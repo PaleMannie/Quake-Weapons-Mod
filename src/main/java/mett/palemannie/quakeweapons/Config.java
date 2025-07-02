@@ -12,9 +12,6 @@ public class Config
 
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
-    private static boolean validateItemName(final Object obj) {
-    }
-
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event) {
     }

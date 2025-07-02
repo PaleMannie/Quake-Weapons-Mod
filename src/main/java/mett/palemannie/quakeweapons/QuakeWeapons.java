@@ -1,6 +1,12 @@
 package mett.palemannie.quakeweapons;
 
 import com.mojang.logging.LogUtils;
+import mett.palemannie.quakeweapons.effect.ModEffects;
+import mett.palemannie.quakeweapons.entity.ModEntities;
+import mett.palemannie.quakeweapons.item.ModItems;
+import mett.palemannie.quakeweapons.net.ModMessages;
+import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.ModCreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -13,27 +19,35 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import software.bernie.geckolib.GeckoLib;
 
 @Mod(QuakeWeapons.MODID)
-public class QuakeWeapons
-{
+public class QuakeWeapons {
+
     public static final String MODID = "quakeweapons";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public QuakeWeapons(FMLJavaModLoadingContext context)
-    {
+    public QuakeWeapons(FMLJavaModLoadingContext context){
+
         IEventBus modEventBus = context.getModEventBus();
-
         modEventBus.addListener(this::commonSetup);
-
         MinecraftForge.EVENT_BUS.register(this);
-
         modEventBus.addListener(this::addCreative);
+
+        GeckoLib.initialize();
+        ModCreativeModeTabs.register(modEventBus);
+        ModItems.register(modEventBus);
+        ModEffects.register(modEventBus);
+        ModEntities.register(modEventBus);
+        ModSounds.register(modEventBus);
+
 
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+
+        event.enqueueWork(ModMessages::register);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -44,11 +58,11 @@ public class QuakeWeapons
     }
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents
-    {
+    public static class ClientModEvents {
+
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
+        public static void onClientSetup(FMLClientSetupEvent event){
+
         }
     }
 }
