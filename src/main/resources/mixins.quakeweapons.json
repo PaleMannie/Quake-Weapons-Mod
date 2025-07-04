@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "mett.palemannie.quakeweapons.mixin",
+  "refmap": "quakeweapons.mixins-refmap.json",
+
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "MinecraftMixin",
+    "ItemInHandRendererMixin",
+    "LocalPlayerMixin"
+
+  ],
+  "client": [
+  ],
+  "server": [
+  ]
+}

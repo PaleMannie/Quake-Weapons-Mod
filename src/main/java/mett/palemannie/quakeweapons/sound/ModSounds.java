@@ -13,7 +13,7 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, QuakeWeapons.MODID);
 
-    //public static final RegistryObject<SoundEvent> METAL_DETECTOR_FOUND_ORE = registerSoundEvents("metal_detector_found_ore");
+    public static final RegistryObject<SoundEvent> NAILGUN_SHOOT = registerSoundEvents("nailgun_shoot");
 
 
 

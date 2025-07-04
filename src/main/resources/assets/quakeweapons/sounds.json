@@ -1,0 +1,8 @@
+{
+  "nailgun_shoot": {
+    "subtitle": "sounds.quakeweapons.nailgun_shoot",
+    "sounds": [
+      "quakeweapons:nailgun_shoot"
+    ]
+  }
+}

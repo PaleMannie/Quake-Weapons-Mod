@@ -1,11 +1,11 @@
 package mett.palemannie.quakeweapons.util;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.item.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,12 +18,11 @@ public class ModCreativeModeTabs {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, QuakeWeapons.MODID);
 
     public static final RegistryObject<CreativeModeTab> QUAKEWEAPONS_TAB = CREATIVE_MODE_TABS.register("quakeweapons_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(Items.ACACIA_BOAT))
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.NAILGUN.get()))
                     .title(Component.translatable("quakeweapons.creativetab.quakeweapons_tab"))
                     .displayItems((pParameters, pOutput) -> {
 
-                        pOutput.accept(Items.ACACIA_BOAT);
-                        pOutput.accept(Items.BONE_MEAL);
+                        pOutput.accept(ModItems.NAILGUN.get());
 
 
                     })

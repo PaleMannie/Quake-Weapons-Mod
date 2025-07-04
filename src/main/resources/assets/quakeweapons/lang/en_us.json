@@ -1,3 +1,8 @@
 {
-  "quakeweapons.creativetab.quakeweapons_tab": "Quake Weapons Mod"
+  "quakeweapons.creativetab.quakeweapons_tab": "Quake Weapons Mod",
+
+  "quakeweapons.key.category.title": "Quake Weapons Mod",
+  "quakeweapons.key.shoot": "Shoot Quake Weapons",
+
+  "item.quakeweapons.nailgun": "Nail Gun"
 }
