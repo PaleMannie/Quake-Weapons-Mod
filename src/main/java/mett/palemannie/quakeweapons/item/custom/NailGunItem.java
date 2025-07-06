@@ -1,17 +1,18 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.NailGunRenderer;
-import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.net.ModMessages;
+import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
+import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -29,10 +30,6 @@ public class NailGunItem extends AbstractWeapon {
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("animation.nailgun.shooting", Animation.LoopType.LOOP);
-
-    int ammoConsumption;
-    int fireRate;
-    Item ammoType;
 
     public NailGunItem(Properties pProperties) {
         super(pProperties);
@@ -73,9 +70,38 @@ public class NailGunItem extends AbstractWeapon {
         });
     }
 
+    private boolean consumeAmmo(Player player) {
+        if (player.isCreative()) return true;
+
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.is(ModItems.NAIL.get())) {
+                stack.shrink(1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //the Nailgun starts shooting from the right barrel
+    public static boolean rightSide = true;
+
     @Override
     protected void executeWeaponFire(Level pLevel, LivingEntity pLivingEntity, ItemStack stack, int pRemainingUseDuration) {
 
-        if(pRemainingUseDuration % 2 == 0) pLevel.playSound(pLivingEntity, pLivingEntity.getOnPos(), ModSounds.NAILGUN_SHOOT.get(), SoundSource.NEUTRAL, 1f, 1f);
+        if(pLivingEntity instanceof ServerPlayer serverPlayer){
+
+            if(pRemainingUseDuration % 2 == 0){
+
+                if (consumeAmmo((Player)pLivingEntity)) {
+
+                    ModMessages.sendToServer(new C2SNailPacket());
+                    rightSide = !rightSide;
+                } else {
+
+                    ModMessages.sendToServer(new C2SAmmoEmptyPacket());
+                    stopShootingAnimation(pLivingEntity, pLevel.getServer().overworld());
+                }
+            }
+        }
     }
 }

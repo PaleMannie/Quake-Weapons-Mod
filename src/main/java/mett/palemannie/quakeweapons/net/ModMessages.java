@@ -1,6 +1,8 @@
 package mett.palemannie.quakeweapons.net;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
+import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -23,12 +25,17 @@ public class ModMessages {
 
         INSTANCE = net;
 
-        /*net.messageBuilder(SpuckenC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(SpuckenC2SPacket::new)
-                .encoder(SpuckenC2SPacket::toBytes)
-                .consumerMainThread(SpuckenC2SPacket::handle)
-                .add();*/
+        net.messageBuilder(C2SNailPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SNailPacket::new)
+                .encoder(C2SNailPacket::toBytes)
+                .consumerMainThread(C2SNailPacket::handle)
+                .add();
 
+        net.messageBuilder(C2SAmmoEmptyPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SAmmoEmptyPacket::new)
+                .encoder(C2SAmmoEmptyPacket::toBytes)
+                .consumerMainThread(C2SAmmoEmptyPacket::handle)
+                .add();
     }
 
     public static <MSG> void sendToServer(MSG message){

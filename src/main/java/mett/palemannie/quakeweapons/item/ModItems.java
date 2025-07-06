@@ -16,6 +16,9 @@ public class ModItems {
     public static final RegistryObject<Item> NAILGUN = ITEMS.register("nailgun",
             () -> new NailGunItem(new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> NAIL = ITEMS.register("nail",
+            () -> new Item(new Item.Properties().stacksTo(64)));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

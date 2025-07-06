@@ -90,8 +90,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 
         if (pLevel instanceof ServerLevel serverLevel) {
-            triggerAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller", "shooting");
-        }
+            startShootingAnimation(pLivingEntity, serverLevel);        }
         executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
     }
 
@@ -101,14 +100,26 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
         if(pLivingEntity instanceof Player) ((Player) pLivingEntity).getCooldowns().addCooldown(this, 1);
         if (pLevel instanceof ServerLevel serverLevel)
-            stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller", "shooting");
+            stopShootingAnimation(pLivingEntity, serverLevel);
+        //this ensures, that the Nailgun always starts shooting from the right barrel
+        NailGunItem.rightSide = false;
     }
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (!selected && level instanceof ServerLevel serverLevel) {
-            stopTriggeredAnim(entity, GeoItem.getOrAssignId(stack, serverLevel), "controller", "shooting");
+            stopShootingAnimation((LivingEntity) entity, serverLevel);
         }
         super.inventoryTick(stack, level, entity, slot, selected);
+    }
+
+    public void startShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
+
+        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller", "shooting");
+    }
+
+    public void stopShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
+
+        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller", "shooting");
     }
 }

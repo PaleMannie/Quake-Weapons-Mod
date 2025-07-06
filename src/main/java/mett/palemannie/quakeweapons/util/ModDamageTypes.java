@@ -12,5 +12,5 @@ public class ModDamageTypes {
         return ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, name));
     }
 
-    public static final ResourceKey<DamageType> NAILGUN_DAMAGE =   register("nailgun_damage");
+    public static final ResourceKey<DamageType> NAILGUN_DAMAGE = register("nailgun_damage");
 }

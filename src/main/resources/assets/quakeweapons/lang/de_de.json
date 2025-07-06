@@ -4,5 +4,9 @@
   "quakeweapons.key.category.title": "Quake Weapons Mod",
   "quakeweapons.key.shoot": "Schieße Quake-Waffen",
 
-  "item.quakeweapons.nailgun": "Nagelkanone"
+  "item.quakeweapons.nailgun": "Nagelkanone",
+  "item.quakeweapons.nail": "Nagel",
+
+  "death.attack.quakeweapons.nailgun_damage": "%1$s hat sich selbst genagelt",
+  "death.attack.quakeweapons.nailgun_damage.player": "%1$s wurde durch %2$s genagelt"
 }
