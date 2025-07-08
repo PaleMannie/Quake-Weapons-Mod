@@ -6,10 +6,12 @@ import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +28,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 
+import javax.annotation.Nullable;
+
 public class NailProjectileEntity extends Projectile {
 
     public NailProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
@@ -38,9 +42,17 @@ public class NailProjectileEntity extends Projectile {
         this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
     }
 
+    @Override
+    protected void defineSynchedData() {}
+
+    @Override
+    public boolean isNoGravity() {
+        return true;
+    }
+
     private BlockPos lightPos;
 
-    private void tryPlaceLight() {
+    void tryPlaceLight() {
         BlockPos origin = this.blockPosition();
         Level level = this.level();
 
@@ -65,7 +77,7 @@ public class NailProjectileEntity extends Projectile {
         }
     }
 
-    private void cleanupLight() {
+    void cleanupLight() {
         if (this.lightPos != null) {
             BlockState state = this.level().getBlockState(this.lightPos);
             if (state.getBlock() == Blocks.LIGHT) {
@@ -76,9 +88,7 @@ public class NailProjectileEntity extends Projectile {
         }
     }
 
-    @Override
-    public void tick() {
-        super.tick();
+    void muzzleFlashHandler(){
 
         if (!this.level().isClientSide) {
             if (this.tickCount == 1) {
@@ -89,11 +99,17 @@ public class NailProjectileEntity extends Projectile {
                 this.cleanupLight();
             }
         }
+    }
+
+    void hitResultHandler(){
 
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
         if (hitresult.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, hitresult)) {
             this.onHit(hitresult);
         }
+    }
+
+    void projectileFlyStraight(){
 
         Vec3 vec3 = this.getDeltaMovement();
         double d0 = this.getX() + vec3.x;
@@ -107,23 +123,57 @@ public class NailProjectileEntity extends Projectile {
         this.setPos(d0, d1, d2);
     }
 
+    void handleDamage(EntityHitResult pResult, Level level, ResourceKey<DamageType> damageType){
+
+        DamageSource source = level.damageSources().source(damageType, null, null);
+        DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
+        if(pResult.getEntity() instanceof LivingEntity entity){
+
+            entity.hurt(source2, Float.MIN_VALUE);
+            entity.hurt(source, 2f);
+        }
+    }
+
+    void handleProjectileBlockHitEffects(){
+
+        if(level() instanceof ServerLevel)
+            ((ServerLevel) level()).sendParticles(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
+    }
+
+    void handleGore(Level level){
+
+        if(level instanceof ServerLevel)
+            ((ServerLevel) level).sendParticles(ParticleTypes.LANDING_LAVA, this.getX(), this.getY(), this.getZ(), 3, 0.1f, 0.1f, 0.1f, 0.1f);
+    }
+
+    void handleHitSound(@Nullable EntityHitResult entityHitResult, @Nullable BlockHitResult blockHitResult, Level level, SoundEvent soundEvent, float volume, float pitch){
+
+        if(entityHitResult != null && blockHitResult == null) level.playSound(null, entityHitResult.getEntity().blockPosition(), soundEvent, SoundSource.NEUTRAL,volume, pitch);
+        if(blockHitResult != null && entityHitResult == null) level.playSound(null, blockHitResult.getBlockPos(), soundEvent, SoundSource.NEUTRAL, volume, pitch);
+    }
+
     @Override
-    public boolean isNoGravity() {
-        return true;
+    public void tick() {
+        super.tick();
+
+        muzzleFlashHandler();
+        hitResultHandler();
+        projectileFlyStraight();
     }
 
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
 
-        this.cleanupLight();
+        cleanupLight();
+        var soundEvent = ModSounds.NAILGUN_HIT.get();
 
         if (!this.level().isClientSide) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }
-        level().playSound(null, pResult.getBlockPos(), ModSounds.NAILGUN_HIT.get(), SoundSource.NEUTRAL, 1f, 1f);
-        if(level() instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
+
+        handleHitSound(null, pResult, level(), soundEvent, 1f, 1f);
+        handleProjectileBlockHitEffects();
 
         super.onHitBlock(pResult);
     }
@@ -132,28 +182,14 @@ public class NailProjectileEntity extends Projectile {
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
 
-        Level level = this.level();
+        var damageType = ModDamageTypes.NAILGUN_DAMAGE;
+        var soundEvent = ModSounds.NAILGUN_HIT.get();
 
-        DamageSource source = level.damageSources().source(ModDamageTypes.NAILGUN_DAMAGE, null, null);
-        DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
-        if(pResult.getEntity() instanceof LivingEntity entity){
+        handleDamage(pResult, level(), damageType);
+        handleGore(level());
+        handleHitSound(pResult, null, level(), soundEvent, 1f, 1f);
 
-            entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, 2f);
-        }
-
-        if(level instanceof ServerLevel)
-            ((ServerLevel) level).sendParticles(ParticleTypes.LANDING_LAVA, this.getX(), this.getY(), this.getZ(), 3, 0.1f, 0.1f, 0.1f, 0.1f);
-
-        level.playSound(null, pResult.getEntity().blockPosition(), ModSounds.NAILGUN_HIT.get(), SoundSource.NEUTRAL, 0.25f, 1f);
+        cleanupLight();
         this.discard();
-        this.cleanupLight();
-    }
-
-    @Override
-    protected void defineSynchedData() {}
-
-    public void recreateFromPacket(ClientboundAddEntityPacket packet) {
-        super.recreateFromPacket(packet);
     }
 }

@@ -1,7 +1,5 @@
 package mett.palemannie.quakeweapons;
 
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.logging.LogUtils;
 import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.effect.ModEffects;
@@ -11,18 +9,9 @@ import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModCreativeModeTabs;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.MossBlock;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterShadersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -35,8 +24,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import software.bernie.geckolib.GeckoLib;
-
-import java.io.IOException;
 
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
@@ -83,6 +70,7 @@ public class QuakeWeapons {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void clientSetup(FMLClientSetupEvent e) {
+
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

@@ -78,7 +78,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-
         setCurrentHand(pUsedHand, (LivingEntity) pPlayer);
         return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
     }
@@ -90,7 +89,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 
         if (pLevel instanceof ServerLevel serverLevel) {
-            startShootingAnimation(pLivingEntity, serverLevel);        }
+            startShootingAnimation(pLivingEntity, serverLevel); }
         executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
     }
 

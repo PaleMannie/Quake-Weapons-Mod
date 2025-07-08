@@ -5,9 +5,9 @@ import mett.palemannie.quakeweapons.item.client.NailGunRenderer;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -57,7 +57,7 @@ public class NailGunItem extends AbstractWeapon {
                 return this.renderer;
             }
 
-            //keeps the item in the bow holding position when it's not used
+            //Keeps the item in the bow holding position when it's not used
             @Override
             public HumanoidModel.ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
                 if (!itemStack.isEmpty()) {
@@ -83,7 +83,7 @@ public class NailGunItem extends AbstractWeapon {
     }
 
     //the Nailgun starts shooting from the right barrel
-    public static boolean rightSide = true;
+    public static boolean rightSide = false;
 
     @Override
     protected void executeWeaponFire(Level pLevel, LivingEntity pLivingEntity, ItemStack stack, int pRemainingUseDuration) {
@@ -92,15 +92,25 @@ public class NailGunItem extends AbstractWeapon {
 
             if(pRemainingUseDuration % 2 == 0){
 
+
                 if (consumeAmmo((Player)pLivingEntity)) {
+
+                    //Here's your recoil, bro
+                    assert Minecraft.getInstance().player != null;
+                    Minecraft.getInstance().player.setXRot(pLivingEntity.getXRot() - 0.5f);
 
                     ModMessages.sendToServer(new C2SNailPacket());
                     rightSide = !rightSide;
+
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
                     stopShootingAnimation(pLivingEntity, pLevel.getServer().overworld());
                 }
+            } else {
+                //Repeatedly tapping your mouseor releasing in an even use tick will cause your view to go up, but I don't care anymore.
+                assert Minecraft.getInstance().player != null;
+                Minecraft.getInstance().player.setXRot(pLivingEntity.getXRot() + 0.5f);
             }
         }
     }
