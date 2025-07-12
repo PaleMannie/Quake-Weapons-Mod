@@ -14,6 +14,7 @@ public class ModSounds {
             DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, QuakeWeapons.MODID);
 
     public static final RegistryObject<SoundEvent> NAILGUN_SHOOT = registerSoundEvents("nailgun_shoot");
+    public static final RegistryObject<SoundEvent> SUPER_NAILGUN_SHOOT = registerSoundEvents("super_nailgun_shoot");
     public static final RegistryObject<SoundEvent> NAILGUN_HIT = registerSoundEvents("nailgun_hit");
 
 

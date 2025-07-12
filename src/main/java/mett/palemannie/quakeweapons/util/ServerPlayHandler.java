@@ -1,6 +1,7 @@
 package mett.palemannie.quakeweapons.util;
 
 import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
+import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
 import mett.palemannie.quakeweapons.item.custom.NailGunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,6 +15,60 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Random;
 
 public class ServerPlayHandler {
+
+    public static void handleAxeShoot(ServerPlayer player){
+    }
+
+    public static void handleThunderboltShoot(ServerPlayer player){
+    }
+
+    public static void handleRocketLauncherShoot(ServerPlayer player){
+    }
+
+    public static void handleGrenadeLauncherShoot(ServerPlayer player){
+    }
+
+    public static void handleSuperShotgunShoot(ServerPlayer player){
+    }
+
+    public static void handleShotgunShoot(ServerPlayer player){
+    }
+
+    public static void handleSuperNailgunShoot(ServerPlayer player){
+
+        ServerLevel sevel = player.serverLevel();
+        Random rdm = new Random();
+        Level lvl = player.level();
+
+        ///Entity
+        double forwardOffset = 0.2;
+
+        Vec3 look = player.getLookAngle();
+        Vec3 right = look.cross(new Vec3(0, 0, 0)).normalize();
+
+        double spawnX = player.getX() + right.x+ look.x * forwardOffset;
+        double spawnY = player.getEyeY() - 0.25 + right.y + look.y * forwardOffset;
+        double spawnZ = player.getZ() + right.z + look.z * forwardOffset;
+
+        SuperNailProjectileEntity projectile = new SuperNailProjectileEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.8F, 0.0F);
+
+        sevel.addFreshEntity(projectile);
+
+        ///Sound
+        double posX = player.getX();
+        double posY = player.getY();
+        double posZ = player.getZ();
+        lvl.playSound(null, posX, posY, posZ, ModSounds.SUPER_NAILGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
+
+        ///Particle
+        double particleX = player.getX() + right.x + look.x * (forwardOffset+0.4f);
+        double particleY = player.getEyeY() - 0.25f + right.y * + look.y * (forwardOffset+0.4f);
+        double particleZ = player.getZ() + right.z + look.z * (forwardOffset+0.4f);
+
+        ((ServerLevel)lvl).sendParticles(ParticleTypes.SMALL_FLAME, particleX, particleY, particleZ, 1, 0.01f, 0.01f, 0.01f, 0f);
+    }
 
     public static void handleNailgunShoot(ServerPlayer player){
 

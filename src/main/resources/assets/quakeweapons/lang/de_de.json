@@ -6,7 +6,11 @@
 
   "item.quakeweapons.nailgun": "Nagelkanone",
   "item.quakeweapons.nail": "Nagel",
+  "item.quakeweapons.super_nailgun": "Super Nagelkanone",
+  "item.quakeweapons.super_nail": "Super Nagel",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s hat sich selbst genagelt",
-  "death.attack.quakeweapons.nailgun_damage.player": "%1$s wurde durch %2$s genagelt"
+  "death.attack.quakeweapons.nailgun_damage.player": "%1$s wurde durch %2$s genagelt",
+  "death.attack.quakeweapons.super_nailgun_damage": "%1$s penetrierte sich selbst",
+  "death.attack.quakeweapons.super_nailgun_damage.player": "%1$s wurde durch %2$s penetriert"
 }

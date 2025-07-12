@@ -30,13 +30,13 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
 
-public class NailProjectileEntity extends Projectile {
+public class SuperNailProjectileEntity extends Projectile {
 
-    public NailProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
+    public SuperNailProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public NailProjectileEntity(Level level, Player player){
+    public SuperNailProjectileEntity(Level level, Player player){
         this(ModEntities.NAIL_PROJECTILE.get(), level);
         this.setOwner(player);
         this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
@@ -130,7 +130,7 @@ public class NailProjectileEntity extends Projectile {
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, 2f);
+            entity.hurt(source, 4f);
         }
     }
 
@@ -184,7 +184,7 @@ public class NailProjectileEntity extends Projectile {
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
 
-        var damageType = ModDamageTypes.NAILGUN_DAMAGE;
+        var damageType = ModDamageTypes.SUPER_NAILGUN_DAMAGE;
         var soundEvent = ModSounds.NAILGUN_HIT.get();
 
         handleDamage(pResult, level(), damageType);

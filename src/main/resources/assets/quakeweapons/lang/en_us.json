@@ -6,7 +6,11 @@
 
   "item.quakeweapons.nailgun": "Nail Gun",
   "item.quakeweapons.nail": "Nail",
+  "item.quakeweapons.super_nailgun": "Super Nail Gun",
+  "item.quakeweapons.super_nail": "Super Nail",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s nailed themselves",
-  "death.attack.quakeweapons.nailgun_damage.player": "%1$s was nailed by %2$s"
+  "death.attack.quakeweapons.nailgun_damage.player": "%1$s was nailed by %2$s",
+  "death.attack.quakeweapons.super_nailgun_damage": "%1$s penetrated themselves",
+  "death.attack.quakeweapons.super_nailgun_damage.player": "%1$s was penetrated by %2$s"
 }

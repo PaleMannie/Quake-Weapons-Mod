@@ -23,6 +23,7 @@ public class ModCreativeModeTabs {
                     .displayItems((pParameters, pOutput) -> {
 
                         pOutput.accept(ModItems.NAILGUN.get());
+                        pOutput.accept(ModItems.SUPER_NAILGUN.get());
                         pOutput.accept(ModItems.NAIL.get());
 
 

@@ -7,6 +7,13 @@
     ]
   },
 
+  "super_nailgun_shoot": {
+    "subtitle": "sounds.quakeweapons.super_nailgun_shoot",
+    "sounds": [
+      "quakeweapons:super_nailgun_shoot"
+    ]
+  },
+
   "nailgun_hit": {
     "subtitle": "sounds.quakeweapons.nailgun_hit",
     "sounds": [

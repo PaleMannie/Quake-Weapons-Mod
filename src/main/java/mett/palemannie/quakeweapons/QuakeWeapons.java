@@ -5,6 +5,7 @@ import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.client.NailProjectileRenderer;
+import mett.palemannie.quakeweapons.entity.client.SuperNailProjectileRenderer;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;
@@ -64,13 +65,13 @@ public class QuakeWeapons {
         public static void onClientSetup(FMLClientSetupEvent event){
 
             EntityRenderers.register(ModEntities.NAIL_PROJECTILE.get(), NailProjectileRenderer::new);
+            EntityRenderers.register(ModEntities.SUPER_NAIL_PROJECTILE.get(), SuperNailProjectileRenderer::new);
         }
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void clientSetup(FMLClientSetupEvent e) {
-
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {

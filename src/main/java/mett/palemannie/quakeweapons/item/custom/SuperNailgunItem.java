@@ -2,9 +2,11 @@ package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.NailGunRenderer;
+import mett.palemannie.quakeweapons.item.client.SuperNailGunRenderer;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
+import mett.palemannie.quakeweapons.net.packets.C2SSuperNailPacket;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,17 +26,10 @@ import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.function.Consumer;
 
-public class NailGunItem extends AbstractWeapon {
+public class SuperNailgunItem extends AbstractWeapon{
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("animation.nailgun.shooting", Animation.LoopType.LOOP);
-
-    public NailGunItem(Properties pProperties) {
-        super(pProperties);
-        this.cooldown = 1;
-
-    }
+    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("super_nailgun.animations.shooting", Animation.LoopType.LOOP);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
@@ -43,15 +38,21 @@ public class NailGunItem extends AbstractWeapon {
                 .triggerableAnim("shooting", SHOOT_ANIM));
     }
 
+    public SuperNailgunItem(Properties pProperties) {
+        super(pProperties);
+        this.cooldown = 1;
+
+    }
+
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private NailGunRenderer renderer;
+            private SuperNailGunRenderer renderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if(this.renderer == null) {
-                    this.renderer = new NailGunRenderer();
+                    this.renderer = new SuperNailGunRenderer();
                 }
 
                 return this.renderer;
@@ -74,34 +75,30 @@ public class NailGunItem extends AbstractWeapon {
         if (player.isCreative()) return true;
 
         for (ItemStack stack : player.getInventory().items) {
-            if (stack.is(ModItems.NAIL.get())) {
-                stack.shrink(1);
+            if (stack.is(ModItems.NAIL.get()) && stack.getCount() >= 2) {
+                stack.shrink(2);
                 return true;
             }
         }
         return false;
     }
 
-    //the Nailgun starts shooting from the right barrel
-    public static boolean rightSide = false;
-
     @Override
-    protected void executeWeaponFire(Level pLevel, LivingEntity pLivingEntity, ItemStack stack, int pRemainingUseDuration) {
+    protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
 
-        if(pLivingEntity instanceof ServerPlayer serverPlayer){
+        if(user instanceof ServerPlayer serverPlayer){
 
             if(pRemainingUseDuration % 2 == 0){
 
 
-                if (consumeAmmo((Player)pLivingEntity)) {
+                if (consumeAmmo((Player)user)) {
 
-                    ModMessages.sendToServer(new C2SNailPacket());
-                    rightSide = !rightSide;
+                    ModMessages.sendToServer(new C2SSuperNailPacket());
 
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
-                    stopShootingAnimation(pLivingEntity, pLevel.getServer().overworld());
+                    stopShootingAnimation(user, level.getServer().overworld());
                 }
             }
         }

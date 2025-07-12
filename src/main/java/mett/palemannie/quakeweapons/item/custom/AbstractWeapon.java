@@ -93,11 +93,13 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
     }
 
+    int cooldown;
+
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
 
-        if(pLivingEntity instanceof Player) ((Player) pLivingEntity).getCooldowns().addCooldown(this, 1);
+        if(pLivingEntity instanceof Player) ((Player) pLivingEntity).getCooldowns().addCooldown(this, cooldown);
         if (pLevel instanceof ServerLevel serverLevel)
             stopShootingAnimation(pLivingEntity, serverLevel);
         //this ensures, that the Nailgun always starts shooting from the right barrel
