@@ -61,11 +61,79 @@
 							"vector": [0, -15, 0]
 						}
 					}
+				},
+				"right_fire": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, -4.001]
+						},
+						"0.09": {
+							"vector": [0, 0, -4]
+						},
+						"0.1": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"left_fire": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.09": {
+							"vector": [0, 0, 0]
+						},
+						"0.1": {
+							"vector": [0, 0, -4.001]
+						}
+					}
 				}
 			}
 		},
-		"animation.nailgun.idle": {
-			"loop": true
+		"animation.nailgun.ammoempty": {
+			"loop": true,
+			"animation_length": 0.11,
+			"bones": {
+				"left_barrel": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0.5]
+						},
+						"0.09": {
+							"vector": [0, 0, 0.5]
+						},
+						"0.1": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"right_barrel": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, -0.5]
+						},
+						"0.09": {
+							"vector": [0, 0, -0.5]
+						},
+						"0.1": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"swivel": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, -15, 0]
+						},
+						"0.09": {
+							"vector": [0, -15, 0]
+						},
+						"0.1": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
 		}
 	},
 	"geckolib_format_version": 2

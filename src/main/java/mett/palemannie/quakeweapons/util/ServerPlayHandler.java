@@ -61,13 +61,6 @@ public class ServerPlayHandler {
         double posY = player.getY();
         double posZ = player.getZ();
         lvl.playSound(null, posX, posY, posZ, ModSounds.SUPER_NAILGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
-
-        ///Particle
-        double particleX = player.getX() + right.x + look.x * (forwardOffset+0.4f);
-        double particleY = player.getEyeY() - 0.25f + right.y * + look.y * (forwardOffset+0.4f);
-        double particleZ = player.getZ() + right.z + look.z * (forwardOffset+0.4f);
-
-        ((ServerLevel)lvl).sendParticles(ParticleTypes.SMALL_FLAME, particleX, particleY, particleZ, 1, 0.01f, 0.01f, 0.01f, 0f);
     }
 
     public static void handleNailgunShoot(ServerPlayer player){
@@ -99,13 +92,6 @@ public class ServerPlayHandler {
         double posY = player.getY();
         double posZ = player.getZ();
         lvl.playSound(null, posX, posY, posZ, ModSounds.NAILGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
-
-        ///Particle
-        double particleX = player.getX() + right.x * (offset/2.25f) + look.x * (forwardOffset+0.4f);
-        double particleY = player.getEyeY() - 0.15f + right.y * (offset/2.25f) + look.y * (forwardOffset+0.4f);
-        double particleZ = player.getZ() + right.z * (offset/2.25f) + look.z * (forwardOffset+0.4f);
-
-        ((ServerLevel)lvl).sendParticles(ParticleTypes.SMALL_FLAME, particleX, particleY, particleZ, 1, 0.01f, 0.01f, 0.01f, 0f);
     }
 
     public static void playAmmoEmptySound(ServerPlayer player){

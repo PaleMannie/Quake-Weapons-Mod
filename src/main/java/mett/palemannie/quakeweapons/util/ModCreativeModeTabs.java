@@ -25,6 +25,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.NAILGUN.get());
                         pOutput.accept(ModItems.SUPER_NAILGUN.get());
                         pOutput.accept(ModItems.NAIL.get());
+                        pOutput.accept(ModItems.HITSCANTEST.get());
 
 
                     })

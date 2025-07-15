@@ -88,8 +88,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 
-        if (pLevel instanceof ServerLevel serverLevel) {
-            startShootingAnimation(pLivingEntity, serverLevel); }
         executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
     }
 
@@ -100,8 +98,9 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
 
         if(pLivingEntity instanceof Player) ((Player) pLivingEntity).getCooldowns().addCooldown(this, cooldown);
-        if (pLevel instanceof ServerLevel serverLevel)
+        if (pLevel instanceof ServerLevel serverLevel){
             stopShootingAnimation(pLivingEntity, serverLevel);
+            stopAmmoEmptyAnimation(pLivingEntity, serverLevel);}
         //this ensures, that the Nailgun always starts shooting from the right barrel
         NailGunItem.rightSide = false;
     }
@@ -110,6 +109,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (!selected && level instanceof ServerLevel serverLevel) {
             stopShootingAnimation((LivingEntity) entity, serverLevel);
+            stopAmmoEmptyAnimation((LivingEntity) entity, serverLevel);
         }
         super.inventoryTick(stack, level, entity, slot, selected);
     }
@@ -122,5 +122,15 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void stopShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
 
         stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller", "shooting");
+    }
+
+    public void startAmmoEmptyAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
+
+        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller2", "ammoempty");
+    }
+
+    public void stopAmmoEmptyAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
+
+        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller2", "ammoempty");
     }
 }

@@ -9,6 +9,7 @@ import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SSuperNailPacket;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,12 +31,17 @@ public class SuperNailgunItem extends AbstractWeapon{
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("super_nailgun.animations.shooting", Animation.LoopType.LOOP);
+    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("super_nailgun.animations.ammoempty", Animation.LoopType.LOOP);
+
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
 
         controllerRegistrar.add(new AnimationController<>(this, "controller", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("shooting", SHOOT_ANIM));
+
+        controllerRegistrar.add(new AnimationController<>(this, "controller2", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
     }
 
     public SuperNailgunItem(Properties pProperties) {
@@ -93,12 +99,14 @@ public class SuperNailgunItem extends AbstractWeapon{
 
                 if (consumeAmmo((Player)user)) {
 
+                    if (level instanceof ServerLevel serverLevel) {
+                        startShootingAnimation(user, serverLevel); }
                     ModMessages.sendToServer(new C2SSuperNailPacket());
 
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
-                    stopShootingAnimation(user, level.getServer().overworld());
+                    startAmmoEmptyAnimation(user, level.getServer().overworld());
                 }
             }
         }

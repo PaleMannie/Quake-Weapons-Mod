@@ -31,10 +31,15 @@
       ]
     },
     "firstperson_righthand": {
+      "rotation": [
+        15,
+        0,
+        0
+      ],
       "translation": [
         -9,
-        -2,
-        3.5
+        -3.5,
+        -2
       ],
       "scale": [
         1.5,
@@ -43,10 +48,15 @@
       ]
     },
     "firstperson_lefthand": {
+      "rotation": [
+        15,
+        0,
+        0
+      ],
       "translation": [
         -9,
-        -2,
-        3.5
+        -3.5,
+        -2
       ],
       "scale": [
         1.5,
@@ -87,7 +97,7 @@
       "rotation": [
         90,
         0,
-        180
+        -180
       ],
       "translation": [
         0,
@@ -102,6 +112,6 @@
     }
   },
   "textures": {
-    "particle": "quakeweapons:item/supernailgun"
+    "particle": "quakeweapons:item/super_nailgun"
   }
 }

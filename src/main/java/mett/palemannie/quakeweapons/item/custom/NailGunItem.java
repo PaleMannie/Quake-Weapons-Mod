@@ -7,6 +7,7 @@ import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,6 +30,7 @@ public class NailGunItem extends AbstractWeapon {
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("animation.nailgun.shooting", Animation.LoopType.LOOP);
+    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("animation.nailgun.ammoempty", Animation.LoopType.LOOP);
 
     public NailGunItem(Properties pProperties) {
         super(pProperties);
@@ -41,6 +43,9 @@ public class NailGunItem extends AbstractWeapon {
 
         controllerRegistrar.add(new AnimationController<>(this, "controller", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("shooting", SHOOT_ANIM));
+
+        controllerRegistrar.add(new AnimationController<>(this, "controller2", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
     }
 
     @Override
@@ -92,16 +97,17 @@ public class NailGunItem extends AbstractWeapon {
 
             if(pRemainingUseDuration % 2 == 0){
 
-
                 if (consumeAmmo((Player)pLivingEntity)) {
 
+                    if (pLevel instanceof ServerLevel serverLevel) {
+                        startShootingAnimation(pLivingEntity, serverLevel); }
                     ModMessages.sendToServer(new C2SNailPacket());
                     rightSide = !rightSide;
 
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
-                    stopShootingAnimation(pLivingEntity, pLevel.getServer().overworld());
+                    startAmmoEmptyAnimation(pLivingEntity, pLevel.getServer().overworld());
                 }
             }
         }
