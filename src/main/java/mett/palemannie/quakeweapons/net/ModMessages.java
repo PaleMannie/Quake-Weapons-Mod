@@ -4,6 +4,7 @@ import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SSuperNailPacket;
+import mett.palemannie.quakeweapons.net.packets.C2SThunderPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -42,6 +43,12 @@ public class ModMessages {
                 .decoder(C2SSuperNailPacket::new)
                 .encoder(C2SSuperNailPacket::toBytes)
                 .consumerMainThread(C2SSuperNailPacket::handle)
+                .add();
+
+        net.messageBuilder(C2SThunderPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(C2SThunderPacket::new)
+                .encoder(C2SThunderPacket::toBytes)
+                .consumerMainThread(C2SThunderPacket::handle)
                 .add();
     }
 

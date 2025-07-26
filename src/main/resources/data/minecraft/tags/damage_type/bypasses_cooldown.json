@@ -1,6 +1,7 @@
 {
   "values": [
     "quakeweapons:nailgun_damage",
-    "quakeweapons:super_nailgun_damage"
+    "quakeweapons:super_nailgun_damage",
+    "quakeweapons:thunderbolt_damage"
   ]
 }

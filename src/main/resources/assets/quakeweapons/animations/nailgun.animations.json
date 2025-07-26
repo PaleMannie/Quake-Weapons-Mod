@@ -73,6 +73,9 @@
 						"0.1": {
 							"vector": [0, 0, 0]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				},
 				"left_fire": {
@@ -86,6 +89,9 @@
 						"0.1": {
 							"vector": [0, 0, -4.001]
 						}
+					},
+					"scale": {
+						"vector": [1, 1, 1]
 					}
 				}
 			}
@@ -131,6 +137,21 @@
 						"0.1": {
 							"vector": [0, 0, 0]
 						}
+					}
+				}
+			}
+		},
+		"animation.nailgun.idle": {
+			"loop": true,
+			"bones": {
+				"right_fire": {
+					"scale": {
+						"vector": [0.0001, 0.0001, 0.0001]
+					}
+				},
+				"left_fire": {
+					"scale": {
+						"vector": [0.0001, 0.0001, 0.0001]
 					}
 				}
 			}

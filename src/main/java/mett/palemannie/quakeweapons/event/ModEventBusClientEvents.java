@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.event;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.client.NailProjectileModel;
 import mett.palemannie.quakeweapons.entity.client.SuperNailProjectileModel;
+import mett.palemannie.quakeweapons.entity.client.ThunderboltFlashModel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,5 +17,6 @@ public class ModEventBusClientEvents {
 
         event.registerLayerDefinition(NailProjectileModel.NAIL_LAYER, NailProjectileModel::createBodyLayer);
         event.registerLayerDefinition(SuperNailProjectileModel.SUPER_NAIL_LAYER, SuperNailProjectileModel::createBodyLayer);
+        event.registerLayerDefinition(ThunderboltFlashModel.FLASH_LAYER, ThunderboltFlashModel::createBodyLayer);
     }
 }

@@ -100,7 +100,9 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         if(pLivingEntity instanceof Player) ((Player) pLivingEntity).getCooldowns().addCooldown(this, cooldown);
         if (pLevel instanceof ServerLevel serverLevel){
             stopShootingAnimation(pLivingEntity, serverLevel);
-            stopAmmoEmptyAnimation(pLivingEntity, serverLevel);}
+            stopAmmoEmptyAnimation(pLivingEntity, serverLevel);
+            startIdleAnimation(pLivingEntity, serverLevel);
+        }
         //this ensures, that the Nailgun always starts shooting from the right barrel
         NailGunItem.rightSide = false;
     }
@@ -110,6 +112,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         if (!selected && level instanceof ServerLevel serverLevel) {
             stopShootingAnimation((LivingEntity) entity, serverLevel);
             stopAmmoEmptyAnimation((LivingEntity) entity, serverLevel);
+            startIdleAnimation((LivingEntity) entity, serverLevel);
         }
         super.inventoryTick(stack, level, entity, slot, selected);
     }
@@ -132,5 +135,15 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void stopAmmoEmptyAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
 
         stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller2", "ammoempty");
+    }
+
+    public void startIdleAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
+
+        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller3", "idle");
+    }
+
+    public void stopIdleAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel){
+
+        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(pLivingEntity.getItemInHand(pLivingEntity.getUsedItemHand()), serverLevel), "controller3", "idle");
     }
 }

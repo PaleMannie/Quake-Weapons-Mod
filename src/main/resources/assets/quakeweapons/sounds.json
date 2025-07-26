@@ -22,5 +22,19 @@
       "quakeweapons:nail_hit3",
       "quakeweapons:nail_hit4"
     ]
+  },
+
+  "thunderbolt_start": {
+    "subtitle": "sounds.quakeweapons.thunderbolt_start",
+    "sounds": [
+      "quakeweapons:thunderbolt_start"
+    ]
+  },
+
+  "thunderbolt_loop": {
+    "subtitle": "sounds.quakeweapons.thunderbolt_loop",
+    "sounds": [
+      "quakeweapons:thunderbolt_loop"
+    ]
   }
 }

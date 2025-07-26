@@ -32,6 +32,7 @@ public class SuperNailgunItem extends AbstractWeapon{
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("super_nailgun.animations.shooting", Animation.LoopType.LOOP);
     private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("super_nailgun.animations.ammoempty", Animation.LoopType.LOOP);
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("super_nailgun.animations.idle", Animation.LoopType.LOOP);
 
 
     @Override
@@ -42,6 +43,9 @@ public class SuperNailgunItem extends AbstractWeapon{
 
         controllerRegistrar.add(new AnimationController<>(this, "controller2", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
+
+        controllerRegistrar.add(new AnimationController<>(this, "controller3", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("idle", IDLE_ANIM));
     }
 
     public SuperNailgunItem(Properties pProperties) {
@@ -100,12 +104,16 @@ public class SuperNailgunItem extends AbstractWeapon{
                 if (consumeAmmo((Player)user)) {
 
                     if (level instanceof ServerLevel serverLevel) {
+                        stopAmmoEmptyAnimation(user, serverLevel);
+                        stopIdleAnimation(user, serverLevel);
                         startShootingAnimation(user, serverLevel); }
                     ModMessages.sendToServer(new C2SSuperNailPacket());
 
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
+                    stopShootingAnimation(user, level.getServer().overworld());
+                    stopIdleAnimation(user, level.getServer().overworld());
                     startAmmoEmptyAnimation(user, level.getServer().overworld());
                 }
             }

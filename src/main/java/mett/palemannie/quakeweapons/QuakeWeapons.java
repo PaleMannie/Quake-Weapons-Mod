@@ -6,6 +6,7 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.client.NailProjectileRenderer;
 import mett.palemannie.quakeweapons.entity.client.SuperNailProjectileRenderer;
+import mett.palemannie.quakeweapons.entity.client.ThunderboltFlashRenderer;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;
@@ -66,6 +67,7 @@ public class QuakeWeapons {
 
             EntityRenderers.register(ModEntities.NAIL_PROJECTILE.get(), NailProjectileRenderer::new);
             EntityRenderers.register(ModEntities.SUPER_NAIL_PROJECTILE.get(), SuperNailProjectileRenderer::new);
+            EntityRenderers.register(ModEntities.THUNDERBOLT_FLASH.get(), ThunderboltFlashRenderer::new);
         }
     }
 

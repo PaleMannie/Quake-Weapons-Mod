@@ -16,6 +16,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> NAILGUN_SHOOT = registerSoundEvents("nailgun_shoot");
     public static final RegistryObject<SoundEvent> SUPER_NAILGUN_SHOOT = registerSoundEvents("super_nailgun_shoot");
     public static final RegistryObject<SoundEvent> NAILGUN_HIT = registerSoundEvents("nailgun_hit");
+    public static final RegistryObject<SoundEvent> THUNDERBOLT_START = registerSoundEvents("thunderbolt_start");
+    public static final RegistryObject<SoundEvent> THUNDERBOLT_LOOP = registerSoundEvents("thunderbolt_loop");
 
 
 
