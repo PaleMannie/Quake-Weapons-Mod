@@ -7,6 +7,7 @@ import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SSuperNailPacket;
+import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
@@ -107,7 +108,8 @@ public class SuperNailgunItem extends AbstractWeapon{
                         stopAmmoEmptyAnimation(user, serverLevel);
                         stopIdleAnimation(user, serverLevel);
                         startShootingAnimation(user, serverLevel); }
-                    ModMessages.sendToServer(new C2SSuperNailPacket());
+                    //ModMessages.sendToServer(new C2SSuperNailPacket());
+                    ServerPlayHandler.handleSuperNailgunShoot(serverPlayer);
 
                 } else {
 

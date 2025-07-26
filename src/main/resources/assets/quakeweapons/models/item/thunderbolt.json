@@ -31,11 +31,6 @@
       ]
     },
     "firstperson_righthand": {
-      "rotation": [
-        5,
-        0,
-        0
-      ],
       "translation": [
         -9,
         -2,
@@ -48,11 +43,6 @@
       ]
     },
     "firstperson_lefthand": {
-      "rotation": [
-        5,
-        0,
-        0
-      ],
       "translation": [
         -9,
         -2,

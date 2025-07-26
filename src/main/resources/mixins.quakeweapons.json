@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8.5",
   "package": "mett.palemannie.quakeweapons.mixin",
-  "refmap": "quakeweapons.mixins-refmap.json",
+  "refmap": "quakeweapons.mixins.refmap.json",
 
   "injectors": {
     "defaultRequire": 1

@@ -49,11 +49,13 @@ minecraft {
 
         client {
             property 'forge.enabledGameTestNamespaces', mod_id
+            arg '-mixin.config=mixins.quakeweapons.json'
         }
 
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
+            //args '--nogui'
+            arg '-mixin.config=mixins.quakeweapons.json'
         }
 
         gameTestServer {
@@ -96,7 +98,7 @@ dependencies {
 
 mixin {
 
-    add sourceSets.main, 'mixins.quakeweapons.refmap.json'
+    add sourceSets.main, 'quakeweapons.mixins.refmap.json'
     config 'mixins.quakeweapons.json'
 
     debug.verbose = true
@@ -127,7 +129,11 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : mod_authors,
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+
+                //"TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+                //"TweakOrder": 0,
+                "MixinConfigs": "mixins.quakeweapons.json"
         ])
     }
 

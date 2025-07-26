@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity> {
 
-    private static final ResourceLocation NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/nail_projectile/thunderbolt_flash.png");
+    private static final ResourceLocation NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/nail_projectile/nail_projectile.png");
     private final NailProjectileModel<NailProjectileEntity> model;
 
     public NailProjectileRenderer(EntityRendererProvider.Context context) {
