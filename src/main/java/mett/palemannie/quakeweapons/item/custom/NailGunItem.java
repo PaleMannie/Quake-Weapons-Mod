@@ -107,9 +107,9 @@ public class NailGunItem extends AbstractWeapon {
                 if (consumeAmmo((Player)user)) {
 
                     if (level instanceof ServerLevel serverLevel) {
-                        stopAmmoEmptyAnimation(user, serverLevel);
-                        stopIdleAnimation(user, serverLevel);
-                        startShootingAnimation(user, serverLevel); }
+                        stopAmmoEmptyAnimation(user, serverLevel, stack);
+                        stopIdleAnimation(user, serverLevel, stack);
+                        startShootingAnimation(user, serverLevel, stack); }
                     rightSide = !rightSide;
                     //ModMessages.sendToServer(new C2SNailPacket());
                     ServerPlayHandler.handleNailgunShoot(serverPlayer);
@@ -117,9 +117,9 @@ public class NailGunItem extends AbstractWeapon {
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
-                    stopShootingAnimation(user, level.getServer().overworld());
-                    stopIdleAnimation(user, level.getServer().overworld());
-                    startAmmoEmptyAnimation(user, level.getServer().overworld());
+                    stopShootingAnimation(user, level.getServer().overworld(), stack);
+                    stopIdleAnimation(user, level.getServer().overworld(), stack);
+                    startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);
                 }
             }
         }

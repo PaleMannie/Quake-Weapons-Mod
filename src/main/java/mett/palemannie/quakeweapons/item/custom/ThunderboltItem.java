@@ -18,17 +18,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.List;
@@ -110,17 +109,17 @@ public class ThunderboltItem extends AbstractWeapon{
                 if (consumeAmmo((Player)user)) {
 
                     if (level instanceof ServerLevel serverLevel) {
-                        stopAmmoEmptyAnimation(user, serverLevel);
-                        stopIdleAnimation(user, serverLevel);
-                        startShootingAnimation(user, serverLevel); }
+                        stopAmmoEmptyAnimation(user, serverLevel, stack);
+                        stopIdleAnimation(user, serverLevel, stack);
+                        startShootingAnimation(user, serverLevel, stack); }
                     //ModMessages.sendToServer(new C2SThunderPacket());
                     ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
-                    stopShootingAnimation(user, level.getServer().overworld());
-                    stopIdleAnimation(user, level.getServer().overworld());
-                    startAmmoEmptyAnimation(user, level.getServer().overworld());
+                    stopShootingAnimation(user, level.getServer().overworld(), stack);
+                    stopIdleAnimation(user, level.getServer().overworld(), stack);
+                    startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);
                 }
             }
         }
