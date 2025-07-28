@@ -1,30 +1,25 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.item.ModItems;
-import mett.palemannie.quakeweapons.item.client.SuperNailGunRenderer;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
-import mett.palemannie.quakeweapons.net.packets.C2SSuperNailPacket;
-import mett.palemannie.quakeweapons.net.packets.C2SThunderPacket;
-import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
@@ -98,6 +93,42 @@ public class ThunderboltItem extends AbstractWeapon{
         return false;
     }
 
+    public int drainAllCellsAndDischarge(Player player) {
+        int totalCells = 0;
+
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack slot = player.getInventory().getItem(i);
+            if (slot.getItem() == ModItems.CELL.get()) {
+                totalCells += slot.getCount();
+                player.getInventory().setItem(i, ItemStack.EMPTY);
+            }
+        }
+
+        return totalCells;
+    }
+
+    public void dischargeInWater(Player player, Level level, float baseDamage, int radius) {
+
+        AABB area = new AABB(player.blockPosition()).inflate(radius);
+
+        List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, area, entity ->
+                entity != player && entity.isInWaterOrBubble() && entity.isAlive());
+
+        for (LivingEntity target : targets) {
+
+            target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
+            target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, null, null), baseDamage * 6);
+            level.playSound(null, target.blockPosition(), SoundEvents.TRIDENT_THUNDER, SoundSource.PLAYERS, 0.8F, 1.2F);
+            ((ServerLevel) level).sendParticles(ParticleTypes.ELECTRIC_SPARK,
+                    target.getX(), target.getY() + 1.0, target.getZ(),
+                    8, 0.3, 0.3, 0.3, 0.01);
+        }
+
+        player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, null, null), baseDamage * 3.5f);
+    }
+
+
+
     @Override
     protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
 
@@ -107,6 +138,14 @@ public class ThunderboltItem extends AbstractWeapon{
 
 
                 if (consumeAmmo((Player)user)) {
+
+                    if(user.isInWaterOrBubble()){
+
+                        int ammocount = drainAllCellsAndDischarge((Player) user);
+
+                        drainAllCellsAndDischarge((Player)user);
+                        dischargeInWater((Player)user, level, (float) ammocount, 32);
+                    }
 
                     if (level instanceof ServerLevel serverLevel) {
                         stopAmmoEmptyAnimation(user, serverLevel, stack);
