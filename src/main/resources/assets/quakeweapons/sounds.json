@@ -36,5 +36,19 @@
     "sounds": [
       "quakeweapons:thunderbolt_loop"
     ]
+  },
+
+  "shotgun_shoot": {
+    "subtitle": "sounds.quakeweapons.shotgun_shoot",
+    "sounds": [
+      "quakeweapons:shotgun_shoot"
+    ]
+  },
+
+  "super_shotgun_shoot": {
+    "subtitle": "sounds.quakeweapons.super_shotgun_shoot",
+    "sounds": [
+      "quakeweapons:super_shotgun_shoot"
+    ]
   }
 }

@@ -1,11 +1,9 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.item.ModItems;
-import mett.palemannie.quakeweapons.item.client.NailGunRenderer;
+import mett.palemannie.quakeweapons.item.client.ShotgunRenderer;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
-import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
-import mett.palemannie.quakeweapons.net.packets.C2SSuperNailPacket;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -27,19 +25,18 @@ import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.function.Consumer;
 
-public class NailGunItem extends AbstractWeapon {
+public class ShotgunItem extends AbstractWeapon{
+
+    public ShotgunItem(Properties pProperties) {
+        super(pProperties);
+        this.cooldown = 10;
+    }
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("animation.nailgun.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("animation.nailgun.ammoempty", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("animation.nailgun.idle", Animation.LoopType.LOOP);
-
-    public NailGunItem(Properties pProperties) {
-        super(pProperties);
-        this.cooldown = 1;
-
-    }
+    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("shotgun.animations.shooting", Animation.LoopType.LOOP);
+    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("shotgun.animations.ammoempty", Animation.LoopType.LOOP);
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("shotgun.animations.idle", Animation.LoopType.LOOP);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
@@ -57,12 +54,12 @@ public class NailGunItem extends AbstractWeapon {
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private NailGunRenderer renderer;
+            private ShotgunRenderer renderer;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if(this.renderer == null) {
-                    this.renderer = new NailGunRenderer();
+                    this.renderer = new ShotgunRenderer();
                 }
 
                 return this.renderer;
@@ -85,7 +82,7 @@ public class NailGunItem extends AbstractWeapon {
         if (player.isCreative()) return true;
 
         for (ItemStack stack : player.getInventory().items) {
-            if (stack.is(ModItems.NAIL.get())) {
+            if (stack.is(ModItems.SHELL.get())) {
                 stack.shrink(1);
                 return true;
             }
@@ -93,27 +90,24 @@ public class NailGunItem extends AbstractWeapon {
         return false;
     }
 
-    //the Nailgun starts shooting from the right barrel
-    public static boolean rightSide = false;
-
     @Override
     protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
 
         if(user instanceof ServerPlayer serverPlayer){
 
-            if(pRemainingUseDuration % 2 == 0){
+
+            if(pRemainingUseDuration % 10 == 0){
 
 
                 if (consumeAmmo((Player)user)) {
 
                     if (level instanceof ServerLevel serverLevel) {
+
                         stopAmmoEmptyAnimation(user, serverLevel, stack);
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
-                    rightSide = !rightSide;
-                    //ModMessages.sendToServer(new C2SNailPacket());
-                    ServerPlayHandler.handleNailgunShoot(serverPlayer);
 
+                        ServerPlayHandler.handleShotgunShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());

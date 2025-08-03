@@ -1,9 +1,7 @@
 package mett.palemannie.quakeweapons.item;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.item.custom.NailGunItem;
-import mett.palemannie.quakeweapons.item.custom.SuperNailgunItem;
-import mett.palemannie.quakeweapons.item.custom.ThunderboltItem;
+import mett.palemannie.quakeweapons.item.custom.*;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,7 +14,7 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, QuakeWeapons.MODID);
 
     public static final RegistryObject<Item> NAILGUN = ITEMS.register("nailgun",
-            () -> new NailGunItem(new Item.Properties().stacksTo(1)));
+            () -> new NailgunItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> NAIL = ITEMS.register("nail",
             () -> new Item(new Item.Properties().stacksTo(64)));
@@ -32,6 +30,12 @@ public class ModItems {
 
     public static final RegistryObject<Item> SHELL = ITEMS.register("shell",
             () -> new Item(new Item.Properties().stacksTo(64)));
+
+    public static final RegistryObject<Item> SHOTGUN = ITEMS.register("shotgun",
+            () -> new ShotgunItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> SUPER_SHOTGUN = ITEMS.register("super_shotgun",
+            () -> new SuperShotgunItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

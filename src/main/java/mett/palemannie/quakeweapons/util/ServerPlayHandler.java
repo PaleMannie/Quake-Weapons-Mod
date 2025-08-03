@@ -3,7 +3,7 @@ package mett.palemannie.quakeweapons.util;
 import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
 import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
 import mett.palemannie.quakeweapons.entity.custom.ThunderboltFlashEntity;
-import mett.palemannie.quakeweapons.item.custom.NailGunItem;
+import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -93,7 +93,9 @@ public class ServerPlayHandler {
     public static void handleGrenadeLauncherShoot(ServerPlayer player){
     }
 
-    public static void handleSuperShotgunShoot(ServerPlayer player){
+    public static void handleSuperShotgunShoot(ServerPlayer player, int useTime){
+
+
     }
 
     public static void handleShotgunShoot(ServerPlayer player, int useTime){
@@ -137,7 +139,7 @@ public class ServerPlayHandler {
         Level lvl = player.level();
 
         ///Entity
-        boolean rightSide = NailGunItem.rightSide;
+        boolean rightSide = NailgunItem.rightSide;
         double offset = rightSide ? 0.3 : -0.3;
         double forwardOffset = 0.4;
 

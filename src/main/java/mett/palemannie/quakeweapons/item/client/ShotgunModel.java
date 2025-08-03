@@ -1,27 +1,26 @@
 package mett.palemannie.quakeweapons.item.client;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.item.custom.ShotGunItem;
-import mett.palemannie.quakeweapons.item.custom.ThunderboltItem;
+import mett.palemannie.quakeweapons.item.custom.ShotgunItem;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
-public class ShotgunModel extends GeoModel<ShotGunItem> {
+public class ShotgunModel extends GeoModel<ShotgunItem> {
 
     @Override
-    public ResourceLocation getModelResource(ShotGunItem animatable) {
+    public ResourceLocation getModelResource(ShotgunItem animatable) {
 
         return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/shotgun.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureResource(ShotGunItem animatable) {
+    public ResourceLocation getTextureResource(ShotgunItem animatable) {
 
         return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "textures/item/shotgun.png");
     }
 
     @Override
-    public ResourceLocation getAnimationResource(ShotGunItem animatable) {
+    public ResourceLocation getAnimationResource(ShotgunItem animatable) {
 
         return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/shotgun.animations.json");
     }

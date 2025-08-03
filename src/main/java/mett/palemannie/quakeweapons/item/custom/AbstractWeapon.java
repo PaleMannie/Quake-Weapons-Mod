@@ -2,8 +2,6 @@ package mett.palemannie.quakeweapons.item.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -18,9 +16,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.network.GeckoLibNetwork;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 /*
@@ -114,7 +110,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
             startIdleAnimation(pLivingEntity, serverLevel, stack);
         }
         //this ensures, that the Nailgun always starts shooting from the right barrel
-        NailGunItem.rightSide = false;
+        NailgunItem.rightSide = false;
     }
 
     @Override
