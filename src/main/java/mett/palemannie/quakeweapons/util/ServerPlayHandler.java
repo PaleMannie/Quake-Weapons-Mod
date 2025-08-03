@@ -117,7 +117,7 @@ public class ServerPlayHandler {
 
         SuperNailProjectileEntity projectile = new SuperNailProjectileEntity(sevel, player);
         projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.8F, 0.0F);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
         sevel.addFreshEntity(projectile);
 
@@ -148,7 +148,7 @@ public class ServerPlayHandler {
 
         NailProjectileEntity projectile = new NailProjectileEntity(sevel, player);
         projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.8F, 0.0F);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
         sevel.addFreshEntity(projectile);
 

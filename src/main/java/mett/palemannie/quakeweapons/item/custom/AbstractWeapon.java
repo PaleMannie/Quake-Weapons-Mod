@@ -2,6 +2,8 @@ package mett.palemannie.quakeweapons.item.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -112,9 +114,18 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        if(entity instanceof  Player player) {
-            if ((!selected || !player.isUsingItem()) && level instanceof ServerLevel serverLevel) {
 
+        if(entity instanceof  Player player && level instanceof ServerLevel serverLevel) {
+
+            if (stack.hasTag() && stack.getTag().getBoolean("WasDropped")) {
+
+                stopShootingAnimation((LivingEntity) entity, serverLevel, stack);
+                stopAmmoEmptyAnimation((LivingEntity) entity, serverLevel, stack);
+                startIdleAnimation((LivingEntity) entity, serverLevel, stack);
+                stack.getTag().remove("WasDropped");
+            }
+
+            if ((!selected || !player.isUsingItem()) ) {
 
                 stopShootingAnimation((LivingEntity) entity, serverLevel, stack);
                 stopAmmoEmptyAnimation((LivingEntity) entity, serverLevel, stack);

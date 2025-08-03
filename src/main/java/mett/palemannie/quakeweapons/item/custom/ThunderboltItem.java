@@ -4,6 +4,7 @@ import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
+import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
@@ -118,9 +119,9 @@ public class ThunderboltItem extends AbstractWeapon{
 
             target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
             target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, null, null), baseDamage * 6);
-            level.playSound(null, target.blockPosition(), SoundEvents.TRIDENT_THUNDER, SoundSource.PLAYERS, 0.8F, 1.2F);
+            level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.25f, 0.5f);
             ((ServerLevel) level).sendParticles(ParticleTypes.ELECTRIC_SPARK,
-                    target.getX(), target.getY() + 1.0, target.getZ(),
+                    target.getX(), target.getY(), target.getZ(),
                     8, 0.3, 0.3, 0.3, 0.01);
         }
 
@@ -133,6 +134,7 @@ public class ThunderboltItem extends AbstractWeapon{
     protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
 
         if(user instanceof ServerPlayer serverPlayer){
+
 
             if(pRemainingUseDuration % 2 == 0){
 
@@ -148,11 +150,12 @@ public class ThunderboltItem extends AbstractWeapon{
                     }
 
                     if (level instanceof ServerLevel serverLevel) {
+
                         stopAmmoEmptyAnimation(user, serverLevel, stack);
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
-                    //ModMessages.sendToServer(new C2SThunderPacket());
-                    ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
+
+                        ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
