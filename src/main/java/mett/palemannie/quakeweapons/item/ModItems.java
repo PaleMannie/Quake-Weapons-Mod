@@ -1,7 +1,6 @@
 package mett.palemannie.quakeweapons.item;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.item.custom.HitscanTest;
 import mett.palemannie.quakeweapons.item.custom.NailGunItem;
 import mett.palemannie.quakeweapons.item.custom.SuperNailgunItem;
 import mett.palemannie.quakeweapons.item.custom.ThunderboltItem;
@@ -25,14 +24,14 @@ public class ModItems {
     public static final RegistryObject<Item> SUPER_NAILGUN = ITEMS.register("super_nailgun",
             () -> new SuperNailgunItem(new Item.Properties().stacksTo(1)));
 
-    public static final RegistryObject<Item> HITSCANTEST = ITEMS.register("hitscantest",
-            () -> new HitscanTest(new Item.Properties().stacksTo(1)));
-
     public static final RegistryObject<Item> CELL = ITEMS.register("cell",
             () -> new Item(new Item.Properties().stacksTo(64)));
 
     public static final RegistryObject<Item> THUNDERBOLT = ITEMS.register("thunderbolt",
             () -> new ThunderboltItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> SHELL = ITEMS.register("shell",
+            () -> new Item(new Item.Properties().stacksTo(64)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

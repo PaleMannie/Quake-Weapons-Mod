@@ -9,11 +9,20 @@
   "item.quakeweapons.super_nailgun": "Super Nail Gun",
   "item.quakeweapons.cell": "Cell",
   "item.quakeweapons.thunderbolt": "Thunderbolt",
+  "item.quakeweapons.shell": "Shotgun Shell",
+  "item.quakeweapons.shotgun": "Shotgun",
+  "item.quakeweapons.super_shotgun": "Super Shotgun",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s nailed themselves",
   "death.attack.quakeweapons.nailgun_damage.player": "%1$s was nailed by %2$s",
   "death.attack.quakeweapons.super_nailgun_damage": "%1$s penetrated themselves",
   "death.attack.quakeweapons.super_nailgun_damage.player": "%1$s was penetrated by %2$s",
-  "death.attack.quakeweapons.thunderbolt_damage": "%1$s discharges",
-  "death.attack.quakeweapons.thunderbolt_damage.player": "%1$s accepts %2$s's shaft"
+  "death.attack.quakeweapons.thunderbolt_damage": "%1$s discharges into the water",
+  "death.attack.quakeweapons.thunderbolt_damage.player": "%1$s accepts %2$s's shaft",
+  "death.attack.quakeweapons.thunderbolt_discharge": "%1$s discharges into the water",
+  "death.attack.quakeweapons.thunderbolt_discharge.player": "%1$s accepts %2$s's discharge",
+  "death.attack.quakeweapons.shotgun_damage": "%1$s chewed on %2$s's boomstick",
+  "death.attack.quakeweapons.shotgun_damage.player": "how",
+  "death.attack.quakeweapons.super_shotgun_damage": "%1$s ate 2 loads of %2$s's buckshot",
+  "death.attack.quakeweapons.super_shotgun_damage.player": "how"
 }

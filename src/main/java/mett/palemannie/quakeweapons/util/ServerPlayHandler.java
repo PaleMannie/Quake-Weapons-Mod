@@ -96,7 +96,9 @@ public class ServerPlayHandler {
     public static void handleSuperShotgunShoot(ServerPlayer player){
     }
 
-    public static void handleShotgunShoot(ServerPlayer player){
+    public static void handleShotgunShoot(ServerPlayer player, int useTime){
+
+
     }
 
     public static void handleSuperNailgunShoot(ServerPlayer player){

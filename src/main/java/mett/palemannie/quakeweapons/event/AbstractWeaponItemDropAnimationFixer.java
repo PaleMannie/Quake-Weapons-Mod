@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import software.bernie.geckolib.animatable.GeoItem;
 
 @Mod.EventBusSubscriber
-public class ItemDropAnimationFixHandler {
+public class AbstractWeaponItemDropAnimationFixer {
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.LevelTickEvent event) {
@@ -22,12 +22,12 @@ public class ItemDropAnimationFixHandler {
 
         for (ItemEntity itemEntity : serverLevel.getEntitiesOfClass(ItemEntity.class, new AABB(
                 serverLevel.getMinBuildHeight(), 0, serverLevel.getMinBuildHeight(),
-                serverLevel.getMaxBuildHeight(), serverLevel.getMaxBuildHeight(), serverLevel.getMaxBuildHeight()
-        ))) {
+                serverLevel.getMaxBuildHeight(), serverLevel.getMaxBuildHeight(), serverLevel.getMaxBuildHeight()))) {
+
             ItemStack stack = itemEntity.getItem();
 
             if (stack.getItem() instanceof AbstractWeapon weapon) {
-                // Setze Idle-Animation auf das Item im Entity-Zustand
+
                 int id = Math.toIntExact(GeoItem.getOrAssignId(stack, serverLevel));
                 weapon.stopShootingAnimation(Minecraft.getInstance().player, serverLevel, stack);
                 weapon.stopAmmoEmptyAnimation(Minecraft.getInstance().player, serverLevel, stack);

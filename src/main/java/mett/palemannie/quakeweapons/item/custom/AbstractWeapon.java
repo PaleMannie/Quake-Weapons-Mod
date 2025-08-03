@@ -83,8 +83,13 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        setCurrentHand(pUsedHand, (LivingEntity) pPlayer);
-        return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
+
+        if (pUsedHand != InteractionHand.MAIN_HAND) {
+            return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
+        } else {
+            setCurrentHand(pUsedHand, (LivingEntity) pPlayer);
+            return InteractionResultHolder.pass(pPlayer.getItemInHand(pUsedHand));
+        }
     }
 
     protected abstract void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration);

@@ -15,4 +15,7 @@ public class ModDamageTypes {
     public static final ResourceKey<DamageType> NAILGUN_DAMAGE = register("nailgun_damage");
     public static final ResourceKey<DamageType> SUPER_NAILGUN_DAMAGE = register("super_nailgun_damage");
     public static final ResourceKey<DamageType> THUNDERBOLT_DAMAGE = register("thunderbolt_damage");
+    public static final ResourceKey<DamageType> THUNDERBOLT_DISCHARGE = register("thunderbolt_discharge");
+    public static final ResourceKey<DamageType> SHOTGUN_DAMAGE = register("shotgun_damage");
+    public static final ResourceKey<DamageType> SUPER_SHOTGUN_DAMAGE = register("super_shotgun_damage");
 }
