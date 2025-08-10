@@ -30,14 +30,14 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
 
-public class NailProjectileEntity extends Projectile {
+public class RocketProjectileEntity extends Projectile {
 
-    public NailProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
+    public RocketProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public NailProjectileEntity(Level level, Player player){
-        this(ModEntities.NAIL_PROJECTILE.get(), level);
+    public RocketProjectileEntity(Level level, Player player){
+        this(ModEntities.ROCKET_PROJECTILE.get(), level);
         this.setOwner(player);
         this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
     }

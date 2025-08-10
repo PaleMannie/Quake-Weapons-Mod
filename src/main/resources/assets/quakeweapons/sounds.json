@@ -50,5 +50,56 @@
     "sounds": [
       "quakeweapons:super_shotgun_shoot"
     ]
+  },
+
+  "rocketlauncher_shoot": {
+    "subtitle": "sounds.quakeweapons.rocketlauncher_shoot",
+    "sounds": [
+      "quakeweapons:rocketlauncher_shoot"
+    ]
+  },
+
+  "grenadelauncher_shoot": {
+    "subtitle": "sounds.quakeweapons.grenadelauncher_shoot",
+    "sounds": [
+      "quakeweapons:grenadelauncher_shoot"
+    ]
+  },
+
+  "grenade_bounce": {
+    "subtitle": "sounds.quakeweapons.grenade_bounce",
+    "sounds": [
+      "quakeweapons:grenade_bounce"
+    ]
+  },
+
+  "explosion": {
+    "subtitle": "sounds.quakeweapons.explosion",
+    "sounds": [
+      "quakeweapons:explosion"
+    ]
+  },
+
+  "axe_hit_air": {
+    "subtitle": "sounds.quakeweapons.axe_hit_air",
+    "sounds": [
+      "quakeweapons:axe_hit_air"
+    ]
+  },
+
+  "axe_hit_solid": {
+    "subtitle": "sounds.quakeweapons.axe_hit_solid",
+    "sounds": [
+      "quakeweapons:axe_hit_solid"
+    ]
+  },
+
+  "axe_hit_entity": {
+    "subtitle": "sounds.quakeweapons.axe_hit_entity",
+    "sounds": [
+      "quakeweapons:axe_hit_entity"
+    ]
   }
+
+
 }

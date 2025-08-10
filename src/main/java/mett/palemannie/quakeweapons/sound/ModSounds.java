@@ -20,6 +20,13 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> THUNDERBOLT_LOOP = registerSoundEvents("thunderbolt_loop");
     public static final RegistryObject<SoundEvent> SHOTGUN_SHOOT = registerSoundEvents("shotgun_shoot");
     public static final RegistryObject<SoundEvent> SUPER_SHOTGUN_SHOOT = registerSoundEvents("super_shotgun_shoot");
+    public static final RegistryObject<SoundEvent> ROCKETLAUNCHER_SHOOT = registerSoundEvents("rocketlauncher_shoot");
+    public static final RegistryObject<SoundEvent> GRENADELAUNCHER_SHOOT = registerSoundEvents("grenadelauncher_shoot");
+    public static final RegistryObject<SoundEvent> GRENADE_BOUNCE = registerSoundEvents("grenade_bounce");
+    public static final RegistryObject<SoundEvent> EXPLOSION = registerSoundEvents("explosion");
+    public static final RegistryObject<SoundEvent> AXE_HIT_AIR = registerSoundEvents("axe_hit_air");
+    public static final RegistryObject<SoundEvent> AXE_HIT_SOLID = registerSoundEvents("axe_hit_solid");
+    public static final RegistryObject<SoundEvent> AXE_HIT_ENTITY = registerSoundEvents("axe_hit_entity");
 
 
 

@@ -1,8 +1,6 @@
 package mett.palemannie.quakeweapons.util;
 
-import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
-import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
-import mett.palemannie.quakeweapons.entity.custom.HitscanMuzzleflashEntity;
+import mett.palemannie.quakeweapons.entity.custom.*;
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
@@ -73,7 +71,7 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look1.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look1.z * forwardOffset;
 
-        HitscanMuzzleflashEntity projectile = new HitscanMuzzleflashEntity(sevel, player);
+        MuzzleflashEntity projectile = new MuzzleflashEntity(sevel, player);
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
@@ -121,9 +119,71 @@ public class ServerPlayHandler {
     }
 
     public static void handleRocketLauncherShoot(ServerPlayer player){
+
+        ServerLevel sevel = player.serverLevel();
+        Random rdm = new Random();
+        Level lvl = player.level();
+
+        ///Entity
+        double forwardOffset = 0.2;
+
+        Vec3 look = player.getLookAngle();
+        Vec3 right = look.cross(new Vec3(0, 0, 0)).normalize();
+
+        double spawnX = player.getX() + right.x+ look.x * forwardOffset;
+        double spawnY = player.getEyeY() - 0.25 + right.y + look.y * forwardOffset;
+        double spawnZ = player.getZ() + right.z + look.z * forwardOffset;
+
+        RocketProjectileEntity projectile = new RocketProjectileEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
+
+        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
+
+        sevel.addFreshEntity(flash);
+        sevel.addFreshEntity(projectile);
+
+        ///Sound
+        double posX = player.getX();
+        double posY = player.getY();
+        double posZ = player.getZ();
+        lvl.playSound(null, posX, posY, posZ, ModSounds.ROCKETLAUNCHER_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
     }
 
     public static void handleGrenadeLauncherShoot(ServerPlayer player){
+
+        ServerLevel sevel = player.serverLevel();
+        Random rdm = new Random();
+        Level lvl = player.level();
+
+        ///Entity
+        double forwardOffset = 0.2;
+
+        Vec3 look = player.getLookAngle();
+        Vec3 right = look.cross(new Vec3(0, 0, 0)).normalize();
+
+        double spawnX = player.getX() + right.x+ look.x * forwardOffset;
+        double spawnY = player.getEyeY() - 0.25 + right.y + look.y * forwardOffset;
+        double spawnZ = player.getZ() + right.z + look.z * forwardOffset;
+
+        GrenadeProjectileEntity projectile = new GrenadeProjectileEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
+
+        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
+
+        sevel.addFreshEntity(flash);
+        sevel.addFreshEntity(projectile);
+
+        ///Sound
+        double posX = player.getX();
+        double posY = player.getY();
+        double posZ = player.getZ();
+        lvl.playSound(null, posX, posY, posZ, ModSounds.GRENADELAUNCHER_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
     }
 
     public static void handleSuperShotgunShoot(ServerPlayer player) {
@@ -187,7 +247,7 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look1.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look1.z * forwardOffset;
 
-        HitscanMuzzleflashEntity projectile = new HitscanMuzzleflashEntity(sevel, player);
+        MuzzleflashEntity projectile = new MuzzleflashEntity(sevel, player);
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
@@ -260,7 +320,7 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look1.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look1.z * forwardOffset;
 
-        HitscanMuzzleflashEntity projectile = new HitscanMuzzleflashEntity(sevel, player);
+        MuzzleflashEntity projectile = new MuzzleflashEntity(sevel, player);
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
@@ -287,6 +347,11 @@ public class ServerPlayHandler {
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
+        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
+
+        sevel.addFreshEntity(flash);
         sevel.addFreshEntity(projectile);
 
         ///Sound
@@ -318,6 +383,11 @@ public class ServerPlayHandler {
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
+        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
+
+        sevel.addFreshEntity(flash);
         sevel.addFreshEntity(projectile);
 
         ///Sound

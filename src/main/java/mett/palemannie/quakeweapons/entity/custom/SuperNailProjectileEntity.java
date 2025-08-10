@@ -50,57 +50,6 @@ public class SuperNailProjectileEntity extends Projectile {
         return true;
     }
 
-    private BlockPos lightPos;
-
-    void tryPlaceLight() {
-        BlockPos origin = this.blockPosition();
-        Level level = this.level();
-
-        int[] dyOrder = {0, -1, 1};
-        for (int dy : dyOrder) {
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    BlockPos candidate = origin.offset(dx, dy, dz);
-                    BlockState state = level.getBlockState(candidate);
-
-                    if (state.isAir()) {
-                        level.setBlock(candidate, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 15), 3);
-                        this.lightPos = candidate;
-                        return;
-                    } else if (state.getBlock() == Blocks.WATER) {
-                        level.setBlock(candidate, ModBlocks.LIGHT_WATER.get().defaultBlockState(), 3);
-                        this.lightPos = candidate;
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    void cleanupLight() {
-        if (this.lightPos != null) {
-            BlockState state = this.level().getBlockState(this.lightPos);
-            if (state.getBlock() == Blocks.LIGHT) {
-                this.level().removeBlock(this.lightPos, false);
-            } else if (state.getBlock() == ModBlocks.LIGHT_WATER.get()) {
-                this.level().setBlock(this.lightPos, Blocks.WATER.defaultBlockState(), 3);
-            }
-        }
-    }
-
-    void muzzleFlashHandler(){
-
-        if (!this.level().isClientSide) {
-            if (this.tickCount == 1) {
-                this.tryPlaceLight();
-            }
-
-            if (this.tickCount == 4) {
-                this.cleanupLight();
-            }
-        }
-    }
-
     void hitResultHandler(){
 
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
@@ -156,7 +105,6 @@ public class SuperNailProjectileEntity extends Projectile {
     public void tick() {
         super.tick();
 
-        muzzleFlashHandler();
         hitResultHandler();
         projectileFlyStraight();
 
@@ -166,7 +114,6 @@ public class SuperNailProjectileEntity extends Projectile {
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
 
-        cleanupLight();
         var soundEvent = ModSounds.NAILGUN_HIT.get();
 
         if (!this.level().isClientSide) {
@@ -191,7 +138,6 @@ public class SuperNailProjectileEntity extends Projectile {
         handleGore(level());
         handleHitSound(pResult, null, level(), soundEvent, 1f, 1f);
 
-        cleanupLight();
         this.discard();
     }
 }

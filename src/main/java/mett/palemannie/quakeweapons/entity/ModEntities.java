@@ -1,9 +1,7 @@
 package mett.palemannie.quakeweapons.entity;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
-import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
-import mett.palemannie.quakeweapons.entity.custom.HitscanMuzzleflashEntity;
+import mett.palemannie.quakeweapons.entity.custom.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,9 +23,17 @@ public class ModEntities {
             ENTITY_TYPES.register("super_nail_projectile", () -> EntityType.Builder.<SuperNailProjectileEntity>of(SuperNailProjectileEntity::new, MobCategory.MISC)
                     .sized(0.1f, 0.1f).fireImmune().build("super_nail_projectile"));
 
-    public static final RegistryObject<EntityType<HitscanMuzzleflashEntity>> THUNDERBOLT_FLASH =
-            ENTITY_TYPES.register("thunderbolt_flash", () -> EntityType.Builder.<HitscanMuzzleflashEntity>of(HitscanMuzzleflashEntity::new, MobCategory.MISC)
-                    .sized(0.1f, 0.1f).fireImmune().build("thunderbolt_flash"));
+    public static final RegistryObject<EntityType<MuzzleflashEntity>> MUZZLE_FLASH =
+            ENTITY_TYPES.register("muzzleflash", () -> EntityType.Builder.<MuzzleflashEntity>of(MuzzleflashEntity::new, MobCategory.MISC)
+                    .sized(0.1f, 0.1f).fireImmune().build("muzzleflash"));
+
+    public static final RegistryObject<EntityType<RocketProjectileEntity>> ROCKET_PROJECTILE =
+            ENTITY_TYPES.register("rocket_projectile", () -> EntityType.Builder.<RocketProjectileEntity>of(RocketProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.1f, 0.1f).fireImmune().build("rocket_projectile"));
+
+    public static final RegistryObject<EntityType<GrenadeProjectileEntity>> GRENADE_PROJECTILE =
+            ENTITY_TYPES.register("grenade_projectile", () -> EntityType.Builder.<GrenadeProjectileEntity>of(GrenadeProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.1f, 0.1f).fireImmune().build("grenade_projectile"));
 
 
     public static void register(IEventBus eventBus) {

@@ -12,6 +12,9 @@
   "item.quakeweapons.shell": "Schrotpatrone",
   "item.quakeweapons.shotgun": "Schrotgewehr",
   "item.quakeweapons.super_shotgun": "Zwilling",
+  "item.quakeweapons.rocketlauncher": "Raketenwerfer",
+  "item.quakeweapons.grenadelauncher": "Granatenwerfer",
+  "item.quakeweapons.axe": "Axt",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s hat sich selbst genagelt",
   "death.attack.quakeweapons.nailgun_damage.player": "%1$s wurde durch %2$s genagelt",
@@ -24,5 +27,11 @@
   "death.attack.quakeweapons.shotgun_damage": "wie",
   "death.attack.quakeweapons.shotgun_damage.player": "%1$s knabberte an %2$s's Flinte",
   "death.attack.quakeweapons.super_shotgun_damage": "wie",
-  "death.attack.quakeweapons.super_shotgun_damage.player": "%1$s aß 2 Ladungen von %2$s's Grobschrot"
+  "death.attack.quakeweapons.super_shotgun_damage.player": "%1$s aß 2 Ladungen von %2$s's Grobschrot",
+  "death.attack.quakeweapons.rocketlauncher_damage": "%2$s wurde das Leben langweilig",
+  "death.attack.quakeweapons.rocketlauncher_damage.player": "%1$s reitet %2$s's Rakete",
+  "death.attack.quakeweapons.grenadelauncher_damage": "%2$s versuchte den Stift zurückzustecken",
+  "death.attack.quakeweapons.grenadeauncher_damage.player": "%1$s isst %2$s's Ananas",
+  "death.attack.quakeweapons.axe_damage": "wie in aller Welt",
+  "death.attack.quakeweapons.axe_damage.player": "%1$s wurde geäxtet durch %2$s"
 }

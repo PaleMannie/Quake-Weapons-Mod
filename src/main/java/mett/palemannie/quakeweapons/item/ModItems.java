@@ -37,6 +37,21 @@ public class ModItems {
     public static final RegistryObject<Item> SUPER_SHOTGUN = ITEMS.register("super_shotgun",
             () -> new SuperShotgunItem(new Item.Properties().stacksTo(1)));
 
+    public static final RegistryObject<Item> ROCKET = ITEMS.register("rocket",
+            () -> new Item(new Item.Properties().stacksTo(64)));
+
+    public static final RegistryObject<Item> ROCKETLAUNCHER = ITEMS.register("rocketlauncher",
+            () -> new RocketlauncherItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> GRENADE = ITEMS.register("grenade",
+            () -> new Item(new Item.Properties().stacksTo(64)));
+
+    public static final RegistryObject<Item> GRENADELAUNCHER = ITEMS.register("grenadelauncher",
+            () -> new GrenadelauncherItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> AXE = ITEMS.register("axe",
+            () -> new QWAxeItem(new Item.Properties().stacksTo(1)));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

@@ -18,4 +18,7 @@ public class ModDamageTypes {
     public static final ResourceKey<DamageType> THUNDERBOLT_DISCHARGE = register("thunderbolt_discharge");
     public static final ResourceKey<DamageType> SHOTGUN_DAMAGE = register("shotgun_damage");
     public static final ResourceKey<DamageType> SUPER_SHOTGUN_DAMAGE = register("super_shotgun_damage");
+    public static final ResourceKey<DamageType> ROCKETLAUNCHER_DAMAGE = register("rocketlauncher_damage");
+    public static final ResourceKey<DamageType> GRENADELAUNCHER_DAMAGE = register("grenadelauncher_damage");
+    public static final ResourceKey<DamageType> AXE_DAMAGE = register("axe_damage");
 }

@@ -11,14 +11,14 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class HitscanMuzzleflashEntity extends Projectile {
+public class MuzzleflashEntity extends Projectile {
 
-    public HitscanMuzzleflashEntity(EntityType<? extends Projectile> entityType, Level level) {
+    public MuzzleflashEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public HitscanMuzzleflashEntity(Level level, Player player){
-        this(ModEntities.THUNDERBOLT_FLASH.get(), level);
+    public MuzzleflashEntity(Level level, Player player){
+        this(ModEntities.MUZZLE_FLASH.get(), level);
         this.setOwner(player);
         this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
     }

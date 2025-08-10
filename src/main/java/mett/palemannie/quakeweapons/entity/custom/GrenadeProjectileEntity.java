@@ -30,14 +30,14 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
 
-public class NailProjectileEntity extends Projectile {
+public class GrenadeProjectileEntity extends Projectile {
 
-    public NailProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
+    public GrenadeProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public NailProjectileEntity(Level level, Player player){
-        this(ModEntities.NAIL_PROJECTILE.get(), level);
+    public GrenadeProjectileEntity(Level level, Player player){
+        this(ModEntities.GRENADE_PROJECTILE.get(), level);
         this.setOwner(player);
         this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
     }
@@ -49,6 +49,8 @@ public class NailProjectileEntity extends Projectile {
     public boolean isNoGravity() {
         return true;
     }
+
+    private BlockPos lightPos;
 
     void hitResultHandler(){
 
