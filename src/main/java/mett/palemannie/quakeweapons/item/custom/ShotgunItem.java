@@ -29,7 +29,7 @@ public class ShotgunItem extends AbstractWeapon{
 
     public ShotgunItem(Properties pProperties) {
         super(pProperties);
-        this.cooldown = 10;
+        this.cooldown = 9;
     }
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);

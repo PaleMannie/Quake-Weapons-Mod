@@ -21,8 +21,8 @@
   "death.attack.quakeweapons.thunderbolt_damage.player": "%1$s accepts %2$s's shaft",
   "death.attack.quakeweapons.thunderbolt_discharge": "%1$s discharges into the water",
   "death.attack.quakeweapons.thunderbolt_discharge.player": "%1$s accepts %2$s's discharge",
-  "death.attack.quakeweapons.shotgun_damage": "%1$s chewed on %2$s's boomstick",
-  "death.attack.quakeweapons.shotgun_damage.player": "how",
-  "death.attack.quakeweapons.super_shotgun_damage": "%1$s ate 2 loads of %2$s's buckshot",
-  "death.attack.quakeweapons.super_shotgun_damage.player": "how"
+  "death.attack.quakeweapons.shotgun_damage": "how",
+  "death.attack.quakeweapons.shotgun_damage.player": "%1$s chewed on %2$s's boomstick",
+  "death.attack.quakeweapons.super_shotgun_damage": "how",
+  "death.attack.quakeweapons.super_shotgun_damage.player": "%1$s ate 2 loads of %2$s's buckshot"
 }

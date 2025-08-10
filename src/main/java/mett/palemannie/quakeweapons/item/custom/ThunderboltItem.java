@@ -17,8 +17,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
@@ -96,63 +100,79 @@ public class ThunderboltItem extends AbstractWeapon{
         return false;
     }
 
-    public int drainAllCellsAndDischarge(Player player) {
-        int totalCells = 0;
+    private void triggerWaterDischarge(ServerLevel level, Player player) {
 
-        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-            ItemStack slot = player.getInventory().getItem(i);
-            if (slot.getItem() == ModItems.CELL.get()) {
-                totalCells += slot.getCount();
-                player.getInventory().setItem(i, ItemStack.EMPTY);
-            }
-        }
+        int cellCount = countAmmoCells(player);
+        if (cellCount <= 0) return;
 
-        return totalCells;
-    }
+        double radius = cellCount/2d;
 
-    public void dischargeInWater(Player player, Level level, float baseDamage, int radius) {
+        Vec3 dischargePos = player.position();
 
-        AABB area = new AABB(player.blockPosition()).inflate(radius);
+        AABB area = new AABB(dischargePos.x - radius, dischargePos.y - radius, dischargePos.z - radius,
+                dischargePos.x + radius, dischargePos.y + radius, dischargePos.z + radius);
 
-        List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, area, entity ->
-                entity != player && entity.isInWaterOrBubble() && entity.isAlive());
+        List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, area,
+                e -> e.isAlive() && e != player);
 
         for (LivingEntity target : targets) {
+            boolean targetInWater = target.isInWaterOrBubble();
+            boolean hasLOS = hasLineOfSight(level, dischargePos, target);
 
-            target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
-            target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), baseDamage * 6);
-            level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
-            ((ServerLevel) level).sendParticles(ParticleTypes.ELECTRIC_SPARK,
-                    target.getX(), target.getY(), target.getZ(),
-                    8, 0.3, 0.3, 0.3, 0.01);
+            if (targetInWater || hasLOS) {
+                target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
+                target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.63f) * 6f);
+                level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
+
+                level.sendParticles(ParticleTypes.ELECTRIC_SPARK,
+                        target.getX(), target.getY() + target.getBbHeight() / 2, target.getZ(),
+                        10, 0.2, 0.5, 0.2, 0.05);
+            }
+            player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.56f) * 6f);
         }
 
-        player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), baseDamage * 3.5f);
+        removeAllAmmoCells(player);
     }
 
+    private boolean hasLineOfSight(Level level, Vec3 from, LivingEntity target) {
+        Vec3 to = target.position().add(0, target.getBbHeight() / 2, 0);
+        BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+        return hit.getType() == HitResult.Type.MISS;
+    }
 
+    private int countAmmoCells(Player player) {
+        int total = 0;
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.is(ModItems.CELL.get())) {
+                total += stack.getCount();
+            }
+        }
+        return total;
+    }
+
+    private void removeAllAmmoCells(Player player) {
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.is(ModItems.CELL.get())) {
+                stack.setCount(0);
+            }
+        }
+    }
 
     @Override
     protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
 
         if(user instanceof ServerPlayer serverPlayer){
 
-
             if(pRemainingUseDuration % 2 == 0){
-
 
                 if (consumeAmmo((Player)user)) {
 
-                    if(user.isInWaterOrBubble()){
-
-                        int ammocount = drainAllCellsAndDischarge((Player) user);
-
-                        drainAllCellsAndDischarge((Player)user);
-                        dischargeInWater((Player)user, level, (float) ammocount, 32);
-                    }
-
                     if (level instanceof ServerLevel serverLevel) {
 
+                        if(user.isInWaterOrBubble()){
+
+                            triggerWaterDischarge(serverLevel, (Player) user);
+                        }
                         stopAmmoEmptyAnimation(user, serverLevel, stack);
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }

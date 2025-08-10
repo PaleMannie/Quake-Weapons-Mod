@@ -21,8 +21,8 @@
   "death.attack.quakeweapons.thunderbolt_damage.player": "%1$s nimmt %2$s's Schaft an",
   "death.attack.quakeweapons.thunderbolt_discharge": "%1$s entlädt sich ins Wasser",
   "death.attack.quakeweapons.thunderbolt_discharge.player": "%1$s nimmt %2$s's Entladung an",
-  "death.attack.quakeweapons.shotgun_damage": "%1$s knabberte an %2$s's Flinte",
-  "death.attack.quakeweapons.shotgun_damage.player": "wie",
-  "death.attack.quakeweapons.super_shotgun_damage": "%1$s aß 2 Ladungen von %2$s's Grobschrot",
-  "death.attack.quakeweapons.super_shotgun_damage.player": "wie"
+  "death.attack.quakeweapons.shotgun_damage": "wie",
+  "death.attack.quakeweapons.shotgun_damage.player": "%1$s knabberte an %2$s's Flinte",
+  "death.attack.quakeweapons.super_shotgun_damage": "wie",
+  "death.attack.quakeweapons.super_shotgun_damage.player": "%1$s aß 2 Ladungen von %2$s's Grobschrot"
 }

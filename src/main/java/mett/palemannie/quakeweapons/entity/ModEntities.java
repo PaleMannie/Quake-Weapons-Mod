@@ -3,7 +3,7 @@ package mett.palemannie.quakeweapons.entity;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
 import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
-import mett.palemannie.quakeweapons.entity.custom.ThunderboltFlashEntity;
+import mett.palemannie.quakeweapons.entity.custom.HitscanMuzzleflashEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,8 +25,8 @@ public class ModEntities {
             ENTITY_TYPES.register("super_nail_projectile", () -> EntityType.Builder.<SuperNailProjectileEntity>of(SuperNailProjectileEntity::new, MobCategory.MISC)
                     .sized(0.1f, 0.1f).fireImmune().build("super_nail_projectile"));
 
-    public static final RegistryObject<EntityType<ThunderboltFlashEntity>> THUNDERBOLT_FLASH =
-            ENTITY_TYPES.register("thunderbolt_flash", () -> EntityType.Builder.<ThunderboltFlashEntity>of(ThunderboltFlashEntity::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<HitscanMuzzleflashEntity>> THUNDERBOLT_FLASH =
+            ENTITY_TYPES.register("thunderbolt_flash", () -> EntityType.Builder.<HitscanMuzzleflashEntity>of(HitscanMuzzleflashEntity::new, MobCategory.MISC)
                     .sized(0.1f, 0.1f).fireImmune().build("thunderbolt_flash"));
 
 
