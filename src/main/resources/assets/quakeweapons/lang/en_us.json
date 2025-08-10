@@ -11,7 +11,7 @@
   "item.quakeweapons.thunderbolt": "Thunderbolt",
   "item.quakeweapons.shell": "Shotgun Shell",
   "item.quakeweapons.shotgun": "Shotgun",
-  "item.quakeweapons.super_shotgun": "Super Shotgun",
+  "item.quakeweapons.super_shotgun": "Double Barreled Shotgun",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s nailed themselves",
   "death.attack.quakeweapons.nailgun_damage.player": "%1$s was nailed by %2$s",

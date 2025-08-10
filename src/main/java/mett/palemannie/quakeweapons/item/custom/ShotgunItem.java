@@ -107,7 +107,7 @@ public class ShotgunItem extends AbstractWeapon{
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
 
-                        ServerPlayHandler.handleShotgunShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
+                        ServerPlayHandler.handleShotgunShoot(serverPlayer);
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());

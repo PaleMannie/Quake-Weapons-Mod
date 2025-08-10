@@ -28,6 +28,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.THUNDERBOLT.get());
                         pOutput.accept(ModItems.CELL.get());
                         pOutput.accept(ModItems.SHOTGUN.get());
+                        pOutput.accept(ModItems.SUPER_SHOTGUN.get());
                         pOutput.accept(ModItems.SHELL.get());
 
                     })

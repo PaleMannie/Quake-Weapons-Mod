@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class ServerPlayHandler {
 
-    private static Vec3 getSpreadDirection(Vec3 look, double spreadDegrees, RandomSource random) {
+    private static Vec3 getShotgunNormalizedSpreadDirection(Vec3 look, double spreadDegrees, RandomSource random) {
 
         double spreadRad = Math.toRadians(spreadDegrees);
         double angle = random.nextDouble() * Math.PI * 2;
@@ -37,6 +37,22 @@ public class ServerPlayHandler {
         Vec3 offset = right.scale(Math.cos(angle) * radius).add(up.scale(Math.sin(angle) * radius));
 
         return look.add(offset).normalize();
+    }
+
+    private static Vec3 getSuperShotgunNormalizedSpreadDirection(Vec3 forward, double spreadH, double spreadV, RandomSource random) {
+
+        double yaw = Math.toRadians((random.nextDouble() - 0.5) * 2 * spreadH);
+        double pitch = Math.toRadians((random.nextDouble() - 0.5) * 2 * spreadV);
+
+        Vec3 up = new Vec3(0, 1, 0);
+        Vec3 right = forward.cross(up).normalize();
+        up = right.cross(forward).normalize();
+
+        Vec3 dir = forward
+                .add(right.scale(Math.tan(yaw)))
+                .add(up.scale(Math.tan(pitch)));
+
+        return dir.normalize();
     }
 
     public static void handleAxeShoot(ServerPlayer player){
@@ -110,12 +126,75 @@ public class ServerPlayHandler {
     public static void handleGrenadeLauncherShoot(ServerPlayer player){
     }
 
-    public static void handleSuperShotgunShoot(ServerPlayer player, int useTime){
+    public static void handleSuperShotgunShoot(ServerPlayer player) {
 
+        ServerLevel sevel = player.serverLevel();
+        Vec3 eyePos = player.getEyePosition();
+        Vec3 look = player.getLookAngle();
 
+        final int PELLETS = 14;
+        final double RANGE = 64.0;
+        final double SPREAD_H = 11.0;
+        final double SPREAD_V = 7.0;
+        final float DAMAGE_PER_PELLET = 2.0F;
+
+        for (int i = 0; i < PELLETS; i++) {
+            Vec3 pelletDir = getSuperShotgunNormalizedSpreadDirection(look, SPREAD_H, SPREAD_V, sevel.random);
+            Vec3 endPos = eyePos.add(pelletDir.scale(RANGE));
+
+            BlockHitResult blockHit = sevel.clip(new ClipContext(
+                    eyePos, endPos,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    player
+            ));
+
+            EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
+                    sevel, player, eyePos, endPos,
+                    new AABB(eyePos, endPos).inflate(1.0),
+                    e -> e instanceof LivingEntity && e != player
+            );
+
+            if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
+                LivingEntity target = (LivingEntity) entityHit.getEntity();
+                target.hurt(sevel.damageSources().playerAttack(player), Float.MIN_VALUE);
+                target.hurt(sevel.damageSources().source(ModDamageTypes.SUPER_SHOTGUN_DAMAGE, null, null), DAMAGE_PER_PELLET);
+
+                Vec3 hitPos = entityHit.getLocation();
+                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+                sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+            }
+            else if (blockHit != null && blockHit.getType() != HitResult.Type.MISS) {
+                Vec3 hitPos = blockHit.getLocation();
+                sevel.sendParticles(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z,
+                        1, 0.1, 0.1, 0.1, 0.0);
+            }
+        }
+
+        ///Sound
+        double posX = player.getX();
+        double posY = player.getY();
+        double posZ = player.getZ();
+        sevel.playSound(null, posX, posY, posZ, ModSounds.SUPER_SHOTGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
+
+        ///Entity
+        double forwardOffset = 0.2;
+
+        Vec3 look1 = player.getLookAngle();
+        Vec3 right = look1.cross(new Vec3(0, 0, 0)).normalize();
+
+        double spawnX = player.getX() + right.x+ look1.x * forwardOffset;
+        double spawnY = player.getEyeY() - 0.25 + right.y + look1.y * forwardOffset;
+        double spawnZ = player.getZ() + right.z + look1.z * forwardOffset;
+
+        HitscanMuzzleflashEntity projectile = new HitscanMuzzleflashEntity(sevel, player);
+        projectile.setPos(spawnX, spawnY, spawnZ);
+        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+        sevel.addFreshEntity(projectile);
     }
 
-    public static void handleShotgunShoot(ServerPlayer player, int useTime){
+    public static void handleShotgunShoot(ServerPlayer player){
         ServerLevel sevel = player.serverLevel();
         Random rdm = new Random();
         Level level = player.level();
@@ -132,10 +211,7 @@ public class ServerPlayHandler {
 
         for (int i = 0; i < PELLETS; i++) {
 
-            double yawOffset = (level.random.nextDouble() - 0.5) * 2 * SPREAD_DEGREES;
-            double pitchOffset = (level.random.nextDouble() - 0.5) * 2 * SPREAD_DEGREES;
-
-            Vec3 pelletDir = getSpreadDirection(look, SPREAD_DEGREES, level.random);
+            Vec3 pelletDir = getShotgunNormalizedSpreadDirection(look, SPREAD_DEGREES, level.random);
             Vec3 endPos = eyePos.add(pelletDir.scale(RANGE));
 
             BlockHitResult blockHit = level.clip(new ClipContext(

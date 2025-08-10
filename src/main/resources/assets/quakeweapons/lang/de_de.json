@@ -11,7 +11,7 @@
   "item.quakeweapons.thunderbolt": "Donnerbolzen",
   "item.quakeweapons.shell": "Schrotpatrone",
   "item.quakeweapons.shotgun": "Schrotgewehr",
-  "item.quakeweapons.super_shotgun": "Super Schrotgewehr",
+  "item.quakeweapons.super_shotgun": "Zwilling",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s hat sich selbst genagelt",
   "death.attack.quakeweapons.nailgun_damage.player": "%1$s wurde durch %2$s genagelt",

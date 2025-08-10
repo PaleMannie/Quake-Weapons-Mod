@@ -30,7 +30,7 @@ public class SuperShotgunItem extends AbstractWeapon{
 
     public SuperShotgunItem(Properties pProperties) {
         super(pProperties);
-        this.cooldown = 14;
+        this.cooldown = 13;
     }
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
@@ -97,7 +97,7 @@ public class SuperShotgunItem extends AbstractWeapon{
         if(user instanceof ServerPlayer serverPlayer){
 
 
-            if(pRemainingUseDuration % 14 == 0){
+            if((pRemainingUseDuration - 12)  % 14 == 0){
 
 
                 if (consumeAmmo((Player)user)) {
@@ -106,9 +106,10 @@ public class SuperShotgunItem extends AbstractWeapon{
 
                         stopAmmoEmptyAnimation(user, serverLevel, stack);
                         stopIdleAnimation(user, serverLevel, stack);
-                        startShootingAnimation(user, serverLevel, stack); }
+                        startShootingAnimation(user, serverLevel, stack);
+                    }
 
-                        ServerPlayHandler.handleSuperShotgunShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
+                    ServerPlayHandler.handleSuperShotgunShoot(serverPlayer);
                 } else {
 
                     ModMessages.sendToServer(new C2SAmmoEmptyPacket());
