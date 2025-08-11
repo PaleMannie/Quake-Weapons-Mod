@@ -25,7 +25,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<MuzzleflashEntity>> MUZZLE_FLASH =
             ENTITY_TYPES.register("muzzleflash", () -> EntityType.Builder.<MuzzleflashEntity>of(MuzzleflashEntity::new, MobCategory.MISC)
-                    .sized(0.1f, 0.1f).fireImmune().build("muzzleflash"));
+                    .sized(0.01f, 0.01f).fireImmune().build("muzzleflash"));
 
     public static final RegistryObject<EntityType<RocketProjectileEntity>> ROCKET_PROJECTILE =
             ENTITY_TYPES.register("rocket_projectile", () -> EntityType.Builder.<RocketProjectileEntity>of(RocketProjectileEntity::new, MobCategory.MISC)

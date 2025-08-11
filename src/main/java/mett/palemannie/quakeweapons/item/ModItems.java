@@ -49,7 +49,7 @@ public class ModItems {
     public static final RegistryObject<Item> GRENADELAUNCHER = ITEMS.register("grenadelauncher",
             () -> new GrenadelauncherItem(new Item.Properties().stacksTo(1)));
 
-    public static final RegistryObject<Item> AXE = ITEMS.register("axe",
+    public static final RegistryObject<Item> QWAXE = ITEMS.register("qwaxe",
             () -> new QWAxeItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {

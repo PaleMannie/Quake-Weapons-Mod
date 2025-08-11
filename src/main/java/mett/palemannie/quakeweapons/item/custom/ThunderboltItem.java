@@ -7,6 +7,7 @@ import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
+import mett.palemannie.quakeweapons.util.WeaponDamageStats;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -121,14 +122,14 @@ public class ThunderboltItem extends AbstractWeapon{
 
             if (targetInWater || hasLOS) {
                 target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
-                target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.63f) * 6f);
+                target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.63f) * WeaponDamageStats.ThunderboltDamage);
                 level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
 
                 level.sendParticles(ParticleTypes.ELECTRIC_SPARK,
                         target.getX(), target.getY() + target.getBbHeight() / 2, target.getZ(),
                         10, 0.2, 0.5, 0.2, 0.05);
             }
-            player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.56f) * 6f);
+            player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.56f) * WeaponDamageStats.ThunderboltDamage);
         }
 
         removeAllAmmoCells(player);

@@ -47,7 +47,7 @@ public class QuakeWeapons {
         ModBlocks.register(modEventBus);
 
 
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        context.registerConfig(ModConfig.Type.COMMON, QuakeWeaponsConfig.COMMON_SPEC);
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

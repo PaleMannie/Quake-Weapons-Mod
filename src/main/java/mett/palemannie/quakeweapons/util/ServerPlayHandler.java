@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.util;
 
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.entity.custom.*;
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
@@ -21,6 +22,10 @@ import java.util.Random;
 import java.util.Set;
 
 public class ServerPlayHandler {
+
+    private static boolean isMuzzleFlashEnabled(){
+        return QuakeWeaponsConfig.COMMON.enableMuzzleFlash.get();
+    }
 
     private static Vec3 getShotgunNormalizedSpreadDirection(Vec3 look, double spreadDegrees, RandomSource random) {
 
@@ -71,11 +76,14 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look1.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look1.z * forwardOffset;
 
-        MuzzleflashEntity projectile = new MuzzleflashEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+        if(isMuzzleFlashEnabled()){
 
-        sevel.addFreshEntity(projectile);
+            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+            flash.setPos(spawnX, spawnY, spawnZ);
+            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+            sevel.addFreshEntity(flash);
+        }
 
         ///Hitscan
         double maxDistance = 20.0;
@@ -102,11 +110,11 @@ public class ServerPlayHandler {
 
                     // Wende Schaden an
                     target.hurt(lvl.damageSources().playerAttack(player), Float.MIN_VALUE);
-                    target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, null, null), 6F);
+                    target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, null, null), WeaponDamageStats.ThunderboltDamage);
                 }
             }
 
-            player.getServer().overworld().sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y-0.25f, point.z, 1, 0.02f, 0.02f, 0.02f, 0f);
+            if(QuakeWeaponsConfig.COMMON.enableThunderboltTracer.get()) player.getServer().overworld().sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y-0.25f, point.z, 1, 0.02f, 0.02f, 0.02f, 0f);
         }
 
         ///Sound
@@ -138,12 +146,16 @@ public class ServerPlayHandler {
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
-        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
-
-        sevel.addFreshEntity(flash);
         sevel.addFreshEntity(projectile);
+
+        if(isMuzzleFlashEnabled()){
+
+            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+            flash.setPos(spawnX, spawnY, spawnZ);
+            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+            sevel.addFreshEntity(flash);
+        }
 
         ///Sound
         double posX = player.getX();
@@ -172,12 +184,16 @@ public class ServerPlayHandler {
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
-        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
-
-        sevel.addFreshEntity(flash);
         sevel.addFreshEntity(projectile);
+
+        if(isMuzzleFlashEnabled()){
+
+            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+            flash.setPos(spawnX, spawnY, spawnZ);
+            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+            sevel.addFreshEntity(flash);
+        }
 
         ///Sound
         double posX = player.getX();
@@ -196,7 +212,7 @@ public class ServerPlayHandler {
         final double RANGE = 64.0;
         final double SPREAD_H = 11.0;
         final double SPREAD_V = 7.0;
-        final float DAMAGE_PER_PELLET = 2.0F;
+        final float DAMAGE_PER_PELLET = WeaponDamageStats.SuperShotgunDamage;
 
         for (int i = 0; i < PELLETS; i++) {
             Vec3 pelletDir = getSuperShotgunNormalizedSpreadDirection(look, SPREAD_H, SPREAD_V, sevel.random);
@@ -247,11 +263,14 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look1.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look1.z * forwardOffset;
 
-        MuzzleflashEntity projectile = new MuzzleflashEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+        if(isMuzzleFlashEnabled()){
 
-        sevel.addFreshEntity(projectile);
+            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+            flash.setPos(spawnX, spawnY, spawnZ);
+            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+            sevel.addFreshEntity(flash);
+        }
     }
 
     public static void handleShotgunShoot(ServerPlayer player){
@@ -262,7 +281,7 @@ public class ServerPlayHandler {
 
         ///Hitscan
         final int PELLETS = 6;
-        final float DAMAGE_PER_PELLET = 2.0F;
+        final float DAMAGE_PER_PELLET = WeaponDamageStats.ShotgunDamage;
         final double RANGE = 64.0;
         final double SPREAD_DEGREES = 10.0;
 
@@ -320,11 +339,14 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look1.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look1.z * forwardOffset;
 
-        MuzzleflashEntity projectile = new MuzzleflashEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+        if(isMuzzleFlashEnabled()){
 
-        sevel.addFreshEntity(projectile);
+            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+            flash.setPos(spawnX, spawnY, spawnZ);
+            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+            sevel.addFreshEntity(flash);
+        }
     }
 
     public static void handleSuperNailgunShoot(ServerPlayer player){
@@ -347,12 +369,16 @@ public class ServerPlayHandler {
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
-        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
-
-        sevel.addFreshEntity(flash);
         sevel.addFreshEntity(projectile);
+
+        if(isMuzzleFlashEnabled()){
+
+            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+            flash.setPos(spawnX, spawnY, spawnZ);
+            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+            sevel.addFreshEntity(flash);
+        }
 
         ///Sound
         double posX = player.getX();
@@ -383,12 +409,16 @@ public class ServerPlayHandler {
         projectile.setPos(spawnX, spawnY, spawnZ);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
 
-        MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0f, 0.0F);
-
-        sevel.addFreshEntity(flash);
         sevel.addFreshEntity(projectile);
+
+        if(isMuzzleFlashEnabled()){
+
+            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
+            flash.setPos(spawnX, spawnY, spawnZ);
+            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
+
+            sevel.addFreshEntity(flash);
+        }
 
         ///Sound
         double posX = player.getX();

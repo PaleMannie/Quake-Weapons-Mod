@@ -4,6 +4,7 @@ import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
+import mett.palemannie.quakeweapons.util.WeaponDamageStats;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
@@ -79,7 +80,7 @@ public class SuperNailProjectileEntity extends Projectile {
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, 4f);
+            entity.hurt(source, WeaponDamageStats.SuperNailgunDamage);
         }
     }
 

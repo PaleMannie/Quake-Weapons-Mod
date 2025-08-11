@@ -88,6 +88,8 @@ public class MuzzleflashEntity extends Projectile {
 
         muzzleFlashHandler();
 
-        if(this.tickCount > 10) this.discard();
+        if(this.tickCount > 10) {
+            this.discard();
+        }
     }
 }
