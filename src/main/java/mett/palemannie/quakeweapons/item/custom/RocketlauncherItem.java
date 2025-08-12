@@ -29,7 +29,7 @@ public class RocketlauncherItem extends AbstractWeapon{
 
     public RocketlauncherItem(Properties pProperties) {
         super(pProperties);
-        this.cooldown = 15;
+        this.cooldown = 14;
     }
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);

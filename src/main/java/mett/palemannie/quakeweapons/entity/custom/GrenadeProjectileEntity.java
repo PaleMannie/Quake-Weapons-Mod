@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -88,13 +89,13 @@ public class GrenadeProjectileEntity extends Projectile {
     void handleProjectileBlockHitEffects(){
 
         if(level() instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
+            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.SMOKE, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
     }
 
     void handleGore(Level level){
 
         if(level instanceof ServerLevel)
-            ((ServerLevel) level).sendParticles(ParticleTypes.LANDING_LAVA, this.getX(), this.getY(), this.getZ(), 3, 0.1f, 0.1f, 0.1f, 0.1f);
+            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.LANDING_LAVA, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
     }
 
     void handleHitSound(@Nullable EntityHitResult entityHitResult, @Nullable BlockHitResult blockHitResult, Level level, SoundEvent soundEvent, float volume, float pitch){

@@ -30,9 +30,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SHOTGUN.get());
                         pOutput.accept(ModItems.SUPER_SHOTGUN.get());
                         pOutput.accept(ModItems.SHELL.get());
-
+                        pOutput.accept(ModItems.ROCKETLAUNCHER.get());
                         pOutput.accept(ModItems.ROCKET.get());
-
+                        pOutput.accept(ModItems.GRENADELAUNCHER.get());
                         pOutput.accept(ModItems.GRENADE.get());
 
                     })

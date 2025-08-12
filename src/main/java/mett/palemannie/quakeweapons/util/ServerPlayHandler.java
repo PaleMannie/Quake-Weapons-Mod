@@ -1,16 +1,22 @@
 package mett.palemannie.quakeweapons.util;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
+import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.custom.*;
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -58,6 +64,23 @@ public class ServerPlayHandler {
         return dir.normalize();
     }
 
+    private static void shootFromRotationNoMomentum(Projectile projectile, Player player, float xRot, float yRot, float velocity, float inaccuracy) {
+
+        projectile.setOwner(player);
+        projectile.setPos(player.getEyePosition().x, player.getEyeY() - 0.2d, player.getEyePosition().z);
+
+        float f = -Mth.sin(yRot * ((float)Math.PI / 180F)) * Mth.cos(xRot * ((float)Math.PI / 180F));
+        float f1 = -Mth.sin(xRot * ((float)Math.PI / 180F));
+        float f2 =  Mth.cos(yRot * ((float)Math.PI / 180F)) * Mth.cos(xRot * ((float)Math.PI / 180F));
+
+        projectile.setYRot(player.getYRot());
+        projectile.yRotO = player.getYRot();
+        projectile.setXRot(player.getXRot());
+        projectile.xRotO = player.getXRot();
+
+        projectile.shoot(f, f1, f2, velocity, inaccuracy);
+    }
+
     public static void handleAxeShoot(ServerPlayer player){
     }
 
@@ -90,25 +113,21 @@ public class ServerPlayHandler {
         Vec3 start = player.getEyePosition();
         Vec3 look = player.getLookAngle();
 
-        // Speichert Gegner, die schon getroffen wurden
         Set<LivingEntity> alreadyHit = new HashSet<>();
 
         for (double i = 0.0; i < maxDistance; i += 0.25) {
             Vec3 point = start.add(look.scale(i));
 
-            // Erstelle AABB um Punkt herum
             AABB box = new AABB(
                     point.x - 0.25, point.y - 0.25, point.z - 0.25,
                     point.x + 0.25, point.y + 0.25, point.z + 0.25
             );
 
-            // Finde Gegner im Bereich
             List<LivingEntity> entities = lvl.getEntitiesOfClass(LivingEntity.class, box);
             for (LivingEntity target : entities) {
                 if (target != player && target.isAlive() && !alreadyHit.contains(target)) {
-                    alreadyHit.add(target); // Markiere als getroffen
+                    alreadyHit.add(target);
 
-                    // Wende Schaden an
                     target.hurt(lvl.damageSources().playerAttack(player), Float.MIN_VALUE);
                     target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, null, null), WeaponDamageStats.ThunderboltDamage);
                 }
@@ -129,7 +148,6 @@ public class ServerPlayHandler {
     public static void handleRocketLauncherShoot(ServerPlayer player){
 
         ServerLevel sevel = player.serverLevel();
-        Random rdm = new Random();
         Level lvl = player.level();
 
         ///Entity
@@ -139,20 +157,18 @@ public class ServerPlayHandler {
         Vec3 right = look.cross(new Vec3(0, 0, 0)).normalize();
 
         double spawnX = player.getX() + right.x+ look.x * forwardOffset;
-        double spawnY = player.getEyeY() - 0.25 + right.y + look.y * forwardOffset;
+        double spawnY = player.getEyeY() - 0.2f + right.y + look.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look.z * forwardOffset;
 
-        RocketProjectileEntity projectile = new RocketProjectileEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
+        RocketProjectileEntity rocket = new RocketProjectileEntity(ModEntities.ROCKET_PROJECTILE.get(), sevel);
 
-        sevel.addFreshEntity(projectile);
+        shootFromRotationNoMomentum(rocket, player, player.getXRot(), player.getYRot(), 0.8f, 0.0f);
+        sevel.addFreshEntity(rocket);
 
         if(isMuzzleFlashEnabled()){
 
             MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
             flash.setPos(spawnX, spawnY, spawnZ);
-            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
             sevel.addFreshEntity(flash);
         }
@@ -167,7 +183,6 @@ public class ServerPlayHandler {
     public static void handleGrenadeLauncherShoot(ServerPlayer player){
 
         ServerLevel sevel = player.serverLevel();
-        Random rdm = new Random();
         Level lvl = player.level();
 
         ///Entity
@@ -180,17 +195,15 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look.z * forwardOffset;
 
-        GrenadeProjectileEntity projectile = new GrenadeProjectileEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
+        GrenadeProjectileEntity grenade = new GrenadeProjectileEntity(ModEntities.GRENADE_PROJECTILE.get(), sevel);
 
-        sevel.addFreshEntity(projectile);
+        shootFromRotationNoMomentum(grenade, player, player.getXRot(), player.getYRot(), 0.8f, 0.0f);
+        sevel.addFreshEntity(grenade);
 
         if(isMuzzleFlashEnabled()){
 
             MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
             flash.setPos(spawnX, spawnY, spawnZ);
-            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
             sevel.addFreshEntity(flash);
         }
@@ -267,15 +280,14 @@ public class ServerPlayHandler {
 
             MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
             flash.setPos(spawnX, spawnY, spawnZ);
-            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
             sevel.addFreshEntity(flash);
         }
     }
 
     public static void handleShotgunShoot(ServerPlayer player){
+
         ServerLevel sevel = player.serverLevel();
-        Random rdm = new Random();
         Level level = player.level();
 
 
@@ -343,7 +355,6 @@ public class ServerPlayHandler {
 
             MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
             flash.setPos(spawnX, spawnY, spawnZ);
-            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
             sevel.addFreshEntity(flash);
         }
@@ -352,7 +363,6 @@ public class ServerPlayHandler {
     public static void handleSuperNailgunShoot(ServerPlayer player){
 
         ServerLevel sevel = player.serverLevel();
-        Random rdm = new Random();
         Level lvl = player.level();
 
         ///Entity
@@ -365,17 +375,15 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.25 + right.y + look.y * forwardOffset;
         double spawnZ = player.getZ() + right.z + look.z * forwardOffset;
 
-        SuperNailProjectileEntity projectile = new SuperNailProjectileEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
+        SuperNailProjectileEntity supernail = new SuperNailProjectileEntity(ModEntities.SUPER_NAIL_PROJECTILE.get(), sevel);
 
-        sevel.addFreshEntity(projectile);
+        shootFromRotationNoMomentum(supernail, player, player.getXRot(), player.getYRot(), 1f, 0.0f);
+        sevel.addFreshEntity(supernail);
 
         if(isMuzzleFlashEnabled()){
 
             MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
             flash.setPos(spawnX, spawnY, spawnZ);
-            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
             sevel.addFreshEntity(flash);
         }
@@ -390,7 +398,6 @@ public class ServerPlayHandler {
     public static void handleNailgunShoot(ServerPlayer player){
 
         ServerLevel sevel = player.serverLevel();
-        Random rdm = new Random();
         Level lvl = player.level();
 
         ///Entity
@@ -405,17 +412,16 @@ public class ServerPlayHandler {
         double spawnY = player.getEyeY() - 0.1 + right.y * offset + look.y * forwardOffset;
         double spawnZ = player.getZ() + right.z * offset + look.z * forwardOffset;
 
-        NailProjectileEntity projectile = new NailProjectileEntity(sevel, player);
-        projectile.setPos(spawnX, spawnY, spawnZ);
-        projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1F, 0.0F);
+        NailProjectileEntity nail = new NailProjectileEntity(ModEntities.NAIL_PROJECTILE.get(), sevel);
 
-        sevel.addFreshEntity(projectile);
+        shootFromRotationNoMomentum(nail, player, player.getXRot(), player.getYRot(), 1f, 0.0f);
+        nail.setPos(spawnX, spawnY, spawnZ);
+        sevel.addFreshEntity(nail);
 
         if(isMuzzleFlashEnabled()){
 
             MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
             flash.setPos(spawnX, spawnY, spawnZ);
-            flash.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 0.0F, 0.0F);
 
             sevel.addFreshEntity(flash);
         }

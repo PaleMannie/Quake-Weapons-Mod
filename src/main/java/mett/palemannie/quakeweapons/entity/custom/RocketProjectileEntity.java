@@ -1,13 +1,11 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
-import mett.palemannie.quakeweapons.block.ModBlocks;
-import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,13 +13,9 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LightBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -34,12 +28,6 @@ public class RocketProjectileEntity extends Projectile {
 
     public RocketProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
-    }
-
-    public RocketProjectileEntity(Level level, Player player){
-        this(ModEntities.ROCKET_PROJECTILE.get(), level);
-        this.setOwner(player);
-        this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
     }
 
     @Override
@@ -86,13 +74,13 @@ public class RocketProjectileEntity extends Projectile {
     void handleProjectileBlockHitEffects(){
 
         if(level() instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
+            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.SMOKE, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
     }
 
     void handleGore(Level level){
 
         if(level instanceof ServerLevel)
-            ((ServerLevel) level).sendParticles(ParticleTypes.LANDING_LAVA, this.getX(), this.getY(), this.getZ(), 3, 0.1f, 0.1f, 0.1f, 0.1f);
+            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.LANDING_LAVA, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
     }
 
     void handleHitSound(@Nullable EntityHitResult entityHitResult, @Nullable BlockHitResult blockHitResult, Level level, SoundEvent soundEvent, float volume, float pitch){

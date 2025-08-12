@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -40,6 +41,11 @@ public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity>
         poseStack.popPose();
 
         super.render(nailEntity, v1, v2, poseStack, bufferSource, packedLight);
+    }
+
+    @Override
+    public boolean shouldRender(NailProjectileEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ) {
+        return true;
     }
 
     @Override
