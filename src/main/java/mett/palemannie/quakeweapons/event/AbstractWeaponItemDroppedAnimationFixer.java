@@ -1,7 +1,6 @@
 package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.item.custom.AbstractWeapon;
-import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -9,10 +8,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import software.bernie.geckolib.animatable.GeoItem;
 
 @Mod.EventBusSubscriber
-public class AbstractWeaponItemDropAnimationFixer {
+public class AbstractWeaponItemDroppedAnimationFixer {
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.LevelTickEvent event) {
@@ -31,10 +29,11 @@ public class AbstractWeaponItemDropAnimationFixer {
 
             if (stack.getItem() instanceof AbstractWeapon weapon) {
 
-                int id = Math.toIntExact(GeoItem.getOrAssignId(stack, serverLevel));
-                weapon.stopShootingAnimation(Minecraft.getInstance().player, serverLevel, stack);
-                weapon.stopAmmoEmptyAnimation(Minecraft.getInstance().player, serverLevel, stack);
-                weapon.startIdleAnimation(Minecraft.getInstance().player, serverLevel, stack);
+                if(serverLevel.getRandomPlayer() != null) {
+                    weapon.stopShootingAnimation(serverLevel.getRandomPlayer(), serverLevel, stack);
+                    weapon.stopAmmoEmptyAnimation(serverLevel.getRandomPlayer(), serverLevel, stack);
+                    weapon.stopIdleAnimation(serverLevel.getRandomPlayer(), serverLevel, stack);
+                }
             }
         }
     }

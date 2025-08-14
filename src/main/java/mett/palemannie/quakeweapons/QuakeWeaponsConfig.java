@@ -32,7 +32,7 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.DoubleValue grenadelauncherDamage;
 
         public Common(ForgeConfigSpec.Builder builder) {
-            builder.push("Spitting Image");
+            builder.push("Quake Weapons");
 
             enableMuzzleFlash = builder.comment("[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables muzzle flash when shooting").define("enableMuzzleFlash", false);
 
@@ -65,12 +65,12 @@ public class QuakeWeaponsConfig
                     .defineInRange("thunderboltDamage", 6.0, 0.0, Float.MAX_VALUE);
 
             rocketlauncherDamage = builder
-                    .comment("How much damage the Rocket Launcher deals per shot")
-                    .defineInRange("rocketlauncherDamage", 6.0, 0.0, Float.MAX_VALUE);
+                    .comment("How much damage the Rocket Launcher deals per shot. WARNING: Damage increases blast radius")
+                    .defineInRange("rocketlauncherDamage", 30, 0.0, Float.MAX_VALUE);
 
             grenadelauncherDamage = builder
-                    .comment("How much damage the Grenade Launcher deals per shot")
-                    .defineInRange("grenadelauncherDamage", 6.0, 0.0, Float.MAX_VALUE);
+                    .comment("How much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
+                    .defineInRange("grenadelauncherDamage", 28.0, 0.0, Float.MAX_VALUE);
 
             builder.pop();
         }

@@ -64,7 +64,7 @@ public class ServerPlayHandler {
         return dir.normalize();
     }
 
-    private static void shootFromRotationNoMomentum(Projectile projectile, Player player, float xRot, float yRot, float velocity, float inaccuracy) {
+    private static void shootFromRotationNoMomentum(Projectile projectile, ServerPlayer player, float xRot, float yRot, float velocity, float inaccuracy) {
 
         projectile.setOwner(player);
         projectile.setPos(player.getEyePosition().x, player.getEyeY() - 0.2d, player.getEyePosition().z);
@@ -162,7 +162,7 @@ public class ServerPlayHandler {
 
         RocketProjectileEntity rocket = new RocketProjectileEntity(ModEntities.ROCKET_PROJECTILE.get(), sevel);
 
-        shootFromRotationNoMomentum(rocket, player, player.getXRot(), player.getYRot(), 0.8f, 0.0f);
+        shootFromRotationNoMomentum(rocket, player, player.getXRot(), player.getYRot(), 1f, 0.0f);
         sevel.addFreshEntity(rocket);
 
         if(isMuzzleFlashEnabled()){

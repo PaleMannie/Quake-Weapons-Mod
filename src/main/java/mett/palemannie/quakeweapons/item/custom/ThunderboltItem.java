@@ -181,7 +181,7 @@ public class ThunderboltItem extends AbstractWeapon{
                         ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
                 } else {
 
-                    ModMessages.sendToServer(new C2SAmmoEmptyPacket());
+                    ServerPlayHandler.playAmmoEmptySound(serverPlayer);
                     stopShootingAnimation(user, level.getServer().overworld(), stack);
                     stopIdleAnimation(user, level.getServer().overworld(), stack);
                     startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);

@@ -112,7 +112,7 @@ public class SuperShotgunItem extends AbstractWeapon{
                     ServerPlayHandler.handleSuperShotgunShoot(serverPlayer);
                 } else {
 
-                    ModMessages.sendToServer(new C2SAmmoEmptyPacket());
+                    ServerPlayHandler.playAmmoEmptySound(serverPlayer);
                     stopShootingAnimation(user, level.getServer().overworld(), stack);
                     stopIdleAnimation(user, level.getServer().overworld(), stack);
                     startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);

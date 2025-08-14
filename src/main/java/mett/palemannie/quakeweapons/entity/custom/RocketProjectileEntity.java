@@ -1,28 +1,27 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
+import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
+import mett.palemannie.quakeweapons.util.WeaponDamageStats;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LightBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
-
-import javax.annotation.Nullable;
 
 public class RocketProjectileEntity extends Projectile {
 
@@ -38,6 +37,79 @@ public class RocketProjectileEntity extends Projectile {
         return true;
     }
 
+    public static float computeRadiusFromDamage(float configDamage) {
+        return ((configDamage - 1) / 7.0F)/2;
+    }
+
+    private void quakeExplosion(Level level) {
+        if (this.level().isClientSide) return;
+
+        Vec3 center = this.position();
+
+        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, this, this.getOwner());
+
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.RocketlauncherDamage), false, Level.ExplosionInteraction.NONE, false);
+
+        // Explosionseffekte (Server sendet Partikel)
+        ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
+                center.x, center.y, center.z,
+                40, // Menge
+                0.0, 0.0, 0.0,
+                0.2); // Geschwindigkeit
+
+        ((ServerLevel) this.level()).sendParticles(ParticleTypes.LARGE_SMOKE,
+                center.x, center.y, center.z,
+                20,
+                0.0, 0.0, 0.0,
+                0.1);
+
+        // Sound (Quake-artig → eigener Soundevent)
+        this.level().playSound(null, center.x, center.y, center.z,
+                ModSounds.EXPLOSION.get(), SoundSource.PLAYERS,
+                2.0F, 1.0F);
+
+        this.cleanupLight();
+        this.discard();
+    }
+
+    private BlockPos lightPos;
+
+    private void tryPlaceLight() {
+        BlockPos origin = this.blockPosition();
+        Level level = this.level();
+
+        int[] dyOrder = {0, -1, 1};
+        for (int dy : dyOrder) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
+                    BlockPos candidate = origin.offset(dx, dy, dz);
+                    BlockState state = level.getBlockState(candidate);
+
+                    if (state.isAir()) {
+                        level.setBlock(candidate, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 15), 3);
+                        this.lightPos = candidate;
+                        return;
+                    } else if (state.getBlock() == Blocks.WATER) {
+                        level.setBlock(candidate, ModBlocks.LIGHT_WATER.get().defaultBlockState(), 3);
+                        this.lightPos = candidate;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    private void cleanupLight() {
+        if (this.lightPos != null) {
+            BlockState state = this.level().getBlockState(this.lightPos);
+            if (state.getBlock() == Blocks.LIGHT) {
+                this.level().removeBlock(this.lightPos, false);
+            } else if (state.getBlock() == ModBlocks.LIGHT_WATER.get()) {
+                this.level().setBlock(this.lightPos, Blocks.WATER.defaultBlockState(), 3);
+            }
+        }
+    }
+
     void hitResultHandler(){
 
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
@@ -47,6 +119,16 @@ public class RocketProjectileEntity extends Projectile {
     }
 
     void projectileFlyStraight(){
+
+        if (this.level().isClientSide) {
+            Vec3 motion = this.getDeltaMovement().normalize().scale(-0.25);
+            double px = this.getX() + motion.x;
+            double py = this.getY() + motion.y;
+            double pz = this.getZ() + motion.z;
+
+            this.level().addParticle(ParticleTypes.SMOKE, px, py, pz, 0, 0, 0);
+            this.level().addParticle(ParticleTypes.FLAME, px, py, pz, 0, 0, 0);
+        }
 
         Vec3 vec3 = this.getDeltaMovement();
         double d0 = this.getX() + vec3.x;
@@ -60,58 +142,39 @@ public class RocketProjectileEntity extends Projectile {
         this.setPos(d0, d1, d2);
     }
 
-    void handleDamage(EntityHitResult pResult, Level level, ResourceKey<DamageType> damageType){
-
-        DamageSource source = level.damageSources().source(damageType, null, null);
-        DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
-        if(pResult.getEntity() instanceof LivingEntity entity){
-
-            entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, 2f);
-        }
-    }
-
-    void handleProjectileBlockHitEffects(){
-
-        if(level() instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.SMOKE, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
-    }
-
-    void handleGore(Level level){
-
-        if(level instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.LANDING_LAVA, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
-    }
-
-    void handleHitSound(@Nullable EntityHitResult entityHitResult, @Nullable BlockHitResult blockHitResult, Level level, SoundEvent soundEvent, float volume, float pitch){
-
-        if(entityHitResult != null && blockHitResult == null) level.playSound(null, entityHitResult.getEntity().blockPosition(), soundEvent, SoundSource.NEUTRAL,volume, pitch);
-        if(blockHitResult != null && entityHitResult == null) level.playSound(null, blockHitResult.getBlockPos(), soundEvent, SoundSource.NEUTRAL, volume, pitch);
-    }
-
     @Override
     public void tick() {
         super.tick();
 
+        if (!this.level().isClientSide) {
+            if (this.tickCount % 2 == 0) {
+                this.cleanupLight();
+                this.tryPlaceLight();
+            }
+        }
+
         hitResultHandler();
         projectileFlyStraight();
 
-        if(this.tickCount > 100) this.discard();
+        if(this.tickCount > 400) {
+
+            quakeExplosion(this.level());
+            cleanupLight();
+            this.discard();
+        }
     }
 
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
-
-        var soundEvent = ModSounds.NAILGUN_HIT.get();
 
         if (!this.level().isClientSide) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }
 
-        handleHitSound(null, pResult, level(), soundEvent, 1f, 1f);
-        handleProjectileBlockHitEffects();
+        quakeExplosion(this.level());
 
+        cleanupLight();
         super.onHitBlock(pResult);
     }
 
@@ -119,13 +182,9 @@ public class RocketProjectileEntity extends Projectile {
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
 
-        var damageType = ModDamageTypes.NAILGUN_DAMAGE;
-        var soundEvent = ModSounds.NAILGUN_HIT.get();
+        quakeExplosion(this.level());
 
-        handleDamage(pResult, level(), damageType);
-        handleGore(level());
-        handleHitSound(pResult, null, level(), soundEvent, 1f, 1f);
-
+        cleanupLight();
         this.discard();
     }
 }

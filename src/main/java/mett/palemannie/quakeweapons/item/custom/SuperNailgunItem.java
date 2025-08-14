@@ -108,12 +108,11 @@ public class SuperNailgunItem extends AbstractWeapon{
                         stopAmmoEmptyAnimation(user, serverLevel, stack);
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
-                    //ModMessages.sendToServer(new C2SSuperNailPacket());
                     ServerPlayHandler.handleSuperNailgunShoot(serverPlayer);
 
                 } else {
 
-                    ModMessages.sendToServer(new C2SAmmoEmptyPacket());
+                    ServerPlayHandler.playAmmoEmptySound(serverPlayer);
                     stopShootingAnimation(user, level.getServer().overworld(), stack);
                     stopIdleAnimation(user, level.getServer().overworld(), stack);
                     startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);
