@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
 public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileEntity> {
@@ -28,17 +29,35 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
         this.model = new GrenadeProjectileModel<>(context.bakeLayer(GrenadeProjectileModel.GRENADE_LAYER));
     }
 
-    public void render(GrenadeProjectileEntity grenadeEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(GrenadeProjectileEntity grenadeEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
+        poseStack.scale(0.2F, 0.2F, 0.2F);
+        poseStack.translate(0.0F, 0.1f, 0.0F);
 
-        poseStack.translate(0.0F, 0.05f, 0.0F);
+        RandomSource random = RandomSource.create(grenadeEntity.getId());
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(v2, grenadeEntity.yRotO, grenadeEntity.getYRot()) + 180f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(v2, grenadeEntity.xRotO, grenadeEntity.getXRot()) ));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(45f));
+        if (!grenadeEntity.hasStopped) {
 
-        poseStack.scale(0.125F, 0.125F, 0.125F);
+            float tumbleSpeed = -25.0F;
+            float tumbleX = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
+            float tumbleY = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
+            float tumbleZ = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
+
+            // Aktuelle Rotation speichern
+            grenadeEntity.lastTumbleX = tumbleX;
+            grenadeEntity.lastTumbleY = tumbleY;
+            grenadeEntity.lastTumbleZ = tumbleZ;
+
+            poseStack.mulPose(Axis.XP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.xRotO, grenadeEntity.getXRot())) + tumbleX));
+            poseStack.mulPose(Axis.YP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.yRotO, grenadeEntity.getYRot()) + 180f) + tumbleY));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(tumbleZ));
+        } else {
+
+            poseStack.mulPose(Axis.XP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.xRotO, grenadeEntity.getXRot())) + grenadeEntity.lastTumbleX));
+            poseStack.mulPose(Axis.YP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.yRotO, grenadeEntity.getYRot()) + 180f) + grenadeEntity.lastTumbleY));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(grenadeEntity.lastTumbleZ));
+        }
 
         VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(GRENADE_LOCATION));
         this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
@@ -47,7 +66,7 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
         this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
         poseStack.popPose();
 
-        super.render(grenadeEntity, v1, v2, poseStack, bufferSource, packedLight);
+        super.render(grenadeEntity, v1, partialTicks, poseStack, bufferSource, packedLight);
     }
 
     @Override

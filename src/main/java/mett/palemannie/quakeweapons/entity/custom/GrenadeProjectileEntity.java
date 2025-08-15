@@ -1,35 +1,31 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
-import mett.palemannie.quakeweapons.block.ModBlocks;
-import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
-import net.minecraft.core.BlockPos;
+import mett.palemannie.quakeweapons.util.WeaponDamageStats;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LightBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 
-import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 public class GrenadeProjectileEntity extends Projectile {
 
@@ -37,110 +33,147 @@ public class GrenadeProjectileEntity extends Projectile {
         super(entityType, level);
     }
 
-    public GrenadeProjectileEntity(Level level, Player player){
-        this(ModEntities.GRENADE_PROJECTILE.get(), level);
-        this.setOwner(player);
-        this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
-    }
-
     @Override
     protected void defineSynchedData() {}
 
     @Override
     public boolean isNoGravity() {
-        return true;
+        return false;
     }
 
-    private BlockPos lightPos;
-
-    void hitResultHandler(){
-
-        HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-        if (hitresult.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, hitresult)) {
-            this.onHit(hitresult);
-        }
+    public static float computeRadiusFromDamage(float configDamage) {
+        return ((configDamage - 1) / 7.0F)/2;
     }
 
-    void projectileFlyStraight(){
+    private void quakeExplosion(Level level) {
+        if (this.level().isClientSide) return;
 
-        Vec3 vec3 = this.getDeltaMovement();
-        double d0 = this.getX() + vec3.x;
-        double d1 = this.getY() + vec3.y;
-        double d2 = this.getZ() + vec3.z;
-        this.updateRotation();
+        Vec3 center = this.position();
 
-        this.setDeltaMovement(vec3.scale(1f));
-        this.setDeltaMovement(this.getDeltaMovement().add(0f, 0f, 0f));
+        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, this, this.getOwner());
 
-        this.setPos(d0, d1, d2);
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.RocketlauncherDamage), false, Level.ExplosionInteraction.NONE, false);
+
+        // Explosionseffekte (Server sendet Partikel)
+        ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
+                center.x, center.y, center.z,
+                40, // Menge
+                0.0, 0.0, 0.0,
+                0.2); // Geschwindigkeit
+
+        ((ServerLevel) this.level()).sendParticles(ParticleTypes.LARGE_SMOKE,
+                center.x, center.y, center.z,
+                20,
+                0.0, 0.0, 0.0,
+                0.1);
+
+        // Sound (Quake-artig → eigener Soundevent)
+        this.level().playSound(null, center.x, center.y, center.z,
+                ModSounds.EXPLOSION.get(), SoundSource.PLAYERS,
+                2.0F, 1.0F);
+
+        this.discard();
     }
 
-    void handleDamage(EntityHitResult pResult, Level level, ResourceKey<DamageType> damageType){
+    public float lastTumbleX = 0;
+    public float lastTumbleY = 0;
+    public float lastTumbleZ = 0;
 
-        DamageSource source = level.damageSources().source(damageType, null, null);
-        DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
-        if(pResult.getEntity() instanceof LivingEntity entity){
 
-            entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, 2f);
-        }
-    }
 
-    void handleProjectileBlockHitEffects(){
-
-        if(level() instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.SMOKE, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
-    }
-
-    void handleGore(Level level){
-
-        if(level instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.LANDING_LAVA, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
-    }
-
-    void handleHitSound(@Nullable EntityHitResult entityHitResult, @Nullable BlockHitResult blockHitResult, Level level, SoundEvent soundEvent, float volume, float pitch){
-
-        if(entityHitResult != null && blockHitResult == null) level.playSound(null, entityHitResult.getEntity().blockPosition(), soundEvent, SoundSource.NEUTRAL,volume, pitch);
-        if(blockHitResult != null && entityHitResult == null) level.playSound(null, blockHitResult.getBlockPos(), soundEvent, SoundSource.NEUTRAL, volume, pitch);
-    }
 
     @Override
     public void tick() {
         super.tick();
 
-        hitResultHandler();
-        projectileFlyStraight();
+        Vec3 motion = this.getDeltaMovement();
 
-        if(this.tickCount > 100) this.discard();
+
+
+        if (this.level().isClientSide) {
+            Vec3 motion1 = this.getDeltaMovement().normalize().scale(-0.25);
+            double px = this.getX() + motion1.x;
+            double py = this.getY() + motion1.y;
+            double pz = this.getZ() + motion1.z;
+
+            this.level().addParticle(ParticleTypes.SMOKE, px, py, pz, 0, 0, 0);
+        }
+
+        ClipContext ctx = new ClipContext(this.position(),
+                this.position().add(motion),
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
+                this);
+        BlockHitResult blockHit = this.level().clip(ctx);
+
+        if (blockHit.getType() != HitResult.Type.MISS) {
+            this.onHitBlock(blockHit);
+
+            Vec3 normal = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal());
+            Vec3 bounced = motion.subtract(normal.scale(2 * motion.dot(normal)));
+
+            float loss = 0.5f + this.random.nextFloat() * 0.25f;
+            bounced = bounced.scale(loss);
+
+            if (bounced.lengthSqr() < 0.04) {
+                this.setDeltaMovement(Vec3.ZERO);
+                this.hasImpulse = false;
+            } else {
+                this.setDeltaMovement(bounced);
+                this.hasImpulse = true;
+            }
+
+            this.setPos(blockHit.getLocation());
+        }
+
+        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
+                this,
+                this.position(),
+                this.position().add(motion),
+                this.getBoundingBox().expandTowards(motion).inflate(0.3d),
+                this::canHitEntity,
+                motion.lengthSqr()
+        );
+        if (entityHit != null) {
+            this.onHitEntity(entityHit);
+        }
+
+        if (!this.getDeltaMovement().equals(Vec3.ZERO)) {
+            this.setPos(this.getX() + this.getDeltaMovement().x,
+                    this.getY() + this.getDeltaMovement().y,
+                    this.getZ() + this.getDeltaMovement().z);
+        }
+
+        if (!this.isNoGravity()) {
+            this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.06, 0.0));
+        }
+
+        if(this.tickCount > 50) quakeExplosion(level());
     }
+
+    public boolean hasStopped = false;
 
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
 
-        var soundEvent = ModSounds.NAILGUN_HIT.get();
+        Vec3 motion = this.getDeltaMovement();
 
-        if (!this.level().isClientSide) {
-            this.level().broadcastEntityEvent(this, (byte)3);
-            this.discard();
+        double speed = motion.length();
+
+        if (speed > 0.2 && !hasStopped) {
+            this.playSound(ModSounds.GRENADE_BOUNCE.get(), 2f, 1f);
         }
 
-        handleHitSound(null, pResult, level(), soundEvent, 1f, 1f);
-        handleProjectileBlockHitEffects();
-
-        super.onHitBlock(pResult);
+        if (speed < 0.2) {
+            hasStopped = true;
+        }
     }
 
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
 
-        var damageType = ModDamageTypes.NAILGUN_DAMAGE;
-        var soundEvent = ModSounds.NAILGUN_HIT.get();
-
-        handleDamage(pResult, level(), damageType);
-        handleGore(level());
-        handleHitSound(pResult, null, level(), soundEvent, 1f, 1f);
-
+        quakeExplosion(this.level());
         this.discard();
     }
 }

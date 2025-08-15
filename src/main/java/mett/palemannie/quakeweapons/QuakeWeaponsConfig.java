@@ -66,11 +66,11 @@ public class QuakeWeaponsConfig
 
             rocketlauncherDamage = builder
                     .comment("How much damage the Rocket Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("rocketlauncherDamage", 30, 0.0, Float.MAX_VALUE);
+                    .defineInRange("rocketlauncherDamage", 28, 0.0, Float.MAX_VALUE);
 
             grenadelauncherDamage = builder
                     .comment("How much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("grenadelauncherDamage", 28.0, 0.0, Float.MAX_VALUE);
+                    .defineInRange("grenadelauncherDamage", 32, 0.0, Float.MAX_VALUE);
 
             builder.pop();
         }

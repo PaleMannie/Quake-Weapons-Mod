@@ -6,9 +6,9 @@
 				"identifier": "geometry.rocketlauncher",
 				"texture_width": 32,
 				"texture_height": 32,
-				"visible_bounds_width": 3,
-				"visible_bounds_height": 2.5,
-				"visible_bounds_offset": [0, 0.75, 0]
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
 			},
 			"bones": [
 				{
@@ -320,10 +320,10 @@
 							}
 						},
 						{
-							"origin": [-1.1, 2.44645, -8.125],
+							"origin": [-1.125, 2.44645, -8.125],
 							"size": [0.25, 0.7, 1.75],
-							"pivot": [-0.85, 2.79645, -7],
-							"rotation": [0, -20, 0],
+							"pivot": [-0.875, 2.79645, -7],
+							"rotation": [0, -15, 0],
 							"uv": {
 								"north": {"uv": [17, 21], "uv_size": [0.25, 0.75]},
 								"east": {"uv": [16, 17], "uv_size": [1.75, 0.75]},
