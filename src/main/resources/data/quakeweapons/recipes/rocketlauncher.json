@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "II ",
+    " PR",
+    "IIS"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    }
+  },
+  "result": {
+    "item": "quakeweapons:rocketlauncher",
+    "count": 1
+  }
+}

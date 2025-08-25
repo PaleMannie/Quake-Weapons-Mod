@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RIn",
+    "ISW",
+    "PWs"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_block"
+    },
+    "n": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "S": {
+      "item": "quakeweapons:shotgun"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "W": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "quakeweapons:super_shotgun",
+    "count": 1
+  }
+}
