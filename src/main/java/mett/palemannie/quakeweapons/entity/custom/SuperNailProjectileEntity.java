@@ -38,12 +38,6 @@ public class SuperNailProjectileEntity extends Projectile {
         super(entityType, level);
     }
 
-    public SuperNailProjectileEntity(Level level, Player player){
-        this(ModEntities.NAIL_PROJECTILE.get(), level);
-        this.setOwner(player);
-        this.setPos(player.getX(), player.getEyeY()-0.2d, player.getZ());
-    }
-
     @Override
     protected void defineSynchedData() {}
 

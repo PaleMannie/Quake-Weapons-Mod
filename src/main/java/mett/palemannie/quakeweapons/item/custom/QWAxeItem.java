@@ -1,7 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.item.client.QWAxeRenderer;
-import mett.palemannie.quakeweapons.item.client.RocketlauncherRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -27,13 +26,13 @@ public class QWAxeItem extends AbstractWeapon{
 
     public QWAxeItem(Properties pProperties) {
         super(pProperties);
-        this.cooldown = 9;
+        this.cooldown = 8;
     }
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("axe.animations.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("axe.animations.idle", Animation.LoopType.LOOP);
+    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("qwaxe.animations.shooting", Animation.LoopType.LOOP);
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("qwaxe.animations.idle", Animation.LoopType.LOOP);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
@@ -74,14 +73,13 @@ public class QWAxeItem extends AbstractWeapon{
 
     private boolean consumeAmmo(Player player) {
 
-        return true;
+        return player.isUsingItem();
     }
 
     @Override
     protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
 
         if(user instanceof ServerPlayer serverPlayer){
-
 
             if(pRemainingUseDuration % 10 == 0){
 
@@ -93,7 +91,15 @@ public class QWAxeItem extends AbstractWeapon{
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
 
-                        ServerPlayHandler.handleRocketLauncherShoot(serverPlayer);
+                        ServerPlayHandler.handleAxeShoot(serverPlayer);
+
+                } else {
+
+                    if (level instanceof ServerLevel serverLevel) {
+
+                        startIdleAnimation(user, serverLevel, stack);
+                        stopShootingAnimation(user, serverLevel, stack);
+                    }
                 }
             }
         }

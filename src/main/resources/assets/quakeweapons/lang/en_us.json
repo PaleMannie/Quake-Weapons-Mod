@@ -14,7 +14,7 @@
   "item.quakeweapons.super_shotgun": "Double Barreled Shotgun",
   "item.quakeweapons.rocketlauncher": "Rocket Launcher",
   "item.quakeweapons.grenadelauncher": "Grenade Launcher",
-  "item.quakeweapons.axe": "Axe",
+  "item.quakeweapons.qwaxe": "Axe",
   "item.quakeweapons.rocket": "Rocket",
   "item.quakeweapons.grenade": "Grenade",
 
@@ -30,10 +30,10 @@
   "death.attack.quakeweapons.shotgun_damage.player": "%1$s chewed on %2$s's boomstick",
   "death.attack.quakeweapons.super_shotgun_damage": "how",
   "death.attack.quakeweapons.super_shotgun_damage.player": "%1$s ate 2 loads of %2$s's buckshot",
-  "death.attack.quakeweapons.rocketlauncher_damage": "%2$s became bored with life",
+  "death.attack.quakeweapons.rocketlauncher_damage": "%1$s became bored with life",
   "death.attack.quakeweapons.rocketlauncher_damage.player": "%1$s rides %2$s's rocket",
-  "death.attack.quakeweapons.grenadelauncher_damage": "%2$s tries to put the pin back in",
-  "death.attack.quakeweapons.grenadeauncher_damage.player": "%1$s eats %2$s's pineapple",
+  "death.attack.quakeweapons.grenadelauncher_damage": "%1$s tried to put the pin back in",
+  "death.attack.quakeweapons.grenadelauncher_damage.player": "%1$s eats %2$s's pineapple",
   "death.attack.quakeweapons.axe_damage": "how in the world",
   "death.attack.quakeweapons.axe_damage.player": "%1$s was ax-murdered by %2$s"
 }

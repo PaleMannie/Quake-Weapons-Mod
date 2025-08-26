@@ -12,17 +12,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.function.Predicate;
@@ -50,9 +49,16 @@ public class GrenadeProjectileEntity extends Projectile {
 
         Vec3 center = this.position();
 
-        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, this, this.getOwner());
+        DamageSource source = level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, null, null);
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.RocketlauncherDamage), false, Level.ExplosionInteraction.NONE, false);
+        AABB area = new AABB(this.blockPosition()).inflate(computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage));
+        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, area)) {
+            if (entity != this.getOwner()) {
+                entity.hurt(this.damageSources().source(DamageTypes.PLAYER_ATTACK, this, this.getOwner()), Float.MIN_VALUE);
+            }
+        }
+
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage), false, Level.ExplosionInteraction.NONE, false);
 
         // Explosionseffekte (Server sendet Partikel)
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,

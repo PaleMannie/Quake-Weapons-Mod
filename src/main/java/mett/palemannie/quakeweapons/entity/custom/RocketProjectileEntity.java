@@ -9,18 +9,18 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.event.ForgeEventFactory;
 
 public class RocketProjectileEntity extends Projectile {
@@ -46,7 +46,14 @@ public class RocketProjectileEntity extends Projectile {
 
         Vec3 center = this.position();
 
-        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, this, this.getOwner());
+        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, null, null);
+
+        AABB area = new AABB(this.blockPosition()).inflate(computeRadiusFromDamage(WeaponDamageStats.RocketlauncherDamage));
+        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, area)) {
+            if (entity != this.getOwner()) {
+                entity.hurt(this.damageSources().source(DamageTypes.PLAYER_ATTACK, this, this.getOwner()), Float.MIN_VALUE);
+            }
+        }
 
         level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.RocketlauncherDamage), false, Level.ExplosionInteraction.NONE, false);
 
@@ -181,6 +188,10 @@ public class RocketProjectileEntity extends Projectile {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
+
+
+        pResult.getEntity().hurt(level().damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner()), Float.MIN_VALUE);
+        pResult.getEntity().hurt(level().damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, null, null), WeaponDamageStats.RocketlauncherDamage * RandomSource.create().nextFloat()/4);
 
         quakeExplosion(this.level());
 

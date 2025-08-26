@@ -109,7 +109,6 @@ public class NailgunItem extends AbstractWeapon {
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
                     rightSide = !rightSide;
-                    //ModMessages.sendToServer(new C2SNailPacket());
                     ServerPlayHandler.handleNailgunShoot(serverPlayer);
 
                 } else {

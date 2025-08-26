@@ -22,6 +22,7 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("quakeweapons.creativetab.quakeweapons_tab"))
                     .displayItems((pParameters, pOutput) -> {
 
+                        pOutput.accept(ModItems.QWAXE.get());
                         pOutput.accept(ModItems.NAILGUN.get());
                         pOutput.accept(ModItems.SUPER_NAILGUN.get());
                         pOutput.accept(ModItems.NAIL.get());

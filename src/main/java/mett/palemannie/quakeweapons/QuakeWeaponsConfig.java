@@ -42,7 +42,7 @@ public class QuakeWeaponsConfig
 
             axeDamage = builder
                     .comment("How much damage the Quake axe deals")
-                    .defineInRange("axeDamage", 1.0, 0.0, Float.MAX_VALUE);
+                    .defineInRange("axeDamage", 10.0, 0.0, Float.MAX_VALUE);
 
             shotgunDamage = builder
                     .comment("How much damage the Shotgun deals per pellet (6 pellets per shot)")
@@ -66,11 +66,11 @@ public class QuakeWeaponsConfig
 
             rocketlauncherDamage = builder
                     .comment("How much damage the Rocket Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("rocketlauncherDamage", 28, 0.0, Float.MAX_VALUE);
+                    .defineInRange("rocketlauncherDamage", 30, 0.0, Float.MAX_VALUE);
 
             grenadelauncherDamage = builder
                     .comment("How much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("grenadelauncherDamage", 32, 0.0, Float.MAX_VALUE);
+                    .defineInRange("grenadelauncherDamage", 30, 0.0, Float.MAX_VALUE);
 
             builder.pop();
         }

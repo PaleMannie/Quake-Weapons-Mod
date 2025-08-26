@@ -5,27 +5,32 @@ import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.custom.*;
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class ServerPlayHandler {
 
@@ -81,7 +86,88 @@ public class ServerPlayHandler {
         projectile.shoot(f, f1, f2, velocity, inaccuracy);
     }
 
-    public static void handleAxeShoot(ServerPlayer player){
+    public static void handleAxeShoot(Player player) {
+
+        Level level = player.level();
+        if (level.isClientSide) return;
+
+        ServerLevel sLevel = (ServerLevel) level;
+
+        // Reichweite (Forge 1.20.1): ENTITY_REACH, Fallback 3.0
+        double reach = 3.0D;
+        if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
+            reach = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).getValue();
+        }
+
+        // Ray setup
+        Vec3 eye = player.getEyePosition(1.0F);
+        Vec3 look = player.getViewVector(1.0F);
+        Vec3 end = eye.add(look.scale(reach));
+
+        // Block raycast
+        BlockHitResult blockHit = level.clip(new ClipContext(
+                eye, end,
+                ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE,
+                player));
+
+        // Wenn ein Block früher getroffen wird, kürzen wir die Max-Distanz (für fairen Entity-Check)
+        Vec3 maxEnd = end;
+        if (blockHit.getType() != HitResult.Type.MISS) {
+            maxEnd = blockHit.getLocation();
+        }
+
+        // Entity raycast
+        AABB pathBB = new AABB(eye, maxEnd).inflate(0.25D);
+        Predicate<Entity> canHit = e ->
+                e.isAlive() &&
+                        e.isPickable() &&
+                        e instanceof LivingEntity &&
+                        e != player;
+
+        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, eye, maxEnd, pathBB, canHit);
+
+        if (entityHit != null) {
+            // === ENTITY TREFFER ===
+            LivingEntity target = (LivingEntity) entityHit.getEntity();
+
+            // Optional: minimaler "Berührungs-Tick" (verhindert Rüstungsping ohne Effekt)
+            target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
+
+            target.hurt(level.damageSources().source(ModDamageTypes.AXE_DAMAGE, null, null), WeaponDamageStats.AxeDamage);
+
+            // Partikel genau an der Oberfläche (Trefferpunkt)
+            Vec3 p = entityHit.getLocation();
+            sLevel.sendParticles(ParticleTypes.DAMAGE_INDICATOR, p.x, p.y, p.z, 6, 0.2, 0.2, 0.2, 0.1);
+            sLevel.sendParticles(ParticleTypes.CRIT, p.x, p.y, p.z, 3, 0.0, 0.2, 0.2, 0.2);
+            sLevel.sendParticles(ParticleTypes.LANDING_LAVA, p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.0);
+
+            // Sound: knackiger Hieb
+            level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 0.5f, 1.0F);
+
+        } else if (blockHit.getType() != HitResult.Type.MISS) {
+            // === BLOCK TREFFER ===
+            BlockPos pos = blockHit.getBlockPos();
+            BlockState state = level.getBlockState(pos);
+
+            // exakter Punkt leicht von der Oberfläche weg, damit Partikel nicht im Block stecken
+            Vec3 hitP = blockHit.getLocation();
+            Vec3 n = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal()).normalize();
+            Vec3 spawn = hitP.add(n.scale(0.01)); // 1 cm aus der Oberfläche heraus
+
+            // Blockstaub (verwendet Textur/State des getroffenen Blocks)
+            sLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+                    spawn.x, spawn.y, spawn.z,
+                    10, 0.02, 0.02, 0.02, 0.02);
+
+            level.playSound(null, spawn.x, spawn.y, spawn.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 0.5f, 1f);
+            level.playSound(null, spawn.x, spawn.y, spawn.z, ModSounds.AXE_HIT_SOLID.get(), SoundSource.PLAYERS, 1f, 1f);
+
+        } else {
+            // === LUFT (MISS) ===
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                    ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 1f, 1f);
+        }
     }
 
     public static void handleThunderboltShoot(ServerPlayer player, int useTime){
