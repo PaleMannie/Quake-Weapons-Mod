@@ -1,6 +1,7 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.block.ModBlocks;
+import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
@@ -68,14 +69,14 @@ public class SuperNailProjectileEntity extends Projectile {
         this.setPos(d0, d1, d2);
     }
 
-    void handleDamage(EntityHitResult pResult, Level level, ResourceKey<DamageType> damageType){
+    void handleDamage(EntityHitResult pResult, Level level, ResourceKey<DamageType> damageType, Player player){
 
         DamageSource source = level.damageSources().source(damageType, null, null);
         DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, WeaponDamageStats.SuperNailgunDamage);
+            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? WeaponDamageStats.SuperNailgunDamage * 4 : WeaponDamageStats.SuperNailgunDamage);
         }
     }
 
@@ -130,7 +131,7 @@ public class SuperNailProjectileEntity extends Projectile {
         var damageType = ModDamageTypes.SUPER_NAILGUN_DAMAGE;
         var soundEvent = ModSounds.NAILGUN_HIT.get();
 
-        handleDamage(pResult, level(), damageType);
+        handleDamage(pResult, level(), damageType, (Player)this.getOwner());
         handleGore(level());
         handleHitSound(pResult, null, level(), soundEvent, 1f, 1f);
 

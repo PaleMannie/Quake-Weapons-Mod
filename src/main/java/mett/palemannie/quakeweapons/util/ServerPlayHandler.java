@@ -131,10 +131,7 @@ public class ServerPlayHandler {
             // === ENTITY TREFFER ===
             LivingEntity target = (LivingEntity) entityHit.getEntity();
 
-            // Optional: minimaler "Berührungs-Tick" (verhindert Rüstungsping ohne Effekt)
-            target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
-
-            target.hurt(level.damageSources().source(ModDamageTypes.AXE_DAMAGE, null, null), WeaponDamageStats.AxeDamage);
+            target.hurt(level.damageSources().source(ModDamageTypes.AXE_DAMAGE, player, player), WeaponDamageStats.AxeDamage);
 
             // Partikel genau an der Oberfläche (Trefferpunkt)
             Vec3 p = entityHit.getLocation();
@@ -214,8 +211,7 @@ public class ServerPlayHandler {
                 if (target != player && target.isAlive() && !alreadyHit.contains(target)) {
                     alreadyHit.add(target);
 
-                    target.hurt(lvl.damageSources().playerAttack(player), Float.MIN_VALUE);
-                    target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, null, null), WeaponDamageStats.ThunderboltDamage);
+                    target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, player, player), WeaponDamageStats.ThunderboltDamage);
                 }
             }
 
@@ -332,8 +328,7 @@ public class ServerPlayHandler {
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
                 LivingEntity target = (LivingEntity) entityHit.getEntity();
-                target.hurt(sevel.damageSources().playerAttack(player), Float.MIN_VALUE);
-                target.hurt(sevel.damageSources().source(ModDamageTypes.SUPER_SHOTGUN_DAMAGE, null, null), DAMAGE_PER_PELLET);
+                target.hurt(sevel.damageSources().source(ModDamageTypes.SUPER_SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
 
                 Vec3 hitPos = entityHit.getLocation();
                 sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
@@ -406,8 +401,7 @@ public class ServerPlayHandler {
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
                 LivingEntity target = (LivingEntity) entityHit.getEntity();
-                target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
-                target.hurt(level.damageSources().source(ModDamageTypes.SHOTGUN_DAMAGE, null, null), DAMAGE_PER_PELLET);
+                target.hurt(level.damageSources().source(ModDamageTypes.SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
 
                 Vec3 hitPos = entityHit.getLocation();
                 sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
@@ -523,5 +517,17 @@ public class ServerPlayHandler {
 
         Level level = player.level();
         level.playSound(null, player.blockPosition(), SoundEvents.DISPENSER_FAIL, SoundSource.NEUTRAL, 1f, 1f);
+    }
+
+    public static void playQuadDamagePickupSound(ServerPlayer player){
+
+        Level level = player.level();
+        level.playSound(null, player.blockPosition(), SoundEvents.ENDER_DRAGON_GROWL, SoundSource.NEUTRAL, 1f, 1f);
+    }
+
+    public static void playQuadDamageUseSound(ServerPlayer player){
+
+        Level level = player.level();
+        level.playSound(null, player.blockPosition(), SoundEvents.ANVIL_PLACE, SoundSource.NEUTRAL, 0.1f, 1f);
     }
 }

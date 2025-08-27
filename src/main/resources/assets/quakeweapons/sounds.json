@@ -99,7 +99,83 @@
     "sounds": [
       "quakeweapons:axe_hit_entity"
     ]
-  }
+  },
 
+  "quad_damage_pickup": {
+    "subtitle": "sounds.quakeweapons.quad_damage_pickup",
+    "sounds": [
+      "quakeweapons:quad_damage_pickup"
+    ]
+  },
+
+  "quad_damage_use": {
+    "subtitle": "sounds.quakeweapons.quad_damage_use",
+    "sounds": [
+      "quakeweapons:quad_damage_use"
+    ]
+  },
+
+  "quad_damage_expire": {
+    "subtitle": "sounds.quakeweapons.quad_damage_expire",
+    "sounds": [
+      "quakeweapons:quad_damage_expire"
+    ]
+  },
+
+  "pentagram_pickup": {
+    "subtitle": "sounds.quakeweapons.pentagram_pickup",
+    "sounds": [
+      "quakeweapons:pentagram_pickup"
+    ]
+  },
+
+  "pentagram_use": {
+    "subtitle": "sounds.quakeweapons.pentagram_use",
+    "sounds": [
+      "quakeweapons:pentagram_use"
+    ]
+  },
+
+  "pentagram_expire": {
+    "subtitle": "sounds.quakeweapons.pentagram_expire",
+    "sounds": [
+      "quakeweapons:pentagram_expire"
+    ]
+  },
+
+  "ring_pickup": {
+    "subtitle": "sounds.quakeweapons.ring_pickup",
+    "sounds": [
+      "quakeweapons:ring_pickup"
+    ]
+  },
+
+  "ring_use": {
+    "subtitle": "sounds.quakeweapons.ring_use",
+    "sounds": [
+      "quakeweapons:ring_use"
+    ]
+  },
+
+  "ring_expire": {
+    "subtitle": "sounds.quakeweapons.ring_expire",
+    "sounds": [
+      "quakeweapons:ring_expire"
+    ]
+  },
+
+  "biosuit_pickup": {
+    "subtitle": "sounds.quakeweapons.biosuit_pickup",
+    "sounds": [
+      "quakeweapons:biosuit_pickup"
+    ]
+  },
+
+  "biosuit_expire": {
+    "subtitle": "sounds.quakeweapons.biosuit_expire",
+    "sounds": [
+      "quakeweapons:biosuit_expire"
+    ]
+  }
 
 }

@@ -1,30 +1,22 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
+import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.WeaponDamageStats;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.event.ForgeEventFactory;
-
-import java.util.function.Predicate;
 
 public class GrenadeProjectileEntity extends Projectile {
 
@@ -40,8 +32,8 @@ public class GrenadeProjectileEntity extends Projectile {
         return false;
     }
 
-    public static float computeRadiusFromDamage(float configDamage) {
-        return ((configDamage - 1) / 7.0F)/2;
+    public static float computeRadiusFromDamage(float configDamage, Player player) {
+        return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;
     }
 
     private void quakeExplosion(Level level) {
@@ -51,14 +43,14 @@ public class GrenadeProjectileEntity extends Projectile {
 
         DamageSource source = level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, null, null);
 
-        AABB area = new AABB(this.blockPosition()).inflate(computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage));
+        AABB area = new AABB(this.blockPosition()).inflate(computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage, (Player)this.getOwner()));
         for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, area)) {
             if (entity != this.getOwner()) {
                 entity.hurt(this.damageSources().source(DamageTypes.PLAYER_ATTACK, this, this.getOwner()), Float.MIN_VALUE);
             }
         }
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage), false, Level.ExplosionInteraction.NONE, false);
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false);
 
         // Explosionseffekte (Server sendet Partikel)
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,

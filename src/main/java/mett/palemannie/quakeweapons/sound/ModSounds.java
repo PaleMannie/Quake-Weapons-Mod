@@ -27,6 +27,17 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> AXE_HIT_AIR = registerSoundEvents("axe_hit_air");
     public static final RegistryObject<SoundEvent> AXE_HIT_SOLID = registerSoundEvents("axe_hit_solid");
     public static final RegistryObject<SoundEvent> AXE_HIT_ENTITY = registerSoundEvents("axe_hit_entity");
+    public static final RegistryObject<SoundEvent> QUAD_DAMAGE_PICKUP = registerSoundEvents("quad_damage_pickup");
+    public static final RegistryObject<SoundEvent> QUAD_DAMAGE_USE = registerSoundEvents("quad_damage_use");
+    public static final RegistryObject<SoundEvent> QUAD_DAMAGE_EXPIRE = registerSoundEvents("quad_damage_expire");
+    public static final RegistryObject<SoundEvent> PENTAGRAM_PICKUP = registerSoundEvents("pentagram_pickup");
+    public static final RegistryObject<SoundEvent> PENTAGRAM_USE = registerSoundEvents("pentagram_use");
+    public static final RegistryObject<SoundEvent> PENTAGRAM_EXPIRE = registerSoundEvents("pentagram_expire");
+    public static final RegistryObject<SoundEvent> RING_PICKUP = registerSoundEvents("ring_pickup");
+    public static final RegistryObject<SoundEvent> RING_USE = registerSoundEvents("ring_use");
+    public static final RegistryObject<SoundEvent> RING_EXPIRE = registerSoundEvents("ring_expire");
+    public static final RegistryObject<SoundEvent> BIOSUIT_PICKUP = registerSoundEvents("biosuit_pickup");
+    public static final RegistryObject<SoundEvent> BIOSUIT_EXPIRE = registerSoundEvents("biosuit_expire");
 
 
 

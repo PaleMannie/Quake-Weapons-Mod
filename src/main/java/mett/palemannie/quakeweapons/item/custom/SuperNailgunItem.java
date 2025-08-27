@@ -1,12 +1,7 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.item.ModItems;
-import mett.palemannie.quakeweapons.item.client.NailGunRenderer;
 import mett.palemannie.quakeweapons.item.client.SuperNailGunRenderer;
-import mett.palemannie.quakeweapons.net.ModMessages;
-import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
-import mett.palemannie.quakeweapons.net.packets.C2SNailPacket;
-import mett.palemannie.quakeweapons.net.packets.C2SSuperNailPacket;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;

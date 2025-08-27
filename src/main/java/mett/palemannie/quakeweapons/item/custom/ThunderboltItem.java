@@ -1,9 +1,8 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
-import mett.palemannie.quakeweapons.net.ModMessages;
-import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
@@ -103,9 +102,9 @@ public class ThunderboltItem extends AbstractWeapon{
 
     private void triggerWaterDischarge(ServerLevel level, Player player) {
 
-        int cellCount = countAmmoCells(player);
-        if (cellCount <= 0) return;
+        if(level.isClientSide) return;
 
+        int cellCount = countAmmoCells(player);
         double radius = cellCount/2d;
 
         Vec3 dischargePos = player.position();
@@ -116,23 +115,35 @@ public class ThunderboltItem extends AbstractWeapon{
         List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, area,
                 e -> e.isAlive() && e != player);
 
+        removeAllAmmoCells(player);
+
         for (LivingEntity target : targets) {
             boolean targetInWater = target.isInWaterOrBubble();
             boolean hasLOS = hasLineOfSight(level, dischargePos, target);
 
             if (targetInWater || hasLOS) {
-                target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
-                target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.63f) * WeaponDamageStats.ThunderboltDamage);
-                level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
 
+                //"Fake" player hit so the correct death message appears
+                target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
+                //the real damage
+                target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
+                        player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? ((cellCount * 0.66f) * WeaponDamageStats.ThunderboltDamage * 4)
+                                : ((cellCount * 0.66f) * WeaponDamageStats.ThunderboltDamage));
+
+                //particles and sound
+                level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
                 level.sendParticles(ParticleTypes.ELECTRIC_SPARK,
                         target.getX(), target.getY() + target.getBbHeight() / 2, target.getZ(),
-                        10, 0.2, 0.5, 0.2, 0.05);
+                        12, 0.2, 0.5, 0.2, 0.05);
             }
-            player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null), (cellCount * 0.56f) * WeaponDamageStats.ThunderboltDamage);
         }
 
-        removeAllAmmoCells(player);
+        //player self discharge damage and particles and sound
+        player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, player, player), (cellCount * 0.5f) * WeaponDamageStats.ThunderboltDamage);
+        level.playSound(null, player.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
+        level.sendParticles(ParticleTypes.ELECTRIC_SPARK,
+                player.getX(), player.getY() + player.getBbHeight() / 2, player.getZ(),
+                12, 0.2, 0.5, 0.2, 0.05);
     }
 
     private boolean hasLineOfSight(Level level, Vec3 from, LivingEntity target) {

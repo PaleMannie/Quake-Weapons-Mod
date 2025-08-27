@@ -7,10 +7,10 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class C2SSuperNailPacket {
-    public C2SSuperNailPacket(){
+public class C2SQuadDamageUsePacket {
+    public C2SQuadDamageUsePacket(){
     }
-    public C2SSuperNailPacket(FriendlyByteBuf buf){
+    public C2SQuadDamageUsePacket(FriendlyByteBuf buf){
     }
     public void toBytes(FriendlyByteBuf buf){
     }
@@ -21,10 +21,7 @@ public class C2SSuperNailPacket {
         context.enqueueWork(()-> {
 
             ServerPlayer player = context.getSender();
-            if(player == null) return;
-            if(player.isSpectator()) return;
-
-            ServerPlayHandler.handleSuperNailgunShoot(player);
+            ServerPlayHandler.playQuadDamageUseSound(player);
 
         });
         return true;

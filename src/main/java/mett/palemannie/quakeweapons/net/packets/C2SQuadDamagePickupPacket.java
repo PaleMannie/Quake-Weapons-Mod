@@ -7,10 +7,10 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class C2SThunderPacket {
-    public C2SThunderPacket(){
+public class C2SQuadDamagePickupPacket {
+    public C2SQuadDamagePickupPacket(){
     }
-    public C2SThunderPacket(FriendlyByteBuf buf){
+    public C2SQuadDamagePickupPacket(FriendlyByteBuf buf){
     }
     public void toBytes(FriendlyByteBuf buf){
     }
@@ -21,10 +21,7 @@ public class C2SThunderPacket {
         context.enqueueWork(()-> {
 
             ServerPlayer player = context.getSender();
-            if(player == null) return;
-            if(player.isSpectator()) return;
-
-            //ServerPlayHandler.handleThunderboltShoot(player);
+            ServerPlayHandler.playQuadDamagePickupSound(player);
 
         });
         return true;

@@ -2,8 +2,6 @@ package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.GrenadelauncherRenderer;
-import mett.palemannie.quakeweapons.net.ModMessages;
-import mett.palemannie.quakeweapons.net.packets.C2SAmmoEmptyPacket;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -29,7 +27,7 @@ public class GrenadelauncherItem extends AbstractWeapon{
 
     public GrenadelauncherItem(Properties pProperties) {
         super(pProperties);
-        this.cooldown = 11;
+        this.cooldown = 10;
     }
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
