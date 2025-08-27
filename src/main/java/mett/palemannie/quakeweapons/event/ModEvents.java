@@ -6,6 +6,8 @@ import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -21,10 +23,16 @@ public class ModEvents {
     public static void onQuadDamageHurt(LivingHurtEvent event) {
 
         if (event.getSource().getEntity() instanceof LivingEntity attacker) {
-            if (attacker.hasEffect(ModEffects.QUAD_DAMAGE.get())) {
+            if(attacker.hasEffect(ModEffects.QUAD_DAMAGE.get())) {
 
                 event.setAmount(event.getAmount() * 4.0F);
             }
+        }
+
+        if (event.getEntity().hasEffect(ModEffects.INVULNERABILITY.get())) {
+
+            event.setCanceled(true);
+            event.getEntity().level().playSound(null, event.getEntity().blockPosition(), ModSounds.PENTAGRAM_USE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 
