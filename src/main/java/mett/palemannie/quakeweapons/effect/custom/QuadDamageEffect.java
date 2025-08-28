@@ -14,6 +14,9 @@ public class QuadDamageEffect extends MobEffect {
         super(pCategory, pColor);
     }
 
+    /// All done through Events
+    /// Only Expiring sounds here
+
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
 

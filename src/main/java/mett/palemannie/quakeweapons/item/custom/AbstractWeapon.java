@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -79,6 +80,8 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+
+        pPlayer.removeEffect(ModEffects.QW_INVIS.get());
 
         if (pUsedHand != InteractionHand.MAIN_HAND) {
             return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));

@@ -97,9 +97,9 @@ public class EffectOverlayRenderEvent {
             long gameTime = mc.level.getGameTime();
 
             float r, g, b, alpha;
-            r = 1f;
-            g = 0.84f;
-            b = 0f;
+            r = 0.3f;
+            g = 0.1f;
+            b = 0.3f;
 
             if (remaining > 60) {
 

@@ -14,8 +14,13 @@ public class BiosuitEffect extends MobEffect {
         super(pCategory, pColor);
     }
 
+    /// All done through Events
+    /// Only Expiring sounds here
+
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
+
+        entity.setAirSupply(entity.getMaxAirSupply());
 
         MobEffectInstance inst = entity.getEffect(ModEffects.BIOSUIT.get());
         if (inst != null) {
