@@ -14,10 +14,20 @@ public class QWInvisEffect extends MobEffect {
         super(pCategory, pColor);
     }
 
+    /// Effect done through Events
+    /// Only Expiring sounds here (and vanilla invis)
+
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
 
         entity.setInvisible(true);
+        entity.setSilent(true);
+
+        if(!entity.hasEffect(ModEffects.QW_INVIS.get())){
+
+            entity.setInvisible(false);
+            entity.setSilent(false);
+        }
 
         MobEffectInstance inst = entity.getEffect(ModEffects.QW_INVIS.get());
         if (inst != null) {

@@ -15,7 +15,7 @@ public class AbstractWeaponItemDroppedAnimationFixer {
     @SubscribeEvent
     public static void onWorldTick(TickEvent.LevelTickEvent event) {
 
-        ///This event fixes the weapon being stuck in the shooting animation when dropping while shooting said item
+        ///This event fixes the weapon being stuck in the shooting animation when dropping while shooting said Quake-Weapon
 
         if (event.phase != TickEvent.Phase.END) return;
         if (!(event.level instanceof ServerLevel serverLevel)) return;

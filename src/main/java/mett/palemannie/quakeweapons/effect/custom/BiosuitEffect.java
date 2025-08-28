@@ -14,7 +14,7 @@ public class BiosuitEffect extends MobEffect {
         super(pCategory, pColor);
     }
 
-    /// All done through Events
+    /// Effect done through Events
     /// Only Expiring sounds here
 
     @Override

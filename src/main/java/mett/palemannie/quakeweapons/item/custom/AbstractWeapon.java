@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -82,6 +83,8 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
 
         pPlayer.removeEffect(ModEffects.QW_INVIS.get());
+        pPlayer.setInvisible(false);
+        pPlayer.setSilent(false);
 
         if (pUsedHand != InteractionHand.MAIN_HAND) {
             return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));

@@ -12,7 +12,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, value = Dist.CLIENT)
-public class EffectOverlayRenderEvent {
+public class EffectOverlayRenderClientEvent {
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
 

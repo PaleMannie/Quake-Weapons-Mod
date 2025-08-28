@@ -8,9 +8,16 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -94,12 +101,6 @@ public class ModEvents {
 
             event.getEntity().playSound(ModSounds.QUAD_DAMAGE_USE.get(), 1f, 1f);
         }
-
-        if(event.getEntity().hasEffect(ModEffects.QW_INVIS.get())){
-
-            event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
-            event.getEntity().setInvisible(false);
-        }
     }
 
     @SubscribeEvent
@@ -113,7 +114,9 @@ public class ModEvents {
         if(event.getEntity().hasEffect(ModEffects.QW_INVIS.get())){
 
             event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
+            event.getEntity().removeEffect(MobEffects.INVISIBILITY);
             event.getEntity().setInvisible(false);
+            event.getEntity().setSilent(false);
         }
     }
 
@@ -137,7 +140,10 @@ public class ModEvents {
         if(event.getEntity().hasEffect(ModEffects.QW_INVIS.get())){
 
             event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
+            event.getEntity().removeEffect(MobEffects.INVISIBILITY);
             event.getEntity().setInvisible(false);
+            event.getEntity().setSilent(false);
+            event.setCanceled(true);
         }
     }
 
@@ -152,6 +158,9 @@ public class ModEvents {
         if(event.getEntity().hasEffect(ModEffects.QW_INVIS.get())){
 
             event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
+            event.getEntity().removeEffect(MobEffects.INVISIBILITY);
+            event.getEntity().setInvisible(false);
+            event.getEntity().setSilent(false);
         }
     }
 
@@ -164,14 +173,36 @@ public class ModEvents {
         }
     }
 
+    ///QW-invis break fix
 
     @SubscribeEvent
-    public static void onRenderPlayer(RenderLivingEvent.Pre<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> event) {
+    public static void onEffectRemove(MobEffectEvent.Remove event) {
+        if (event.getEntity() instanceof Player player) {
+            if (event.getEffect() == ModEffects.QW_INVIS.get()) {
 
-        LivingEntity entity = event.getEntity();
-        if (entity.hasEffect(ModEffects.QW_INVIS.get())) {
+                player.setInvisible(false);
+                player.setSilent(false);
+            }
+        }
+    }
 
-            event.setCanceled(true);
+    ///Mob deaggro upon and while qw-invis
+
+    @SubscribeEvent
+    public static void onTargetChange(LivingChangeTargetEvent event) {
+        if (event.getNewTarget() instanceof Player player) {
+            if (player.hasEffect(ModEffects.QW_INVIS.get())) {
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (event.getEntity() instanceof Mob mob && mob.getTarget() instanceof Player player) {
+            if (player.hasEffect(ModEffects.QW_INVIS.get())) {
+                mob.setTarget(null);
+            }
         }
     }
 }
