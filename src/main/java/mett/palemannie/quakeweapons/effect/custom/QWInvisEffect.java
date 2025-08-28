@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 public class QWInvisEffect extends MobEffect {
@@ -25,6 +26,7 @@ public class QWInvisEffect extends MobEffect {
 
         if(!entity.hasEffect(ModEffects.QW_INVIS.get())){
 
+            entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0, false, false, false));
             entity.setInvisible(false);
             entity.setSilent(false);
         }

@@ -6,22 +6,18 @@ import mett.palemannie.quakeweapons.entity.custom.*;
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -140,7 +136,7 @@ public class ServerPlayHandler {
             sLevel.sendParticles(ParticleTypes.LANDING_LAVA, p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.0);
 
             // Sound: knackiger Hieb
-            level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 0.5f, 1.0F);
+            level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 1f, 1.0F);
 
         } else if (blockHit.getType() != HitResult.Type.MISS) {
             // === BLOCK TREFFER ===
@@ -153,11 +149,11 @@ public class ServerPlayHandler {
             Vec3 spawn = hitP.add(n.scale(0.01)); // 1 cm aus der Oberfläche heraus
 
             // Blockstaub (verwendet Textur/State des getroffenen Blocks)
-            sLevel.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+            sLevel.sendParticles(ParticleTypes.SMOKE,
                     spawn.x, spawn.y, spawn.z,
-                    10, 0.02, 0.02, 0.02, 0.02);
+                    1, 0d, 0d, 0d, 0d);
 
-            level.playSound(null, spawn.x, spawn.y, spawn.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 0.5f, 1f);
+            level.playSound(null, spawn.x, spawn.y, spawn.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 1f, 1f);
             level.playSound(null, spawn.x, spawn.y, spawn.z, ModSounds.AXE_HIT_SOLID.get(), SoundSource.PLAYERS, 1f, 1f);
 
         } else {
