@@ -29,11 +29,11 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<RocketProjectileEntity>> ROCKET_PROJECTILE =
             ENTITY_TYPES.register("rocket_projectile", () -> EntityType.Builder.<RocketProjectileEntity>of(RocketProjectileEntity::new, MobCategory.MISC)
-                    .sized(0.3f, 0.3f).fireImmune().clientTrackingRange(256).updateInterval(1).build("rocket_projectile"));
+                    .sized(0.5f, 0.5f).fireImmune().clientTrackingRange(256).updateInterval(1).build("rocket_projectile"));
 
     public static final RegistryObject<EntityType<GrenadeProjectileEntity>> GRENADE_PROJECTILE =
             ENTITY_TYPES.register("grenade_projectile", () -> EntityType.Builder.<GrenadeProjectileEntity>of(GrenadeProjectileEntity::new, MobCategory.MISC)
-                    .sized(0.3f, 0.3f).fireImmune().clientTrackingRange(256).updateInterval(1).build("grenade_projectile"));
+                    .sized(0.5f, 0.5f).fireImmune().clientTrackingRange(256).updateInterval(1).build("grenade_projectile"));
 
 
     public static void register(IEventBus eventBus) {

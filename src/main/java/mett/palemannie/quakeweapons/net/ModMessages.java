@@ -1,8 +1,7 @@
 package mett.palemannie.quakeweapons.net;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.net.packets.C2SQuadDamagePickupPacket;
-import mett.palemannie.quakeweapons.net.packets.C2SQuadDamageUsePacket;
+import mett.palemannie.quakeweapons.net.packets.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -12,7 +11,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 public class ModMessages {
 
-    private static SimpleChannel INSTANCE;
+    public static SimpleChannel INSTANCE;
     private static int PacketID = 0;
     private static int id(){
         return PacketID++;
@@ -25,16 +24,10 @@ public class ModMessages {
 
         INSTANCE = net;
 
-        net.messageBuilder(C2SQuadDamagePickupPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(C2SQuadDamagePickupPacket::new)
-                .encoder(C2SQuadDamagePickupPacket::toBytes)
-                .consumerMainThread(C2SQuadDamagePickupPacket::handle)
-                .add();
-
-        net.messageBuilder(C2SQuadDamageUsePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(C2SQuadDamageUsePacket::new)
-                .encoder(C2SQuadDamageUsePacket::toBytes)
-                .consumerMainThread(C2SQuadDamageUsePacket::handle)
+        net.messageBuilder(S2CInvisPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(S2CInvisPacket::encode)
+                .decoder(S2CInvisPacket::decode)
+                .consumerMainThread(S2CInvisPacket::handle)
                 .add();
     }
 

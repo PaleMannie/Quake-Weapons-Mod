@@ -2,20 +2,16 @@ package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.effect.ModEffects;
+import mett.palemannie.quakeweapons.net.ModMessages;
+import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
-import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -25,6 +21,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -68,7 +65,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onEffectGotten(MobEffectEvent.Added event){
 
-        Entity entity = event.getEntity();
+        LivingEntity entity = event.getEntity();
 
         if(event.getEffectInstance().getEffect().equals(ModEffects.QUAD_DAMAGE.get())){
 
@@ -83,6 +80,14 @@ public class ModEvents {
         if(event.getEffectInstance().getEffect().equals(ModEffects.QW_INVIS.get())){
 
             entity.level().playSound(null, entity.blockPosition(), ModSounds.RING_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+
+            if (!entity.level().isClientSide) {
+
+                ModMessages.INSTANCE.send(
+                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                        new S2CInvisPacket(entity.getId(), true)
+                );
+            }
         }
 
         if(event.getEffectInstance().getEffect().equals(ModEffects.BIOSUIT.get())){
@@ -116,7 +121,6 @@ public class ModEvents {
             event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
             event.getEntity().removeEffect(MobEffects.INVISIBILITY);
             event.getEntity().setInvisible(false);
-            event.getEntity().setSilent(false);
         }
     }
 
@@ -142,7 +146,6 @@ public class ModEvents {
             event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
             event.getEntity().removeEffect(MobEffects.INVISIBILITY);
             event.getEntity().setInvisible(false);
-            event.getEntity().setSilent(false);
             event.setCanceled(true);
         }
     }
@@ -160,7 +163,6 @@ public class ModEvents {
             event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
             event.getEntity().removeEffect(MobEffects.INVISIBILITY);
             event.getEntity().setInvisible(false);
-            event.getEntity().setSilent(false);
         }
     }
 
@@ -177,11 +179,18 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onEffectRemove(MobEffectEvent.Remove event) {
-        if (event.getEntity() instanceof Player player) {
-            if (event.getEffect() == ModEffects.QW_INVIS.get()) {
 
-                player.setInvisible(false);
-                player.setSilent(false);
+        LivingEntity entity = event.getEntity();
+
+        if (event.getEffect() == ModEffects.QW_INVIS.get()) {
+
+            event.getEntity().setInvisible(false);
+
+            if(!event.getEntity().level().isClientSide()) {
+                ModMessages.INSTANCE.send(
+                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                        new S2CInvisPacket(entity.getId(), false)
+                );
             }
         }
     }
@@ -199,10 +208,27 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+
         if (event.getEntity() instanceof Mob mob && mob.getTarget() instanceof Player player) {
+
             if (player.hasEffect(ModEffects.QW_INVIS.get())) {
+
                 mob.setTarget(null);
             }
         }
+
+        /*if (!event.getEntity().level().isClientSide) {
+            boolean hasEffect = event.getEntity().hasEffect(ModEffects.QW_INVIS.get());
+            boolean isMarkedInvisible = event.getEntity().getPersistentData().getBoolean("QWInvis");
+
+            // Effekt weg -> aber noch als unsichtbar markiert → Reset
+            if (!hasEffect && isMarkedInvisible) {
+                event.getEntity().getPersistentData().putBoolean("QWInvis", false);
+                ModMessages.CHANNEL.send(
+                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
+                        new S2CInvisPacket(entity.getId(), false)
+                );
+            }
+        }*/
     }
 }

@@ -84,7 +84,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
         pPlayer.removeEffect(ModEffects.QW_INVIS.get());
         pPlayer.setInvisible(false);
-        pPlayer.setSilent(false);
 
         if (pUsedHand != InteractionHand.MAIN_HAND) {
             return InteractionResultHolder.fail(pPlayer.getItemInHand(pUsedHand));
