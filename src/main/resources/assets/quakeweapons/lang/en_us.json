@@ -17,6 +17,10 @@
   "item.quakeweapons.qwaxe": "Axe",
   "item.quakeweapons.rocket": "Rocket",
   "item.quakeweapons.grenade": "Grenade",
+  "item.quakeweapons.quad_damage": "Quad Damage",
+  "item.quakeweapons.pentagram_of_protection": "Pentagram of Protection",
+  "item.quakeweapons.ring_of_shadows": "Ring of Shadows",
+  "item.quakeweapons.biosuit": "Biosuit",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s nailed themselves",
   "death.attack.quakeweapons.nailgun_damage.player": "%1$s was nailed by %2$s",

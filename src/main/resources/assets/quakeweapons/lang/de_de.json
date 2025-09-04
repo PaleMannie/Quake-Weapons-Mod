@@ -17,6 +17,10 @@
   "item.quakeweapons.qwaxe": "Axt",
   "item.quakeweapons.rocket": "Rakete",
   "item.quakeweapons.grenade": "Granate",
+  "item.quakeweapons.quad_damage": "Vierfacher Schaden",
+  "item.quakeweapons.pentagram_of_protection": "Pentagramm des Schutzes",
+  "item.quakeweapons.ring_of_shadows": "Ring der Schatten",
+  "item.quakeweapons.biosuit": "Bioanzug",
 
   "death.attack.quakeweapons.nailgun_damage": "%1$s hat sich selbst genagelt",
   "death.attack.quakeweapons.nailgun_damage.player": "%1$s wurde durch %2$s genagelt",

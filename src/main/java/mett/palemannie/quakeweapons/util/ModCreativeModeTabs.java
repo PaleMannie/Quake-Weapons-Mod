@@ -23,18 +23,23 @@ public class ModCreativeModeTabs {
                     .displayItems((pParameters, pOutput) -> {
 
                         pOutput.accept(ModItems.QWAXE.get());
-                        pOutput.accept(ModItems.NAILGUN.get());
-                        pOutput.accept(ModItems.SUPER_NAILGUN.get());
-                        pOutput.accept(ModItems.NAIL.get());
-                        pOutput.accept(ModItems.THUNDERBOLT.get());
-                        pOutput.accept(ModItems.CELL.get());
                         pOutput.accept(ModItems.SHOTGUN.get());
+                        pOutput.accept(ModItems.NAILGUN.get());
                         pOutput.accept(ModItems.SUPER_SHOTGUN.get());
-                        pOutput.accept(ModItems.SHELL.get());
-                        pOutput.accept(ModItems.ROCKETLAUNCHER.get());
-                        pOutput.accept(ModItems.ROCKET.get());
+                        pOutput.accept(ModItems.SUPER_NAILGUN.get());
                         pOutput.accept(ModItems.GRENADELAUNCHER.get());
+                        pOutput.accept(ModItems.ROCKETLAUNCHER.get());
+                        pOutput.accept(ModItems.THUNDERBOLT.get());
+                        pOutput.accept(ModItems.NAIL.get());
+                        pOutput.accept(ModItems.SHELL.get());
                         pOutput.accept(ModItems.GRENADE.get());
+                        pOutput.accept(ModItems.ROCKET.get());
+                        pOutput.accept(ModItems.CELL.get());
+
+                        pOutput.accept(ModItems.QUAD_DAMAGE_POWERUP.get());
+                        pOutput.accept(ModItems.PENTAGRAM_POWERUP.get());
+                        pOutput.accept(ModItems.RING_POWERUP.get());
+                        pOutput.accept(ModItems.BIOSUIT_POWERUP.get());
 
                     })
                     .build());
