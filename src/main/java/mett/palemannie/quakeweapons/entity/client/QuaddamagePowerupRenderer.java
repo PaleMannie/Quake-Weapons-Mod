@@ -26,24 +26,39 @@ public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupE
         this.model = new QuadDamagePowerupModel<>(context.bakeLayer(QuadDamagePowerupModel.QUAD_LAYER));
     }
 
-    public void render(QuadDamagePowerupEntity rocketEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    float bobbingSpeed = 0.05f;
+    float bobbingHeight = 0.1f;
+    float rotationSpeed = 5f;
+
+    public void render(QuadDamagePowerupEntity rocketEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
 
-        poseStack.translate(0.0F, 0.05f, 0.0F);
+        poseStack.translate(0.0F, 0.0f, 0.0F);
+        poseStack.scale(2f, 2f, 2f);
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(0f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(0f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(0f));
+        // Zeitabhängiger Faktor
+        float ageInTicks = rocketEntity.tickCount + partialTicks;
+
+        // 🔹 Bobbing (sinusförmig)
+        double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
+        poseStack.translate(0.0D, 0.25D + bob, 0.0D);
+
+        // 🔹 Rotation
+        float rotation = (ageInTicks * rotationSpeed) % 360;
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
         poseStack.scale(1f, 1f, 1f);
 
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(QUAD_LOCATION));
         this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
+        VertexConsumer $$7 = bufferSource.getBuffer(RenderType.eyes(QUAD_LOCATION));
+        this.model.renderToBuffer(poseStack, $$7, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
         poseStack.popPose();
 
-        super.render(rocketEntity, v1, v2, poseStack, bufferSource, packedLight);
+        super.render(rocketEntity, v1, partialTicks, poseStack, bufferSource, packedLight);
     }
 
     @Override

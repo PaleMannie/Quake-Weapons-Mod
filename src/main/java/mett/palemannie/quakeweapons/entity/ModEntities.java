@@ -37,19 +37,19 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<QuadDamagePowerupEntity>> QUAD_DAMAGE_POWERUP =
             ENTITY_TYPES.register("quad_damage_powerup", () -> EntityType.Builder.<QuadDamagePowerupEntity>of(QuadDamagePowerupEntity::new, MobCategory.MISC)
-                    .sized(1.5f, 1.5f).setShouldReceiveVelocityUpdates(false).fireImmune().clientTrackingRange(256).setTrackingRange(256).updateInterval(20).build("quad_damage_powerup"));
+                    .sized(1.5f, 2f).setShouldReceiveVelocityUpdates(false).fireImmune().clientTrackingRange(256).setTrackingRange(256).updateInterval(20).build("quad_damage_powerup"));
 
     public static final RegistryObject<EntityType<PentagramPowerupEntity>> PENTAGRAM_POWERUP =
             ENTITY_TYPES.register("pentagram_powerup", () -> EntityType.Builder.<PentagramPowerupEntity>of(PentagramPowerupEntity::new, MobCategory.MISC)
-                    .sized(1.5f, 1.5f).fireImmune().clientTrackingRange(256).updateInterval(1).build("pentagram_powerup"));
+                    .sized(1.5f, 2f).fireImmune().clientTrackingRange(256).updateInterval(1).build("pentagram_powerup"));
 
     public static final RegistryObject<EntityType<RingofshadowsPowerupEntity>> RING_POWERUP =
             ENTITY_TYPES.register("ring_powerup", () -> EntityType.Builder.<RingofshadowsPowerupEntity>of(RingofshadowsPowerupEntity::new, MobCategory.MISC)
-                    .sized(1.5f, 1.5f).fireImmune().clientTrackingRange(256).updateInterval(1).build("ring_powerup"));
+                    .sized(1.5f, 2f).fireImmune().clientTrackingRange(256).updateInterval(1).build("ring_powerup"));
 
     public static final RegistryObject<EntityType<BiosuitPowerupEntity>> BIOSUIT_POWERUP =
             ENTITY_TYPES.register("biosuit_powerup", () -> EntityType.Builder.<BiosuitPowerupEntity>of(BiosuitPowerupEntity::new, MobCategory.MISC)
-                    .sized(1.5f, 1.5f).fireImmune().clientTrackingRange(256).updateInterval(1).build("biosuit_powerup"));
+                    .sized(1.5f, 2f).fireImmune().clientTrackingRange(256).updateInterval(1).build("biosuit_powerup"));
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
