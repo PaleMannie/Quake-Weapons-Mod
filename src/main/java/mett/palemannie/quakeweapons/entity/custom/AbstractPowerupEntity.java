@@ -37,9 +37,6 @@ public abstract class AbstractPowerupEntity extends Entity {
     public void tick() {
         super.tick();
 
-        // schweben lassen
-        this.setYRot((this.getYRot() + 3) % 360);
-
         // despawn
         if (this.tickCount > 10000) {
             discard();

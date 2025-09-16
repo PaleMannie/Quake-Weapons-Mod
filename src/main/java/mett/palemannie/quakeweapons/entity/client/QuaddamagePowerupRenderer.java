@@ -48,8 +48,6 @@ public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupE
         float rotation = (ageInTicks * rotationSpeed) % 360;
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
-        poseStack.scale(1f, 1f, 1f);
-
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(QUAD_LOCATION));
         this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
