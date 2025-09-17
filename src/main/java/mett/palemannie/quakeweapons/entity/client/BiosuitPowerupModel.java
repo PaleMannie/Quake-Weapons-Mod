@@ -23,29 +23,27 @@ public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition biosuit_powerup = partdefinition.addOrReplaceChild("biosuit_powerup", CubeListBuilder.create().texOffs(4, 17).addBox(-0.25F, 2.5F, -0.25F, 0.5F, 1.0F, 0.5F, new CubeDeformation(0.0F))
-				.texOffs(8, 17).addBox(-0.125F, 1.5F, -0.125F, 0.25F, 1.0F, 0.25F, new CubeDeformation(0.0F))
-				.texOffs(0, 17).addBox(-0.375F, 3.5F, -0.4F, 0.75F, 1.0F, 0.75F, new CubeDeformation(0.0F))
-				.texOffs(16, 12).addBox(-0.5F, 4.5F, -0.5F, 1.0F, 3.5F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 8).addBox(-1.25F, 8.0F, -1.25F, 2.5F, 1.0F, 2.5F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+		PartDefinition bb_main = partdefinition.addOrReplaceChild("biosuit_powerup", CubeListBuilder.create().texOffs(40, 72).addBox(1.9F, -4.0F, -6.0F, 6.0F, 4.0F, 9.0F, new CubeDeformation(0.0F))
+				.texOffs(82, 24).addBox(1.9F, -12.0F, -3.0F, 6.0F, 8.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(70, 76).addBox(1.4F, -10.0F, -3.5F, 7.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
+				.texOffs(60, 87).addBox(2.4F, -20.0F, -2.5F, 5.0F, 8.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 60).addBox(-6.5F, -24.0F, -2.9F, 14.0F, 4.0F, 5.8F, new CubeDeformation(0.0F))
+				.texOffs(42, 16).addBox(-6.9F, -28.0F, -3.9F, 14.8F, 4.0F, 7.8F, new CubeDeformation(0.0F))
+				.texOffs(40, 62).addBox(-6.4F, -32.0F, -2.9F, 13.8F, 4.0F, 5.8F, new CubeDeformation(0.0F))
+				.texOffs(36, 34).addBox(-8.9F, -36.0F, -3.9F, 18.8F, 4.0F, 7.8F, new CubeDeformation(0.0F))
+				.texOffs(0, 0).addBox(-15.9F, -42.0F, -4.9F, 32.8F, 6.0F, 9.8F, new CubeDeformation(0.0F))
+				.texOffs(0, 34).addBox(-6.0F, -57.0F, -6.0F, 12.0F, 14.0F, 12.0F, new CubeDeformation(0.0F))
+				.texOffs(74, 46).addBox(-7.4F, -10.0F, -3.5F, 7.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
+				.texOffs(71, 63).addBox(-6.9F, -4.0F, -6.0F, 6.0F, 4.0F, 9.0F, new CubeDeformation(0.0F))
+				.texOffs(80, 10).addBox(-6.9F, -12.0F, -3.0F, 6.0F, 8.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(40, 85).addBox(-6.4F, -20.0F, -2.5F, 5.0F, 8.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(20, 70).addBox(11.5F, -36.0F, -2.5F, 5.0F, 20.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 70).addBox(-15.5F, -36.0F, -2.5F, 5.0F, 20.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(35, 47).addBox(-6.25F, -58.0F, -6.25F, 12.5F, 2.0F, 12.5F, new CubeDeformation(0.0F))
+				.texOffs(76, 0).addBox(-3.25F, -59.0F, -3.25F, 6.5F, 2.0F, 6.5F, new CubeDeformation(0.0F))
+				.texOffs(0, 16).addBox(-7.0F, -45.0F, -7.5F, 14.0F, 4.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition cube_r1 = biosuit_powerup.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 12).addBox(0.685F, -2.4215F, -1.0125F, 2.0F, 0.9F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.3238F, 8.8012F, 0.0125F, 3.1416F, 0.0F, -0.7897F));
-
-		PartDefinition cube_r2 = biosuit_powerup.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(12, 8).addBox(-1.1872F, -1.7498F, -0.9875F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.3238F, 8.8012F, 0.0125F, 3.1416F, 0.0F, -1.3111F));
-
-		PartDefinition cube_r3 = biosuit_powerup.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(0, 4).addBox(-2.572F, -2.0975F, -1.0125F, 3.0F, 1.5F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.3238F, 8.8012F, 0.0125F, 3.1416F, 0.0F, -2.0907F));
-
-		PartDefinition cube_r4 = biosuit_powerup.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0582F, -3.3506F, -0.9875F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.3238F, 8.8012F, 0.0125F, 3.1416F, 0.0F, -2.9656F));
-
-		PartDefinition cube_r5 = biosuit_powerup.addOrReplaceChild("cube_r5", CubeListBuilder.create().texOffs(8, 12).addBox(3.425F, -4.35F, -1.0F, 2.0F, 0.9F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 5.5F, 0.0F, 0.0F, 0.0F, -2.3562F));
-
-		PartDefinition cube_r6 = biosuit_powerup.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(22, 8).addBox(2.15F, -2.05F, -0.975F, 3.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 5.5F, 0.0F, 0.0F, 0.0F, -1.8326F));
-
-		PartDefinition cube_r7 = biosuit_powerup.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(10, 4).addBox(0.0F, 0.05F, -1.0F, 3.0F, 1.5F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 5.5F, 0.0F, 0.0F, 0.0F, -1.0472F));
-
-		PartDefinition cube_r8 = biosuit_powerup.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(10, 0).addBox(-3.05F, 0.0F, -0.975F, 3.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 5.5F, 0.0F, 0.0F, 0.0F, -0.1745F));
-
-		return LayerDefinition.create(meshdefinition, 32, 32);
+		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
 	@Override
