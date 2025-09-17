@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.RingofshadowsPowerupEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -23,24 +24,37 @@ public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEnti
         this.model = new RingPowerupModel<>(context.bakeLayer(RingPowerupModel.RING_LAYER));
     }
 
-    public void render(RingofshadowsPowerupEntity rocketEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    float bobbingSpeed = 0.05f;
+    float bobbingHeight = 0.1f;
+    float rotationSpeed = 5f;
+
+    public void render(RingofshadowsPowerupEntity rocketEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
 
-        poseStack.translate(0.0F, 0.05f, 0.0F);
-
-        poseStack.mulPose(Axis.YP.rotationDegrees(0f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(0f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(0f));
-
+        poseStack.translate(0.0F, 0.0f, 0.0F);
         poseStack.scale(1f, 1f, 1f);
+
+        // Zeitabhängiger Faktor
+        float ageInTicks = rocketEntity.tickCount + partialTicks;
+
+        // 🔹 Bobbing (sinusförmig)
+        double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
+        poseStack.translate(0.0D, 0.25D + bob, 0.0D);
+
+        // 🔹 Rotation
+        float rotation = (ageInTicks * rotationSpeed) % 360;
+        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(RING_LOCATION));
         this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
+        VertexConsumer $$5 = bufferSource.getBuffer(RenderType.eyes(RING_LOCATION));
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
         poseStack.popPose();
 
-        super.render(rocketEntity, v1, v2, poseStack, bufferSource, packedLight);
+        super.render(rocketEntity, v1, partialTicks, poseStack, bufferSource, packedLight);
     }
 
     @Override
