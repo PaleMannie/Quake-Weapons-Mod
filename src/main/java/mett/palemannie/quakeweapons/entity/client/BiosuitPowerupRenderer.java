@@ -33,8 +33,8 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
 
         poseStack.pushPose();
 
-        poseStack.translate(0.0F, 0.25f, 0.0F);
-        poseStack.scale(0.6f, 0.6f, 0.6f);
+        poseStack.translate(0.0F, 2f, 0.0F);
+        poseStack.scale(1f, 1f, 1f);
         poseStack.mulPose(Axis.XP.rotationDegrees(180f));
 
         // Zeitabhängiger Faktor
@@ -46,7 +46,7 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
 
         // 🔹 Rotation
         float rotation = (ageInTicks * rotationSpeed) % 360;
-        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
+        poseStack.mulPose(Axis.YN.rotationDegrees(rotation));
 
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(BIOSUIT_LOCATION));
         this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);

@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
+import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -38,7 +39,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         super.tick();
 
         // despawn
-        if (this.tickCount > 10000) {
+        if (this.tickCount > 5*60*20) {
             discard();
             return;
         }
@@ -66,7 +67,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         if (!level().isClientSide && stack.is(Items.NETHER_STAR)) {
 
             this.spawnAtLocation(getPowerupItem());
-            level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 2.0F);
+            level().playSound(null, blockPosition(), ModSounds.EXPLOSION.get(), SoundSource.PLAYERS, 1.0F, 2.0F);
 
             if(!player.isCreative()){
 
