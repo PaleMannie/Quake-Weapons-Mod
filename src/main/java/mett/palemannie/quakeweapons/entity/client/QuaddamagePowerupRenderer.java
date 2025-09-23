@@ -35,7 +35,7 @@ public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupE
         poseStack.pushPose();
 
         poseStack.translate(0.0F, 0.0f, 0.0F);
-        poseStack.scale(2f, 2f, 2f);
+        poseStack.scale(0.5f, 0.5f, 0.5f);
 
         // Zeitabhängiger Faktor
         float ageInTicks = rocketEntity.tickCount + partialTicks;

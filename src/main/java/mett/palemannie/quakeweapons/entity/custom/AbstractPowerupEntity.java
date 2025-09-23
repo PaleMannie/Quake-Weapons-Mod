@@ -39,7 +39,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         super.tick();
 
         // despawn
-        if (this.tickCount > 5*60*20) {
+        if (this.tickCount > 20*20 /*5*60*20*/) {
             discard();
             return;
         }

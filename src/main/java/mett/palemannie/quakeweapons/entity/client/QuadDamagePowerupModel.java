@@ -24,18 +24,18 @@ public class QuadDamagePowerupModel<T extends Entity> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition quad_damage_powerup = partdefinition.addOrReplaceChild("quad_damage_powerup", CubeListBuilder.create().texOffs(11, 12).addBox(-0.25F, 2.5F, -0.25F, 0.5F, 1.0F, 0.5F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-0.125F, 1.5F, -0.125F, 0.25F, 1.0F, 0.25F, new CubeDeformation(0.0F))
-				.texOffs(12, 9).addBox(-0.375F, 3.5F, -0.4F, 0.75F, 1.0F, 0.75F, new CubeDeformation(0.0F))
-				.texOffs(8, 8).addBox(-0.5F, 4.5F, -0.5F, 1.0F, 3.5F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 4).addBox(-1.25F, 8.0F, -1.25F, 2.5F, 1.0F, 2.5F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-5.0F, 5.25F, -0.75F, 10.0F, 1.5F, 1.5F, new CubeDeformation(0.0F))
-				.texOffs(0, 8).addBox(4.0F, 6.75F, -0.625F, 1.25F, 7.0F, 1.25F, new CubeDeformation(0.0F))
-				.texOffs(4, 8).addBox(-5.5F, 6.75F, -0.625F, 1.25F, 7.0F, 1.25F, new CubeDeformation(0.0F))
-				.texOffs(11, 7).addBox(-4.25F, 13.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(9, 4).addBox(2.0F, 13.5F, -0.5F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -4.0F, 0.0F));
+		PartDefinition bb_main = partdefinition.addOrReplaceChild("quad_damage_powerup", CubeListBuilder.create().texOffs(0, 0).addBox(-0.5F, 2.0F, -0.5F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(30, 43).addBox(-1.0F, 6.0F, -1.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F))
+				.texOffs(18, 43).addBox(-1.5F, 10.0F, -1.5F, 3.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 0).addBox(-18.0F, 17.0F, -2.5F, 36.0F, 5.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(36, 19).addBox(-2.0F, 14.0F, -2.0F, 4.0F, 13.0F, 4.0F, new CubeDeformation(0.0F))
+				.texOffs(36, 10).addBox(-3.0F, 27.0F, -3.0F, 6.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
+				.texOffs(18, 10).addBox(16.0F, 22.0F, -2.5F, 4.0F, 28.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 10).addBox(-20.0F, 22.0F, -2.5F, 4.0F, 28.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(0, 43).addBox(12.0F, 48.0F, -2.5F, 4.0F, 4.0F, 5.0F, new CubeDeformation(0.0F))
+				.texOffs(36, 36).addBox(-16.0F, 48.0F, -2.5F, 4.0F, 4.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		return LayerDefinition.create(meshdefinition, 32, 32);
+		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
 	@Override
