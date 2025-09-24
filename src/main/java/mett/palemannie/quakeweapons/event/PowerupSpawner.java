@@ -4,62 +4,83 @@ package mett.palemannie.quakeweapons.event;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.custom.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.commands.PlaceCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.function.Consumer;
+
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID)
 public class PowerupSpawner {
 
-    private static final double SPAWN_CHANCE = 0.001D; // Feinjustieren! Klein = selten 0.00001D
-    private static final int MAX_ATTEMPTS = 3;           // pro Tick max. Versuche
+    private static final int SPAWN_INTERVAL = 100; // alle 30s (wie ein Spawntick)
+    private static final int ATTEMPTS_PER_PLAYER = 3; // Vanilla-like: pro Spieler 1–4 Versuche
+    private static final int SEARCH_RADIUS = 5; // Rundumsuche wie Vanilla
+
+    private static int tickCounter = 0;
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.LevelTickEvent event) {
-        if (event.level.isClientSide || event.phase != TickEvent.Phase.END) return;
+        if (event.phase != TickEvent.Phase.END || event.level.isClientSide) return;
         ServerLevel level = (ServerLevel) event.level;
 
-        // Nur Overworld? → Bedingung hier rein
-        // if (!level.dimension().equals(Level.OVERWORLD)) return;
+        tickCounter++;
+        if (tickCounter % SPAWN_INTERVAL != 0) return;
 
-        for (int i = 0; i < MAX_ATTEMPTS; i++) {
-            if (level.random.nextDouble() < SPAWN_CHANCE) {
-                trySpawnPowerup(level);
+        for (ServerPlayer player : level.players()) {
+            for (int i = 0; i < ATTEMPTS_PER_PLAYER; i++) {
+                trySpawnNearPlayer(level, player);
             }
         }
     }
 
-    private static void trySpawnPowerup(ServerLevel level) {
+    private static void trySpawnNearPlayer(ServerLevel level, ServerPlayer player) {
+        RandomSource random = level.random;
 
-        ServerPlayer player = level.getRandomPlayer();
+        // Vanilla: Zufällige Position im 8-Chunk-Radius um Spieler
+        int x = player.blockPosition().getX() + Mth.nextInt(random, -128, 128);
+        int z = player.blockPosition().getZ() + Mth.nextInt(random, -128, 128);
+        int y = Mth.nextInt(random, level.getMinBuildHeight() + 5, level.getMaxBuildHeight() - 5);
 
-        if(player == null) return;
+        BlockPos candidate = new BlockPos(x, y, z);
 
-        int x = Mth.nextInt(level.random, -255, 255);
-        int z = Mth.nextInt(level.random, -255, 255);
+        // Suche im Umkreis nach einer brauchbaren Stelle
+        if (tryFindSpawnPos(level, candidate, SEARCH_RADIUS, pos -> {
+            AbstractPowerupEntity entity = randomPowerup(level);
+            entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+            level.addFreshEntity(entity);
 
-        BlockPos topPos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(player.getBlockX() + x, 0,player.getBlockZ() + z));
+            debug(level, "§aSpawned " + entity.getType().toShortString() + " at " + pos);
+        })) {
+            return; // Erfolgreich gespawnt → abbrechen
+        } else {
+            debug(level, "§cNo valid spawn near " + candidate);
+        }
+    }
 
-        if (!level.getBlockState(topPos.below()).isSolid()) return;
+    private static boolean tryFindSpawnPos(ServerLevel level, BlockPos center, int radius, Consumer<BlockPos> onFound) {
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dz = -radius; dz <= radius; dz++) {
+                BlockPos pos = center.offset(dx, 0, dz);
+                if (level.getBlockState(pos).isAir() && level.getBlockState(pos.below()).isSolid()) {
+                    onFound.accept(pos);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-        AbstractPowerupEntity entity = randomPowerup(level);
-        entity.moveTo(topPos.getX() + 0.5, topPos.getY() + 1, topPos.getZ() + 0.5, 0, 0);
-        level.addFreshEntity(entity);
-
-        // 🔹 Debug-Meldung ins Chat an alle Spieler
-        String name = entity.getType().toShortString(); // oder dein eigenes Label
-        Component msg = Component.literal("§d[Powerup-Spawn]§r " + name + " bei " + topPos.getX() + " " + topPos.getY() + " " + topPos.getZ());
+    private static void debug(ServerLevel level, String msg) {
+        Component comp = Component.literal("§d[Powerup Debug]§r " + msg);
         for (ServerPlayer sp : level.players()) {
-            sp.sendSystemMessage(msg);
+            sp.sendSystemMessage(comp);
         }
     }
 
