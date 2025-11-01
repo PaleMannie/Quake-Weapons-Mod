@@ -16,7 +16,7 @@ public class RingofshadowsPowerupEntity extends AbstractPowerupEntity{
 
     @Override
     protected void onPickup(Player player) {
-        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS.get(), 20 * 30, 0, false, false));
+        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS.get(), durationOnPickup, 0, false, false));
     }
 
     @Override

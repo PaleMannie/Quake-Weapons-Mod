@@ -1,12 +1,9 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
-import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.effect.ModEffects;
-import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
-import mett.palemannie.quakeweapons.util.WeaponDamageStats;
-import net.minecraft.core.BlockPos;
+import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -22,9 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LightBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -76,7 +70,7 @@ public class SuperNailProjectileEntity extends Projectile {
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? WeaponDamageStats.SuperNailgunDamage * 4 : WeaponDamageStats.SuperNailgunDamage);
+            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? QWConfigStats.SuperNailgunDamage * 4 : QWConfigStats.SuperNailgunDamage);
         }
     }
 

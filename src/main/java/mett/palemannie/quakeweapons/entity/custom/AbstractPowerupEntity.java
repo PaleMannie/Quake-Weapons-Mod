@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,6 +21,8 @@ public abstract class AbstractPowerupEntity extends Entity {
         this.noPhysics = true;
     }
 
+    public static final int durationOnPickup = 600;//QuakeWeaponsConfig.COMMON.powerupEffectDurationOnPickup.get();
+
     @Override
     protected void defineSynchedData() {}
 
@@ -35,7 +38,7 @@ public abstract class AbstractPowerupEntity extends Entity {
     public void tick() {
         super.tick();
 
-        if (this.tickCount > 5*60*20) {
+        if (this.tickCount > QuakeWeaponsConfig.SERVER.powerupLifetime.get()) {
             discard();
             return;
         }

@@ -53,7 +53,7 @@ public class ModItems {
             () -> new QWAxeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> QUAD_DAMAGE_POWERUP = ITEMS.register("quad_damage",
-            () -> new Item(new Item.Properties().stacksTo(1)));
+            () -> new QuadDamageItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> PENTAGRAM_POWERUP = ITEMS.register("pentagram_of_protection",
             () -> new Item(new Item.Properties().stacksTo(1)));

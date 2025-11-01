@@ -6,7 +6,7 @@ import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
-import mett.palemannie.quakeweapons.util.WeaponDamageStats;
+import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -127,8 +127,8 @@ public class ThunderboltItem extends AbstractWeapon{
                 target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
                 //the real damage
                 target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
-                        player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? ((cellCount * 0.66f) * WeaponDamageStats.ThunderboltDamage * 4)
-                                : ((cellCount * 0.66f) * WeaponDamageStats.ThunderboltDamage));
+                        player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
+                                : ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage));
 
                 //particles and sound
                 level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
@@ -139,7 +139,7 @@ public class ThunderboltItem extends AbstractWeapon{
         }
 
         //player self discharge damage and particles and sound
-        player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, player, player), (cellCount * 0.5f) * WeaponDamageStats.ThunderboltDamage);
+        player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, player, player), (cellCount * 0.5f) * QWConfigStats.ThunderboltDamage);
         level.playSound(null, player.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK,
                 player.getX(), player.getY() + player.getBbHeight() / 2, player.getZ(),

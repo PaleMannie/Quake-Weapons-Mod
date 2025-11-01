@@ -2,7 +2,7 @@ package mett.palemannie.quakeweapons.util;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 
-public class WeaponDamageStats {
+public class QWConfigStats {
 
     public static float AxeDamage = QuakeWeaponsConfig.COMMON.axeDamage.get().floatValue();
     public static float ShotgunDamage = QuakeWeaponsConfig.COMMON.shotgunDamage.get().floatValue();

@@ -3,7 +3,7 @@ package mett.palemannie.quakeweapons.entity.custom;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
-import mett.palemannie.quakeweapons.util.WeaponDamageStats;
+import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -33,7 +33,8 @@ public class GrenadeProjectileEntity extends Projectile {
     }
 
     public static float computeRadiusFromDamage(float configDamage, Player player) {
-        return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;
+        if(player == null){ return ((configDamage - 1) / 7.0F)/2;} else{
+        return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;}
     }
 
     private void quakeExplosion(Level level) {
@@ -43,14 +44,14 @@ public class GrenadeProjectileEntity extends Projectile {
 
         DamageSource source = level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, null, null);
 
-        AABB area = new AABB(this.blockPosition()).inflate(computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage, (Player)this.getOwner()));
+        AABB area = new AABB(this.blockPosition()).inflate(computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()));
         for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, area)) {
             if (entity != this.getOwner()) {
                 entity.hurt(this.damageSources().source(DamageTypes.PLAYER_ATTACK, this, this.getOwner()), Float.MIN_VALUE);
             }
         }
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(WeaponDamageStats.GrenadelauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false);
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false);
 
         // Explosionseffekte (Server sendet Partikel)
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,

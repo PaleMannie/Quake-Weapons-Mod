@@ -127,7 +127,7 @@ public class ServerPlayHandler {
             // === ENTITY TREFFER ===
             LivingEntity target = (LivingEntity) entityHit.getEntity();
 
-            target.hurt(level.damageSources().source(ModDamageTypes.AXE_DAMAGE, player, player), WeaponDamageStats.AxeDamage);
+            target.hurt(level.damageSources().source(ModDamageTypes.AXE_DAMAGE, player, player), QWConfigStats.AxeDamage);
 
             // Partikel genau an der Oberfläche (Trefferpunkt)
             Vec3 p = entityHit.getLocation();
@@ -207,7 +207,7 @@ public class ServerPlayHandler {
                 if (target != player && target.isAlive() && !alreadyHit.contains(target)) {
                     alreadyHit.add(target);
 
-                    target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, player, player), WeaponDamageStats.ThunderboltDamage);
+                    target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, player, player), QWConfigStats.ThunderboltDamage);
                 }
             }
 
@@ -303,7 +303,7 @@ public class ServerPlayHandler {
         final double RANGE = 64.0;
         final double SPREAD_H = 11.0;
         final double SPREAD_V = 7.0;
-        final float DAMAGE_PER_PELLET = WeaponDamageStats.SuperShotgunDamage;
+        final float DAMAGE_PER_PELLET = QWConfigStats.SuperShotgunDamage;
 
         for (int i = 0; i < PELLETS; i++) {
             Vec3 pelletDir = getSuperShotgunNormalizedSpreadDirection(look, SPREAD_H, SPREAD_V, sevel.random);
@@ -370,7 +370,7 @@ public class ServerPlayHandler {
 
         ///Hitscan
         final int PELLETS = 6;
-        final float DAMAGE_PER_PELLET = WeaponDamageStats.ShotgunDamage;
+        final float DAMAGE_PER_PELLET = QWConfigStats.ShotgunDamage;
         final double RANGE = 64.0;
         final double SPREAD_DEGREES = 10.0;
 

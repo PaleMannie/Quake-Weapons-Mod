@@ -5,7 +5,6 @@ import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.client.*;
-import mett.palemannie.quakeweapons.event.ModEvents;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;
@@ -19,7 +18,6 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -47,7 +45,7 @@ public class QuakeWeapons {
         ModSounds.register(modEventBus);
         ModBlocks.register(modEventBus);
 
-        context.registerConfig(ModConfig.Type.COMMON, QuakeWeaponsConfig.COMMON_SPEC);
+        QuakeWeaponsConfig.registerConfigs();
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

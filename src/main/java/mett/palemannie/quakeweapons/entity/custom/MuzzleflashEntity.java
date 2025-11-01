@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.entity.custom;
 import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -91,5 +92,12 @@ public class MuzzleflashEntity extends Projectile {
         if(this.tickCount > 10) {
             this.discard();
         }
+    }
+
+    @Override
+    public void recreateFromPacket(ClientboundAddEntityPacket pPacket) {
+        super.recreateFromPacket(pPacket);
+
+        pPacket.getXa();
     }
 }

@@ -16,7 +16,7 @@ public class PentagramPowerupEntity extends AbstractPowerupEntity{
 
     @Override
     protected void onPickup(Player player) {
-        player.addEffect(new MobEffectInstance(ModEffects.INVULNERABILITY.get(), 20 * 30));
+        player.addEffect(new MobEffectInstance(ModEffects.INVULNERABILITY.get(), durationOnPickup));
     }
 
     @Override

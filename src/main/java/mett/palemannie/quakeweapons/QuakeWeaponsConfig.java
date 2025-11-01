@@ -1,10 +1,9 @@
 package mett.palemannie.quakeweapons;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import org.apache.commons.lang3.tuple.Pair;
+import net.minecraftforge.fml.config.ModConfig;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class QuakeWeaponsConfig
@@ -13,14 +12,13 @@ public class QuakeWeaponsConfig
     public static final Common COMMON;
 
     static {
-        Pair<Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Common::new);
-        COMMON_SPEC = specPair.getRight();
-        COMMON = specPair.getLeft();
+        final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        COMMON = new Common(builder);
+        COMMON_SPEC = builder.build();
     }
 
     public static class Common {
         public final ForgeConfigSpec.BooleanValue enableMuzzleFlash;
-        public final ForgeConfigSpec.BooleanValue quadDamageOnly;
         public final ForgeConfigSpec.BooleanValue enableThunderboltTracer;
         public final ForgeConfigSpec.DoubleValue axeDamage;
         public final ForgeConfigSpec.DoubleValue shotgunDamage;
@@ -31,48 +29,104 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.DoubleValue rocketlauncherDamage;
         public final ForgeConfigSpec.DoubleValue grenadelauncherDamage;
 
+
         public Common(ForgeConfigSpec.Builder builder) {
             builder.push("Quake Weapons");
 
-            enableMuzzleFlash = builder.comment("[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables muzzle flash when shooting").define("enableMuzzleFlash", false);
+            enableMuzzleFlash = builder.comment("\n[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables muzzle flash when shooting")
+                    .define("enableMuzzleFlash", false);
 
-            quadDamageOnly = builder.comment("Enables/Disables permanent quad damage effect").define("quadDamageOnly", false);
-
-            enableThunderboltTracer = builder.comment("Enables/Disables Thunderbolt hitscan tracers").define("enableThunderboltTracer", false);
+            enableThunderboltTracer = builder.comment("\nEnables/Disables Thunderbolt hitscan tracers")
+                    .define("enableThunderboltTracer", false);
 
             axeDamage = builder
-                    .comment("How much damage the Quake axe deals")
+                    .comment("\nHow much damage the Quake axe deals")
                     .defineInRange("axeDamage", 10.0, 0.0, Float.MAX_VALUE);
 
             shotgunDamage = builder
-                    .comment("How much damage the Shotgun deals per pellet (6 pellets per shot)")
+                    .comment("\nHow much damage the Shotgun deals per pellet (6 pellets per shot)")
                     .defineInRange("shotgunDamage", 2.0, 0.0, Float.MAX_VALUE);
 
             superShotgunDamage = builder
-                    .comment("How much damage the Double Barreled Shotgun deals per pellet (14 pellets per shot)")
+                    .comment("\nHow much damage the Double Barreled Shotgun deals per pellet (14 pellets per shot)")
                     .defineInRange("superShotgunDamage", 2.0, 0.0, Float.MAX_VALUE);
 
             nailgunDamage = builder
-                    .comment("How much damage the Nailgun deals per shot")
+                    .comment("\nHow much damage the Nailgun deals per shot")
                     .defineInRange("nailgunDamage", 2.0, 0.0, Float.MAX_VALUE);
 
             superNailgunDamage = builder
-                    .comment("How much damage the Super Nailgun deals per shot")
+                    .comment("\nHow much damage the Super Nailgun deals per shot")
                     .defineInRange("superNailgunDamage", 4.0, 0.0, Float.MAX_VALUE);
 
             thunderboltDamage = builder
-                    .comment("How much damage the Thunderbolt deals per shot")
+                    .comment("\nHow much damage the Thunderbolt deals per shot")
                     .defineInRange("thunderboltDamage", 6.0, 0.0, Float.MAX_VALUE);
 
             rocketlauncherDamage = builder
-                    .comment("How much damage the Rocket Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("rocketlauncherDamage", 24, 0.0, Float.MAX_VALUE);
+                    .comment("\nHow much damage the Rocket Launcher deals per shot. WARNING: Damage increases blast radius")
+                    .defineInRange("rocketlauncherDamage", 26, 0.0, Float.MAX_VALUE);
 
             grenadelauncherDamage = builder
-                    .comment("How much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("grenadelauncherDamage", 24, 0.0, Float.MAX_VALUE);
+                    .comment("\nHow much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
+                    .defineInRange("grenadelauncherDamage", 26, 0.0, Float.MAX_VALUE);
 
             builder.pop();
         }
+    }
+
+
+    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final Server SERVER;
+
+    static {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        SERVER = new Server(builder);
+        SERVER_SPEC = builder.build();
+    }
+
+    public static class Server {
+
+        public final ForgeConfigSpec.IntValue powerupSpawnInterval;
+        public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
+        public final ForgeConfigSpec.IntValue powerupSpawnSearchRadius;
+        public final ForgeConfigSpec.IntValue powerupEffectDurationOnPickup;
+        public final ForgeConfigSpec.IntValue powerupLifetime;
+        public final ForgeConfigSpec.BooleanValue powerupDebug;
+
+        public Server(ForgeConfigSpec.Builder builder) {
+            builder.push("Quakeweapons Server");
+
+            powerupSpawnInterval = builder
+                    .comment("\nSpawns a powerup every x ticks in the world randomly")
+                    .defineInRange("powerupSpawnInterval", 600, 20, Integer.MAX_VALUE);
+
+            powerupSpawnAttempts = builder
+                    .comment("\nAttemts of spawning a powerup at each interval")
+                    .defineInRange("powerupSpawnAttempts", 5, 1, 512);
+
+            powerupSpawnSearchRadius = builder
+                    .comment("\nSearch radius for a suitable spawning place at each spawning attempt")
+                    .defineInRange("powerupSpawnSearchRadius", 5, 1, 512);
+
+            powerupEffectDurationOnPickup = builder
+                    .comment("\nDuration of powerups effects upon picking up in ticks")
+                    .defineInRange("powerupEffectDurationOnPickup", 600, 1, Integer.MAX_VALUE);
+
+            powerupLifetime = builder
+                    .comment("\nDuration of powerups in the world in ticks until despawning")
+                    .defineInRange("powerupLifetime", 6000, 1, Integer.MAX_VALUE);
+
+            powerupDebug = builder
+                    .comment("\nPowerup spawn attempts are visible in chat")
+                    .define("powerupDebug", false);
+
+            builder.pop();
+        }
+    }
+
+    public static void registerConfigs() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_SPEC);
     }
 }

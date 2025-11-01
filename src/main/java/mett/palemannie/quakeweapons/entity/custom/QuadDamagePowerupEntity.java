@@ -16,7 +16,7 @@ public class QuadDamagePowerupEntity extends AbstractPowerupEntity{
 
     @Override
     protected void onPickup(Player player) {
-        player.addEffect(new MobEffectInstance(ModEffects.QUAD_DAMAGE.get(), 20 * 30));
+        player.addEffect(new MobEffectInstance(ModEffects.QUAD_DAMAGE.get(), durationOnPickup));
     }
 
     @Override
