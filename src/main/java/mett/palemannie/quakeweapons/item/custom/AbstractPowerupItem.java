@@ -20,7 +20,7 @@ public abstract class AbstractPowerupItem extends Item {
 
         if (!level.isClientSide) {
             // Wir lesen den Config-Wert LAZY zur Laufzeit
-            int duration = QuakeWeaponsConfig.SERVER.powerupEffectDurationOnPickup.get();
+            int duration = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
 
 
             // Das eigentliche Verhalten wird an die Subklasse delegiert
@@ -43,6 +43,6 @@ public abstract class AbstractPowerupItem extends Item {
      * Zugriffsmethode für die Config-Werte (später falls woanders gebraucht)
      */
     protected int getPowerupDuration() {
-        return QuakeWeaponsConfig.SERVER.powerupEffectDurationOnPickup.get();
+        return QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
     }
 }

@@ -21,7 +21,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         this.noPhysics = true;
     }
 
-    public static final int durationOnPickup = 600;//QuakeWeaponsConfig.COMMON.powerupEffectDurationOnPickup.get();
+    public static int durationOnPickup = 0;
 
     @Override
     protected void defineSynchedData() {}
@@ -34,9 +34,15 @@ public abstract class AbstractPowerupEntity extends Entity {
     protected void addAdditionalSaveData(CompoundTag tag) {
     }
 
+    protected int getPowerupDuration() {
+        return QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
+    }
+
     @Override
     public void tick() {
         super.tick();
+
+        if(!level().isClientSide) { durationOnPickup = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(); }
 
         if (this.tickCount > QuakeWeaponsConfig.SERVER.powerupLifetime.get()) {
             discard();

@@ -5,44 +5,56 @@ import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.custom.*;
-import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID)
+@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
 public class PowerupSpawner {
 
-    private static final int SPAWN_INTERVAL = 600;
-    private static final int ATTEMPTS_PER_PLAYER = 5;
-    private static final int SEARCH_RADIUS = 5;
+    public static int tickCounter = 0;
 
-    private static int tickCounter = 0;
+    /** Liest einen Config-Wert sicher, selbst wenn Config noch nicht geladen ist. */
+    private static int safeGetInt(Supplier<Integer> supplier, int fallback) {
+        try {
+            return supplier.get();
+        } catch (Exception e) {
+            return fallback;
+        }
+    }
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.LevelTickEvent event) {
         if (event.phase != TickEvent.Phase.END || event.level.isClientSide) return;
         ServerLevel level = (ServerLevel) event.level;
 
+        // Config-Werte erst hier lesen, wenn Forge fertig initialisiert ist
+        int interval     = safeGetInt(() -> QuakeWeaponsConfig.SERVER.powerupSpawnInterval.get(), 600);
+        int attempts     = safeGetInt(() -> QuakeWeaponsConfig.SERVER.powerupSpawnAttempts.get(), 3);
+        int searchRadius = safeGetInt(() -> QuakeWeaponsConfig.SERVER.powerupSpawnSearchRadius.get(), 5);
+
         tickCounter++;
-        if (tickCounter % SPAWN_INTERVAL != 0) return;
+        if (tickCounter % interval != 0) return;
 
         for (ServerPlayer player : level.players()) {
-            for (int i = 0; i < ATTEMPTS_PER_PLAYER; i++) {
-                trySpawnNearPlayer(level, player);
+            for (int i = 0; i < attempts; i++) {
+                trySpawnNearPlayer(level, player, searchRadius);
             }
         }
     }
 
-    private static void trySpawnNearPlayer(ServerLevel level, ServerPlayer player) {
+    private static void trySpawnNearPlayer(ServerLevel level, ServerPlayer player, int searchRadius) {
         RandomSource random = level.random;
 
         // Vanilla: Zufällige Position im 8-Chunk-Radius um Spieler
@@ -53,7 +65,7 @@ public class PowerupSpawner {
         BlockPos candidate = new BlockPos(x, y, z);
 
         // Suche im Umkreis nach einer brauchbaren Stelle
-        if (tryFindSpawnPos(level, candidate, SEARCH_RADIUS, pos -> {
+        if (tryFindSpawnPos(level, candidate, searchRadius, pos -> {
             AbstractPowerupEntity entity = randomPowerup(level);
             entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
             level.addFreshEntity(entity);

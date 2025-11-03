@@ -56,13 +56,13 @@ public class ModItems {
             () -> new QuadDamageItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> PENTAGRAM_POWERUP = ITEMS.register("pentagram_of_protection",
-            () -> new Item(new Item.Properties().stacksTo(1)));
+            () -> new PentagramItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> RING_POWERUP = ITEMS.register("ring_of_shadows",
-            () -> new Item(new Item.Properties().stacksTo(1)));
+            () -> new RingOfShadowsItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> BIOSUIT_POWERUP = ITEMS.register("biosuit",
-            () -> new Item(new Item.Properties().stacksTo(1)));
+            () -> new BiosuitItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

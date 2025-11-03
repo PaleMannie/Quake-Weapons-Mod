@@ -90,16 +90,17 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.IntValue powerupSpawnInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
         public final ForgeConfigSpec.IntValue powerupSpawnSearchRadius;
-        public final ForgeConfigSpec.IntValue powerupEffectDurationOnPickup;
+        public final ForgeConfigSpec.IntValue powerupEffectDuration;
         public final ForgeConfigSpec.IntValue powerupLifetime;
         public final ForgeConfigSpec.BooleanValue powerupDebug;
+        public final ForgeConfigSpec.BooleanValue enablePowerups;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Quakeweapons Server");
 
             powerupSpawnInterval = builder
                     .comment("\nSpawns a powerup every x ticks in the world randomly")
-                    .defineInRange("powerupSpawnInterval", 600, 20, Integer.MAX_VALUE);
+                    .defineInRange("powerupSpawnInterval", 600, 20, Integer.MAX_VALUE-1);
 
             powerupSpawnAttempts = builder
                     .comment("\nAttemts of spawning a powerup at each interval")
@@ -109,17 +110,21 @@ public class QuakeWeaponsConfig
                     .comment("\nSearch radius for a suitable spawning place at each spawning attempt")
                     .defineInRange("powerupSpawnSearchRadius", 5, 1, 512);
 
-            powerupEffectDurationOnPickup = builder
+            powerupEffectDuration = builder
                     .comment("\nDuration of powerups effects upon picking up in ticks")
-                    .defineInRange("powerupEffectDurationOnPickup", 600, 1, Integer.MAX_VALUE);
+                    .defineInRange("powerupEffectDurationOnPickup", 600, 1, Integer.MAX_VALUE-1);
 
             powerupLifetime = builder
                     .comment("\nDuration of powerups in the world in ticks until despawning")
-                    .defineInRange("powerupLifetime", 6000, 1, Integer.MAX_VALUE);
+                    .defineInRange("powerupLifetime", 6000, 1, Integer.MAX_VALUE-1);
 
             powerupDebug = builder
                     .comment("\nPowerup spawn attempts are visible in chat")
                     .define("powerupDebug", false);
+
+            enablePowerups = builder
+                    .comment("\nEnables/Disables the spawning of powerups in your world")
+                    .define("enablePowerups", true);
 
             builder.pop();
         }
