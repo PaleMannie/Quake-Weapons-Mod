@@ -98,6 +98,10 @@ public class QuakeWeaponsConfig
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Quakeweapons Server");
 
+            enablePowerups = builder
+                    .comment("\nEnables/Disables the spawning of powerups in your world")
+                    .define("enablePowerups", true);
+
             powerupSpawnInterval = builder
                     .comment("\nSpawns a powerup every x ticks in the world randomly")
                     .defineInRange("powerupSpawnInterval", 600, 20, Integer.MAX_VALUE-1);
@@ -121,10 +125,6 @@ public class QuakeWeaponsConfig
             powerupDebug = builder
                     .comment("\nPowerup spawn attempts are visible in chat")
                     .define("powerupDebug", false);
-
-            enablePowerups = builder
-                    .comment("\nEnables/Disables the spawning of powerups in your world")
-                    .define("enablePowerups", true);
 
             builder.pop();
         }

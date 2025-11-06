@@ -6,84 +6,125 @@ import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.custom.*;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraftforge.api.distmarker.Dist;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.DEDICATED_SERVER)
+@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PowerupSpawner {
 
-    public static int tickCounter = 0;
+    private static int spawnInterval = 600;
+    private static int spawnAttempts = 3;
+    private static int searchRadius = 5;
+    private static boolean debugEnabled = false;
+    private static boolean powerupSpawningEnabled = true;
 
-    /** Liest einen Config-Wert sicher, selbst wenn Config noch nicht geladen ist. */
-    private static int safeGetInt(Supplier<Integer> supplier, int fallback) {
-        try {
-            return supplier.get();
-        } catch (Exception e) {
-            return fallback;
+    private static int tickCounter = 0;
+
+    @SubscribeEvent
+    public static void onConfigReload(ModConfigEvent event) {
+
+        if (event.getConfig().getSpec() == QuakeWeaponsConfig.SERVER_SPEC) {
+            reloadConfigValues();
         }
+    }
+
+    public static void reloadConfigValues() {
+
+        try {
+            spawnInterval = QuakeWeaponsConfig.SERVER.powerupSpawnInterval.get();
+            spawnAttempts = QuakeWeaponsConfig.SERVER.powerupSpawnAttempts.get();
+            searchRadius = QuakeWeaponsConfig.SERVER.powerupSpawnSearchRadius.get();
+            debugEnabled = QuakeWeaponsConfig.SERVER.powerupDebug.get();
+            powerupSpawningEnabled = QuakeWeaponsConfig.SERVER.enablePowerups.get();
+
+            System.out.println("[QuakeWeapons] PowerupSpawner config reloaded:");
+            System.out.println(" interval=" + spawnInterval + " | attempts=" + spawnAttempts + " | radius=" + searchRadius + " | debug=" + debugEnabled
+            + " | enablePowerups=" + powerupSpawningEnabled);
+
+        } catch (Exception e) {
+            System.err.println("[QuakeWeapons] Failed to load config values, using defaults!");
+            spawnInterval = 600;
+            spawnAttempts = 3;
+            searchRadius = 5;
+            debugEnabled = false;
+            powerupSpawningEnabled = true;
+        }
+
+        System.out.println("[QuakeWeapons] Config values after load: powerupSpawnInterval:"
+                + QuakeWeaponsConfig.SERVER.powerupSpawnInterval.get() + ", powerupSpawnAttempts:"
+                + QuakeWeaponsConfig.SERVER.powerupSpawnAttempts.get() + ", powerupSpawnSearchRadius:"
+                + QuakeWeaponsConfig.SERVER.powerupSpawnSearchRadius.get() + ", enablePowerups:"
+                + QuakeWeaponsConfig.SERVER.enablePowerups.get() + ", powerupDebug;"
+                + QuakeWeaponsConfig.SERVER.powerupDebug.get());
     }
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.LevelTickEvent event) {
+
+        if (!powerupSpawningEnabled) {
+            if (debugEnabled) {
+                System.err.println("POWERUP SPAWNING DISABLED. DISABLE DEBUG MODE IN SERVER CONFIG");
+            }
+            return;
+        }
+
         if (event.phase != TickEvent.Phase.END || event.level.isClientSide) return;
+
+        int interval = spawnInterval;
+        int attempts = spawnAttempts;
         ServerLevel level = (ServerLevel) event.level;
+        long gameTime = level.getGameTime();
 
-        // Config-Werte erst hier lesen, wenn Forge fertig initialisiert ist
-        int interval     = safeGetInt(() -> QuakeWeaponsConfig.SERVER.powerupSpawnInterval.get(), 600);
-        int attempts     = safeGetInt(() -> QuakeWeaponsConfig.SERVER.powerupSpawnAttempts.get(), 3);
-        int searchRadius = safeGetInt(() -> QuakeWeaponsConfig.SERVER.powerupSpawnSearchRadius.get(), 5);
 
-        tickCounter++;
-        if (tickCounter % interval != 0) return;
+        if ((gameTime % interval) != 0L) {
+            return;
+        }
 
         for (ServerPlayer player : level.players()) {
             for (int i = 0; i < attempts; i++) {
-                trySpawnNearPlayer(level, player, searchRadius);
+                trySpawnNearPlayer(level, player);
             }
         }
     }
 
-    private static void trySpawnNearPlayer(ServerLevel level, ServerPlayer player, int searchRadius) {
-        RandomSource random = level.random;
+    private static void trySpawnNearPlayer(ServerLevel level, ServerPlayer player) {
 
-        // Vanilla: Zufällige Position im 8-Chunk-Radius um Spieler
+        RandomSource random = level.random;
         int x = player.blockPosition().getX() + Mth.nextInt(random, -128, 128);
         int z = player.blockPosition().getZ() + Mth.nextInt(random, -128, 128);
         int y = Mth.nextInt(random, level.getMinBuildHeight() + 5, level.getMaxBuildHeight() - 5);
-
         BlockPos candidate = new BlockPos(x, y, z);
 
-        // Suche im Umkreis nach einer brauchbaren Stelle
-        if (tryFindSpawnPos(level, candidate, searchRadius, pos -> {
+        if (tryFindSpawnPos(level, candidate, searchRadius, searchRadius, pos -> {
             AbstractPowerupEntity entity = randomPowerup(level);
             entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
             level.addFreshEntity(entity);
-
             debug(level, "§aSpawned " + entity.getType().toShortString() + " at " + pos);
-        })) {
-            return;
-        } else {
-            debug(level, "§cNo valid spawn near " + candidate);
-        }
+        })) return;
+
+        debug(level, "§cNo valid spawn near " + candidate);
     }
 
-    private static boolean tryFindSpawnPos(ServerLevel level, BlockPos center, int radius, Consumer<BlockPos> onFound) {
+    private static boolean tryFindSpawnPos(ServerLevel level, BlockPos center, int radius, int yRadius, Consumer<BlockPos> onFound) {
+
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dz = -radius; dz <= radius; dz++) {
-                for (int dy = -radius; dy <= radius; dy++) {
+                for (int dy = -yRadius; dy <= yRadius; dy++) {
                     BlockPos pos = center.offset(dx, dy, dz);
-                    if (level.getBlockState(pos).isAir() && level.getBlockState(pos.below()).isSolid()) {
+                    BlockState above = level.getBlockState(pos);
+                    BlockState below = level.getBlockState(pos.below());
+                    if (above.isAir() && (below.isSolid() || below.isFaceSturdy(level, pos.below(), Direction.UP))) {
                         onFound.accept(pos);
                         return true;
                     }
@@ -93,26 +134,21 @@ public class PowerupSpawner {
         return false;
     }
 
-
-    private static void debug(ServerLevel level, String msg) {
-
-        if(QuakeWeaponsConfig.SERVER.powerupDebug.get()) {
-
-            Component comp = Component.literal("§d[Powerup Debug]§r " + msg);
-            for (ServerPlayer sp : level.players()) {
-                sp.sendSystemMessage(comp);
-            }
-        }
-    }
-
     private static AbstractPowerupEntity randomPowerup(ServerLevel level) {
 
-        int roll = level.random.nextInt(4); // 4 Powerups
-        return switch (roll) {
+        return switch (level.random.nextInt(4)) {
             case 0 -> new QuadDamagePowerupEntity(ModEntities.QUAD_DAMAGE_POWERUP.get(), level);
             case 1 -> new PentagramPowerupEntity(ModEntities.PENTAGRAM_POWERUP.get(), level);
             case 2 -> new BiosuitPowerupEntity(ModEntities.BIOSUIT_POWERUP.get(), level);
             default -> new RingofshadowsPowerupEntity(ModEntities.RING_POWERUP.get(), level);
         };
+    }
+
+    private static void debug(ServerLevel level, String msg) {
+
+        if (!debugEnabled) return;
+        Component comp = Component.literal("§d[PowerupSpawner]§r " + msg);
+        for (ServerPlayer sp : level.players()) sp.sendSystemMessage(comp);
+        System.out.println("[PowerupSpawner] " + msg.replaceAll("§.", ""));
     }
 }
