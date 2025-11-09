@@ -2,13 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "DBN",
+    "DB ",
     "BRI",
-    "NIS"
+    " IS"
   ],
   "key": {
     "D": {
-      "item": "minecraft:diamond_block"
+      "item": "minecraft:diamond"
     },
     "B": {
       "item": "minecraft:blaze_rod"
@@ -18,9 +18,6 @@
     },
     "R": {
       "item": "minecraft:redstone_block"
-    },
-    "N": {
-      "item": "minecraft:netherite_ingot"
     },
     "S": {
       "item": "minecraft:stick"

@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "II ",
-    " DR",
+    "IIG",
+    "DBR",
     "IIS"
   ],
   "key": {
@@ -18,6 +18,12 @@
     },
     "D": {
       "item": "minecraft:dispenser"
+    },
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
     }
   },
   "result": {

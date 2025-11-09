@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "RIn",
+    "GI ",
     "ISW",
     "PWs"
   ],
@@ -10,11 +10,8 @@
     "I": {
       "item": "minecraft:iron_block"
     },
-    "n": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone_block"
+    "G": {
+      "item": "minecraft:gold_ingot"
     },
     "S": {
       "item": "quakeweapons:shotgun"

@@ -2,16 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "nIR",
+    "GIR",
     "INW",
     "RWS"
   ],
   "key": {
     "N": {
       "item": "quakeweapons:nailgun"
-    },
-    "n": {
-      "item": "minecraft:netherite_ingot"
     },
     "I": {
       "item": "minecraft:iron_block"
@@ -23,7 +20,10 @@
       "item": "minecraft:stick"
     },
     "R": {
-      "item": "minecraft:redstone_block"
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
     }
   },
   "result": {

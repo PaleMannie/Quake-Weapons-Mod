@@ -3,12 +3,15 @@
   "category": "misc",
   "pattern": [
     "WII",
-    " DR",
+    "DBR",
     "IIS"
   ],
   "key": {
     "I": {
-      "item": "minecraft:iron_block"
+    "item": "minecraft:iron_block"
+    },
+    "B": {
+      "item": "minecraft:blaze_rod"
     },
     "S": {
       "item": "minecraft:stick"
