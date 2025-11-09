@@ -93,9 +93,7 @@ public class ShotgunItem extends AbstractWeapon{
 
         if(user instanceof ServerPlayer serverPlayer){
 
-
             if(pRemainingUseDuration % 10 == 0){
-
 
                 if (consumeAmmo((Player)user)) {
 

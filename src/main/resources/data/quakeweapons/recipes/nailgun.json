@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "PIi",
-    "ICi",
+    " Di",
+    "DCI",
     "iIS"
   ],
   "key": {
@@ -19,8 +19,8 @@
     "i": {
       "item": "minecraft:iron_ingot"
     },
-    "P": {
-      "item": "minecraft:piston"
+    "D": {
+      "item": "minecraft:dispenser"
     }
   },
   "result": {

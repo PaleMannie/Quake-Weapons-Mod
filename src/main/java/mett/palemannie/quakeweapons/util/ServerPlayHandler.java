@@ -30,6 +30,8 @@ import java.util.function.Predicate;
 
 public class ServerPlayHandler {
 
+    /// All in one class handling all the weapons shooting which should happen on server side
+
     private static boolean isMuzzleFlashEnabled(){
         return QuakeWeaponsConfig.COMMON.enableMuzzleFlash.get();
     }
@@ -89,7 +91,6 @@ public class ServerPlayHandler {
 
         ServerLevel sLevel = (ServerLevel) level;
 
-        // Reichweite (Forge 1.20.1): ENTITY_REACH, Fallback 3.0
         double reach = 3.0D;
         if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
             reach = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).getValue();
@@ -107,7 +108,6 @@ public class ServerPlayHandler {
                 ClipContext.Fluid.NONE,
                 player));
 
-        // Wenn ein Block früher getroffen wird, kürzen wir die Max-Distanz (für fairen Entity-Check)
         Vec3 maxEnd = end;
         if (blockHit.getType() != HitResult.Type.MISS) {
             maxEnd = blockHit.getLocation();
@@ -124,31 +124,24 @@ public class ServerPlayHandler {
         EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, eye, maxEnd, pathBB, canHit);
 
         if (entityHit != null) {
-            // === ENTITY TREFFER ===
             LivingEntity target = (LivingEntity) entityHit.getEntity();
 
             target.hurt(level.damageSources().source(ModDamageTypes.AXE_DAMAGE, player, player), QWConfigStats.AxeDamage);
 
-            // Partikel genau an der Oberfläche (Trefferpunkt)
             Vec3 p = entityHit.getLocation();
             sLevel.sendParticles(ParticleTypes.DAMAGE_INDICATOR, p.x, p.y, p.z, 6, 0.2, 0.2, 0.2, 0.1);
             sLevel.sendParticles(ParticleTypes.CRIT, p.x, p.y, p.z, 3, 0.0, 0.2, 0.2, 0.2);
             sLevel.sendParticles(ParticleTypes.LANDING_LAVA, p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.0);
 
-            // Sound: knackiger Hieb
+            level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_ENTITY.get(), SoundSource.PLAYERS, 1f, 1.0F);
             level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 1f, 1.0F);
 
         } else if (blockHit.getType() != HitResult.Type.MISS) {
-            // === BLOCK TREFFER ===
-            BlockPos pos = blockHit.getBlockPos();
-            BlockState state = level.getBlockState(pos);
 
-            // exakter Punkt leicht von der Oberfläche weg, damit Partikel nicht im Block stecken
             Vec3 hitP = blockHit.getLocation();
             Vec3 n = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal()).normalize();
-            Vec3 spawn = hitP.add(n.scale(0.01)); // 1 cm aus der Oberfläche heraus
+            Vec3 spawn = hitP.add(n.scale(0.01));
 
-            // Blockstaub (verwendet Textur/State des getroffenen Blocks)
             sLevel.sendParticles(ParticleTypes.SMOKE,
                     spawn.x, spawn.y, spawn.z,
                     1, 0d, 0d, 0d, 0d);
@@ -157,7 +150,7 @@ public class ServerPlayHandler {
             level.playSound(null, spawn.x, spawn.y, spawn.z, ModSounds.AXE_HIT_SOLID.get(), SoundSource.PLAYERS, 1f, 1f);
 
         } else {
-            // === LUFT (MISS) ===
+
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 1f, 1f);
         }
@@ -513,17 +506,5 @@ public class ServerPlayHandler {
 
         Level level = player.level();
         level.playSound(null, player.blockPosition(), SoundEvents.DISPENSER_FAIL, SoundSource.NEUTRAL, 1f, 1f);
-    }
-
-    public static void playQuadDamagePickupSound(ServerPlayer player){
-
-        Level level = player.level();
-        level.playSound(null, player.blockPosition(), SoundEvents.ENDER_DRAGON_GROWL, SoundSource.NEUTRAL, 1f, 1f);
-    }
-
-    public static void playQuadDamageUseSound(ServerPlayer player){
-
-        Level level = player.level();
-        level.playSound(null, player.blockPosition(), SoundEvents.ANVIL_PLACE, SoundSource.NEUTRAL, 0.1f, 1f);
     }
 }

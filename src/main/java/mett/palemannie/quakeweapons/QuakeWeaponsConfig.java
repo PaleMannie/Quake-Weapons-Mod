@@ -19,6 +19,7 @@ public class QuakeWeaponsConfig
 
     public static class Common {
         public final ForgeConfigSpec.BooleanValue enableMuzzleFlash;
+        public final ForgeConfigSpec.BooleanValue enableRocketTrailLight;
         public final ForgeConfigSpec.BooleanValue enableThunderboltTracer;
         public final ForgeConfigSpec.DoubleValue axeDamage;
         public final ForgeConfigSpec.DoubleValue shotgunDamage;
@@ -35,6 +36,9 @@ public class QuakeWeaponsConfig
 
             enableMuzzleFlash = builder.comment("\n[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables muzzle flash when shooting")
                     .define("enableMuzzleFlash", false);
+
+            enableRocketTrailLight = builder.comment("\n[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables rocket trail lighting")
+                    .define("enableRocketTrailLight", false);
 
             enableThunderboltTracer = builder.comment("\nEnables/Disables Thunderbolt hitscan tracers")
                     .define("enableThunderboltTracer", false);
@@ -65,11 +69,11 @@ public class QuakeWeaponsConfig
 
             rocketlauncherDamage = builder
                     .comment("\nHow much damage the Rocket Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("rocketlauncherDamage", 26, 0.0, Float.MAX_VALUE);
+                    .defineInRange("rocketlauncherDamage", 28, 0.0, Float.MAX_VALUE);
 
             grenadelauncherDamage = builder
                     .comment("\nHow much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
-                    .defineInRange("grenadelauncherDamage", 26, 0.0, Float.MAX_VALUE);
+                    .defineInRange("grenadelauncherDamage", 28, 0.0, Float.MAX_VALUE);
 
             builder.pop();
         }
@@ -98,10 +102,6 @@ public class QuakeWeaponsConfig
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Quakeweapons Server");
 
-            enablePowerups = builder
-                    .comment("\nEnables/Disables the spawning of powerups in your world")
-                    .define("enablePowerups", true);
-
             powerupSpawnInterval = builder
                     .comment("\nSpawns a powerup every x ticks in the world randomly")
                     .defineInRange("powerupSpawnInterval", 600, 20, Integer.MAX_VALUE-1);
@@ -121,6 +121,10 @@ public class QuakeWeaponsConfig
             powerupLifetime = builder
                     .comment("\nDuration of powerups in the world in ticks until despawning")
                     .defineInRange("powerupLifetime", 6000, 1, Integer.MAX_VALUE-1);
+
+            enablePowerups = builder
+                    .comment("\nEnables/Disables the spawning of powerups in your world")
+                    .define("enablePowerups", true);
 
             powerupDebug = builder
                     .comment("\nPowerup spawn attempts are visible in chat")

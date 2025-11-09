@@ -35,6 +35,7 @@ public class MuzzleflashEntity extends Projectile {
     private BlockPos lightPos;
 
     void tryPlaceLight() {
+
         BlockPos origin = this.blockPosition();
         Level level = this.level();
 
@@ -60,6 +61,7 @@ public class MuzzleflashEntity extends Projectile {
     }
 
     void cleanupLight() {
+
         if (this.lightPos != null) {
             BlockState state = this.level().getBlockState(this.lightPos);
             if (state.getBlock() == Blocks.LIGHT) {
@@ -97,7 +99,5 @@ public class MuzzleflashEntity extends Projectile {
     @Override
     public void recreateFromPacket(ClientboundAddEntityPacket pPacket) {
         super.recreateFromPacket(pPacket);
-
-        pPacket.getXa();
     }
 }

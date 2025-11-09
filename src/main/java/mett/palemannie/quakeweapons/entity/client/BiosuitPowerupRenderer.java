@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity> {
@@ -37,14 +36,11 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
         poseStack.scale(1f, 1f, 1f);
         poseStack.mulPose(Axis.XP.rotationDegrees(180f));
 
-        // Zeitabhängiger Faktor
         float ageInTicks = rocketEntity.tickCount + partialTicks;
 
-        // 🔹 Bobbing (sinusförmig)
         double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
         poseStack.translate(0.0D, 0.25D + bob, 0.0D);
 
-        // 🔹 Rotation
         float rotation = (ageInTicks * rotationSpeed) % 360;
         poseStack.mulPose(Axis.YN.rotationDegrees(rotation));
 

@@ -16,6 +16,8 @@ public class EffectOverlayRenderClientEvent {
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
 
+        /// Color added to GUI while on Quake effects
+
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
@@ -34,12 +36,9 @@ public class EffectOverlayRenderClientEvent {
             b = 0.95F;
 
             if (remaining > 60) {
-
-                // Normale Laufzeit: ruhiges Quake-Blau
                 alpha = 0.01F;
-            } else {
 
-                // Warnphase: pulsierendes Weiß mit 1 Hz (20 Ticks Periode)
+            } else {
                 alpha = 0.01F + 0.025F * (0.25F * (1.0F + Mth.sin((gameTime % 20) / 20.0F * Mth.TWO_PI)));
             }
 
@@ -54,7 +53,7 @@ public class EffectOverlayRenderClientEvent {
             event.getGuiGraphics().fill(0, 0, screenW, screenH, color);
         }
 
-        ///Pentagram of Protection
+        /// Pentagram of Protection
         if (player != null && player.hasEffect(ModEffects.INVULNERABILITY.get())) {
 
             MobEffectInstance inst = player.getEffect(ModEffects.INVULNERABILITY.get());

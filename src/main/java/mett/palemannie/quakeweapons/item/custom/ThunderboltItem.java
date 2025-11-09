@@ -5,8 +5,8 @@ import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
-import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
+import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -123,7 +123,7 @@ public class ThunderboltItem extends AbstractWeapon{
 
             if (targetInWater || hasLOS) {
 
-                //"Fake" player hit so the correct death message appears
+                //minimal player hit so the correct death message appears
                 target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
                 //the real damage
                 target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
@@ -200,4 +200,6 @@ public class ThunderboltItem extends AbstractWeapon{
             }
         }
     }
+
+
 }

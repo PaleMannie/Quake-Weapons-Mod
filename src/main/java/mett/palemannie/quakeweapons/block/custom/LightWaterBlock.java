@@ -10,6 +10,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FlowingFluid;
 
 public class LightWaterBlock extends LiquidBlock {
+
+    ///Water source block with light level so that muzzle flash works underwater
+
     public LightWaterBlock(FlowingFluid water, Properties properties) {
         super(water, properties);
         this.registerDefaultState(this.getStateDefinition().any().setValue(LEVEL, 0).setValue(BlockStateProperties.POWER, 15));

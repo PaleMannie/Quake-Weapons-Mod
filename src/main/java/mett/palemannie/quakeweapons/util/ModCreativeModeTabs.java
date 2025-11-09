@@ -22,6 +22,8 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("quakeweapons.creativetab.quakeweapons_tab"))
                     .displayItems((pParameters, pOutput) -> {
 
+                        /// Weapons ordered in chronological gameplay order
+
                         pOutput.accept(ModItems.QWAXE.get());
                         pOutput.accept(ModItems.SHOTGUN.get());
                         pOutput.accept(ModItems.NAILGUN.get());
@@ -30,6 +32,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.GRENADELAUNCHER.get());
                         pOutput.accept(ModItems.ROCKETLAUNCHER.get());
                         pOutput.accept(ModItems.THUNDERBOLT.get());
+
                         pOutput.accept(ModItems.NAIL.get());
                         pOutput.accept(ModItems.SHELL.get());
                         pOutput.accept(ModItems.GRENADE.get());

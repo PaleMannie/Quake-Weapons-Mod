@@ -3,7 +3,7 @@
   "category": "misc",
   "pattern": [
     "WII",
-    " PR",
+    " DR",
     "IIS"
   ],
   "key": {
@@ -19,8 +19,8 @@
     "W": {
       "tag": "minecraft:planks"
     },
-    "P": {
-      "item": "minecraft:piston"
+    "D": {
+      "item": "minecraft:dispenser"
     }
   },
   "result": {

@@ -24,16 +24,12 @@ public class RingPowerupModel<T extends Entity> extends EntityModel<T> {
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
 		PartDefinition bb_main = partdefinition.addOrReplaceChild("ring_powerup", CubeListBuilder.create(), PartPose.offset(0.0F, 14.0F, 0.0F));
-
 		PartDefinition cube_r1 = bb_main.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(0, 0).addBox(0.0F, -4.825F, -0.5F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 6).addBox(0.0F, -0.5F, -0.5F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -1.5F, -0.532F, -0.2071F, -0.3361F));
-
 		PartDefinition cube_r2 = bb_main.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(0, 2).addBox(-2.0F, -4.825F, -0.525F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(5, 5).addBox(-2.0F, -0.5F, -0.525F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -1.5F, -0.532F, 0.2071F, 0.3361F));
-
 		PartDefinition cube_r3 = bb_main.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(5, 7).addBox(1.425F, -3.4F, -0.525F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 4).addBox(1.425F, 0.9F, -0.525F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -1.5F, -0.2391F, -0.5194F, -1.1143F));
-
 		PartDefinition cube_r4 = bb_main.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(5, 1).addBox(-3.425F, -3.4F, -0.55F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F))
 				.texOffs(5, 3).addBox(-3.4F, 0.9F, -0.55F, 2.0F, 0.5F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, -1.5F, -0.2391F, 0.5194F, 1.1143F));
 

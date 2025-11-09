@@ -93,9 +93,7 @@ public class SuperShotgunItem extends AbstractWeapon{
 
         if(user instanceof ServerPlayer serverPlayer){
 
-
             if((pRemainingUseDuration - 12)  % 14 == 0){
-
 
                 if (consumeAmmo((Player)user)) {
 

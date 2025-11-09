@@ -3,7 +3,7 @@
   "category": "misc",
   "pattern": [
     "II ",
-    " PR",
+    " DR",
     "IIS"
   ],
   "key": {
@@ -16,8 +16,8 @@
     "R": {
       "item": "minecraft:repeater"
     },
-    "P": {
-      "item": "minecraft:piston"
+    "D": {
+      "item": "minecraft:dispenser"
     }
   },
   "result": {

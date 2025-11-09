@@ -35,14 +35,11 @@ public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEnti
         poseStack.translate(0.0F, 0.0f, 0.0F);
         poseStack.scale(1f, 1f, 1f);
 
-        // Zeitabhängiger Faktor
         float ageInTicks = rocketEntity.tickCount + partialTicks;
 
-        // 🔹 Bobbing (sinusförmig)
         double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
         poseStack.translate(0.0D, 0.25D + bob, 0.0D);
 
-        // 🔹 Rotation
         float rotation = (ageInTicks * rotationSpeed) % 360;
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 

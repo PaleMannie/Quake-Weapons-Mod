@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HorseArmorLayer.class)
 public abstract class HorseArmorLayerMixin extends RenderLayer<Horse, HorseModel<Horse>> {
 
+    /// Horse armour should go invisible too while under rong of shadows effect
+
     public HorseArmorLayerMixin(RenderLayerParent<Horse, HorseModel<Horse>> pRenderer) {
         super(pRenderer);
     }

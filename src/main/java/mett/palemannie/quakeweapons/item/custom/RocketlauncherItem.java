@@ -93,9 +93,7 @@ public class RocketlauncherItem extends AbstractWeapon{
 
         if(user instanceof ServerPlayer serverPlayer){
 
-
             if(pRemainingUseDuration % 16 == 0){
-
 
                 if (consumeAmmo((Player)user)) {
 

@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.QuadDamagePowerupEntity;
-import mett.palemannie.quakeweapons.entity.custom.RocketProjectileEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -13,7 +12,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
 public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupEntity> {
@@ -37,14 +35,11 @@ public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupE
         poseStack.translate(0.0F, 0.0f, 0.0F);
         poseStack.scale(0.5f, 0.5f, 0.5f);
 
-        // Zeitabhängiger Faktor
         float ageInTicks = rocketEntity.tickCount + partialTicks;
 
-        // 🔹 Bobbing (sinusförmig)
         double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
         poseStack.translate(0.0D, 0.25D + bob, 0.0D);
 
-        // 🔹 Rotation
         float rotation = (ageInTicks * rotationSpeed) % 360;
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 

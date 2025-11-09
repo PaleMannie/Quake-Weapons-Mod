@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.GrenadeProjectileEntity;
-import mett.palemannie.quakeweapons.entity.custom.RocketProjectileEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -44,7 +43,6 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
             float tumbleY = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
             float tumbleZ = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
 
-            // Aktuelle Rotation speichern
             grenadeEntity.lastTumbleX = tumbleX;
             grenadeEntity.lastTumbleY = tumbleY;
             grenadeEntity.lastTumbleZ = tumbleZ;
@@ -52,6 +50,7 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
             poseStack.mulPose(Axis.XP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.xRotO, grenadeEntity.getXRot())) + tumbleX));
             poseStack.mulPose(Axis.YP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.yRotO, grenadeEntity.getYRot()) + 180f) + tumbleY));
             poseStack.mulPose(Axis.ZP.rotationDegrees(tumbleZ));
+
         } else {
 
             poseStack.mulPose(Axis.XP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.xRotO, grenadeEntity.getXRot())) + grenadeEntity.lastTumbleX));

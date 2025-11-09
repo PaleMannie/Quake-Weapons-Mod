@@ -1,6 +1,5 @@
 package mett.palemannie.quakeweapons.item.client;
 
-import mett.palemannie.quakeweapons.item.custom.ShotgunItem;
 import mett.palemannie.quakeweapons.item.custom.SuperShotgunItem;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 

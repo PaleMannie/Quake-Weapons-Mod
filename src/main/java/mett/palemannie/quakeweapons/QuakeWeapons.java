@@ -5,7 +5,6 @@ import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.client.*;
-import mett.palemannie.quakeweapons.event.PowerupSpawner;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;

@@ -216,19 +216,5 @@ public class ModEvents {
                 mob.setTarget(null);
             }
         }
-
-        /*if (!event.getEntity().level().isClientSide) {
-            boolean hasEffect = event.getEntity().hasEffect(ModEffects.QW_INVIS.get());
-            boolean isMarkedInvisible = event.getEntity().getPersistentData().getBoolean("QWInvis");
-
-            // Effekt weg -> aber noch als unsichtbar markiert → Reset
-            if (!hasEffect && isMarkedInvisible) {
-                event.getEntity().getPersistentData().putBoolean("QWInvis", false);
-                ModMessages.CHANNEL.send(
-                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                        new S2CInvisPacket(entity.getId(), false)
-                );
-            }
-        }*/
     }
 }

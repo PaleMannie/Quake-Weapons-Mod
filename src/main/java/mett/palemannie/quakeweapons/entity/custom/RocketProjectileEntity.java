@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
@@ -60,7 +61,6 @@ public class RocketProjectileEntity extends Projectile {
 
         level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false);
 
-        // Explosionseffekte (Server sendet Partikel)
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
                 40, // Menge
@@ -73,7 +73,6 @@ public class RocketProjectileEntity extends Projectile {
                 0.0, 0.0, 0.0,
                 0.1);
 
-        // Sound (Quake-artig → eigener Soundevent)
         this.level().playSound(null, center.x, center.y, center.z,
                 ModSounds.EXPLOSION.get(), SoundSource.PLAYERS,
                 2.0F, 1.0F);
@@ -156,7 +155,7 @@ public class RocketProjectileEntity extends Projectile {
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide && QuakeWeaponsConfig.COMMON.enableRocketTrailLight.get()) {
             if (this.tickCount % 2 == 0) {
                 this.cleanupLight();
                 this.tryPlaceLight();

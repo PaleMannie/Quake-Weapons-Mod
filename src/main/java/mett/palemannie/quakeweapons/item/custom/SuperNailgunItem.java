@@ -96,7 +96,6 @@ public class SuperNailgunItem extends AbstractWeapon{
 
             if(pRemainingUseDuration % 2 == 0){
 
-
                 if (consumeAmmo((Player)user)) {
 
                     if (level instanceof ServerLevel serverLevel) {

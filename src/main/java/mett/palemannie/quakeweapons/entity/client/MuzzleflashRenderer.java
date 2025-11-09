@@ -20,8 +20,6 @@ public class MuzzleflashRenderer extends EntityRenderer<MuzzleflashEntity> {
     }
 
     public void render(MuzzleflashEntity nailEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-
-
     }
 
     @Override

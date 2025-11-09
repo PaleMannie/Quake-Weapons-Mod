@@ -19,11 +19,8 @@ public abstract class AbstractPowerupItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
-            // Wir lesen den Config-Wert LAZY zur Laufzeit
+
             int duration = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
-
-
-            // Das eigentliche Verhalten wird an die Subklasse delegiert
             onPowerupUse(level, player, stack, duration);
 
             if (!player.getAbilities().instabuild) {
@@ -34,14 +31,8 @@ public abstract class AbstractPowerupItem extends Item {
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 
-    /**
-     * Subklassen implementieren hier ihr spezielles Powerup-Verhalten.
-     */
     protected abstract void onPowerupUse(Level level, Player player, ItemStack stack, int duration);
 
-    /**
-     * Zugriffsmethode für die Config-Werte (später falls woanders gebraucht)
-     */
     protected int getPowerupDuration() {
         return QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
     }

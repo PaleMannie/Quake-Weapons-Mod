@@ -33,10 +33,13 @@ public class GrenadeProjectileEntity extends Projectile {
     }
 
     public static float computeRadiusFromDamage(float configDamage, Player player) {
-        if(player == null){ return ((configDamage - 1) / 7.0F)/2;} else{
-        return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;}
+
+        if(player == null){ return ((configDamage - 1) / 7.0F)/2; } else {
+            return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;
+        }
     }
 
+    /// Vanilla minecraft explosion with custom particle effects
     private void quakeExplosion(Level level) {
         if (this.level().isClientSide) return;
 
@@ -53,12 +56,11 @@ public class GrenadeProjectileEntity extends Projectile {
 
         level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false);
 
-        // Explosionseffekte (Server sendet Partikel)
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
-                40, // Menge
+                40,
                 0.0, 0.0, 0.0,
-                0.2); // Geschwindigkeit
+                0.2);
 
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.LARGE_SMOKE,
                 center.x, center.y, center.z,
@@ -66,7 +68,6 @@ public class GrenadeProjectileEntity extends Projectile {
                 0.0, 0.0, 0.0,
                 0.1);
 
-        // Sound (Quake-artig → eigener Soundevent)
         this.level().playSound(null, center.x, center.y, center.z,
                 ModSounds.EXPLOSION.get(), SoundSource.PLAYERS,
                 2.0F, 1.0F);
@@ -78,18 +79,15 @@ public class GrenadeProjectileEntity extends Projectile {
     public float lastTumbleY = 0;
     public float lastTumbleZ = 0;
 
-
-
-
     @Override
     public void tick() {
+
         super.tick();
 
         Vec3 motion = this.getDeltaMovement();
 
-
-
         if (this.level().isClientSide) {
+
             Vec3 motion1 = this.getDeltaMovement().normalize().scale(-0.25);
             double px = this.getX() + motion1.x;
             double py = this.getY() + motion1.y;
@@ -133,6 +131,7 @@ public class GrenadeProjectileEntity extends Projectile {
                 this::canHitEntity,
                 motion.lengthSqr()
         );
+
         if (entityHit != null) {
             this.onHitEntity(entityHit);
         }
@@ -156,7 +155,6 @@ public class GrenadeProjectileEntity extends Projectile {
     protected void onHitBlock(BlockHitResult pResult) {
 
         Vec3 motion = this.getDeltaMovement();
-
         double speed = motion.length();
 
         if (speed > 0.2 && !hasStopped) {

@@ -42,13 +42,16 @@ public abstract class AbstractPowerupEntity extends Entity {
     public void tick() {
         super.tick();
 
+        /// Extract entity lifetime from config
         if(!level().isClientSide) { durationOnPickup = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(); }
 
+        /// Lifetime check
         if (this.tickCount > QuakeWeaponsConfig.SERVER.powerupLifetime.get()) {
             discard();
             return;
         }
 
+        /// Entity Hitbox
         if (!level().isClientSide) {
             for (Player player : level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(0.5))) {
                 onPickup(player);
@@ -64,8 +67,10 @@ public abstract class AbstractPowerupEntity extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
+
         ItemStack stack = player.getItemInHand(hand);
 
+        /// Rightclicking the entity with totem of undying will drop it
         if (!level().isClientSide && stack.is(Items.TOTEM_OF_UNDYING)) {
 
             this.spawnAtLocation(getPowerupItem());

@@ -83,7 +83,6 @@ public class QWAxeItem extends AbstractWeapon{
 
             if(pRemainingUseDuration % 10 == 0){
 
-
                 if (consumeAmmo((Player)user)) {
 
                     if (level instanceof ServerLevel serverLevel) {
