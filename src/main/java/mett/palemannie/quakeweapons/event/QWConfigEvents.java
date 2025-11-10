@@ -9,19 +9,27 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class QWConfigEvents {
 
+    /// A way to set config values after they've been (re)loaded upon game start
+
     @SubscribeEvent
     public static void onConfigLoad(ModConfigEvent.Loading event) {
         if (event.getConfig().getSpec() == QuakeWeaponsConfig.SERVER_SPEC) {
+
             System.out.println("[QW] SERVER config loaded — reloading spawner values");
+
             PowerupSpawner.reloadConfigValues();
+            AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
         }
     }
 
     @SubscribeEvent
     public static void onConfigReload(ModConfigEvent.Reloading event) {
         if (event.getConfig().getSpec() == QuakeWeaponsConfig.SERVER_SPEC) {
+
             System.out.println("[QW] SERVER config reloaded — reloading spawner values");
+
             PowerupSpawner.reloadConfigValues();
+            AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
         }
     }
 }

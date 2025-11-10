@@ -32,7 +32,7 @@ public class QuakeWeaponsConfig
 
 
         public Common(ForgeConfigSpec.Builder builder) {
-            builder.push("Quake Weapons");
+            builder.push("Effects");
 
             enableMuzzleFlash = builder.comment("\n[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables muzzle flash when shooting")
                     .define("enableMuzzleFlash", false);
@@ -42,6 +42,9 @@ public class QuakeWeaponsConfig
 
             enableThunderboltTracer = builder.comment("\nEnables/Disables Thunderbolt hitscan tracers")
                     .define("enableThunderboltTracer", false);
+
+            builder.pop();
+            builder.push("Weapon damage");
 
             axeDamage = builder
                     .comment("\nHow much damage the Quake axe deals")
@@ -91,6 +94,8 @@ public class QuakeWeaponsConfig
 
     public static class Server {
 
+        public final ForgeConfigSpec.DoubleValue animationDroppedFixerSearchRadius;
+        public final ForgeConfigSpec.IntValue animationDroppedFixerSearchInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
         public final ForgeConfigSpec.IntValue powerupSpawnSearchRadius;
@@ -100,7 +105,20 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.BooleanValue enablePowerups;
 
         public Server(ForgeConfigSpec.Builder builder) {
-            builder.push("Quakeweapons Server");
+
+            builder.push("Dropped Weapon animation fixer values");
+
+            animationDroppedFixerSearchRadius = builder
+                    .comment("\nRadius around players where dropped Quake weapons are checked for active animations to stop them")
+                    .defineInRange("animationDroppedFixerSearchRadius", 20d, 1d, 32d);
+
+            animationDroppedFixerSearchInterval = builder
+                    .comment("\nTick interval between nearby dropped weapon animation checks")
+                    .defineInRange("animationDroppedFixerSearchInterval", 5, 1, Integer.MAX_VALUE-1);
+
+            builder.pop();
+
+            builder.push("Powerup Spawner values");
 
             powerupSpawnInterval = builder
                     .comment("\nSpawns a powerup every x ticks in the world randomly")

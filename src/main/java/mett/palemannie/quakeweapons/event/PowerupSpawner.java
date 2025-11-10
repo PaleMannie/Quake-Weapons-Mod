@@ -29,7 +29,7 @@ public class PowerupSpawner {
     private static boolean debugEnabled = false;
     private static boolean powerupSpawningEnabled = true;
 
-    private static int tickCounter = 0;
+    private static long tickCounter = 0;
 
     @SubscribeEvent
     public static void onConfigReload(ModConfigEvent event) {
@@ -74,7 +74,7 @@ public class PowerupSpawner {
 
         if (!powerupSpawningEnabled) {
             if (debugEnabled) {
-                System.err.println("POWERUP SPAWNING DISABLED. DISABLE DEBUG MODE IN SERVER CONFIG");
+                System.err.println("POWERUP SPAWNING DISABLED. DISABLE DEBUG MODE IN SERVER CONFIG OR ENABLE POWERUP SPAWNING");
             }
             return;
         }
