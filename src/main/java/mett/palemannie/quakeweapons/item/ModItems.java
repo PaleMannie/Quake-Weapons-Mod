@@ -20,13 +20,13 @@ public class ModItems {
             () -> new Item(new Item.Properties().stacksTo(64)));
 
     public static final RegistryObject<Item> SUPER_NAILGUN = ITEMS.register("super_nailgun",
-            () -> new SuperNailgunItem(new Item.Properties().stacksTo(1).fireResistant()));
+            () -> new SuperNailgunItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> CELL = ITEMS.register("cell",
             () -> new Item(new Item.Properties().stacksTo(64)));
 
     public static final RegistryObject<Item> THUNDERBOLT = ITEMS.register("thunderbolt",
-            () -> new ThunderboltItem(new Item.Properties().stacksTo(1).fireResistant()));
+            () -> new ThunderboltItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> SHELL = ITEMS.register("shell",
             () -> new Item(new Item.Properties().stacksTo(64)));
@@ -35,7 +35,7 @@ public class ModItems {
             () -> new ShotgunItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> SUPER_SHOTGUN = ITEMS.register("super_shotgun",
-            () -> new SuperShotgunItem(new Item.Properties().stacksTo(1).fireResistant()));
+            () -> new SuperShotgunItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> ROCKET = ITEMS.register("rocket",
             () -> new Item(new Item.Properties().stacksTo(64)));
