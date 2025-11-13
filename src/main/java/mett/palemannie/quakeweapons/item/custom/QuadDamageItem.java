@@ -1,6 +1,7 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,6 +11,11 @@ public class QuadDamageItem extends AbstractPowerupItem{
 
     public QuadDamageItem(Properties pProperties) {
         super(pProperties);
+    }
+
+    @Override
+    public MobEffect getPowerupEffect() {
+        return ModEffects.QUAD_DAMAGE.get();
     }
 
     @Override
