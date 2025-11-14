@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
@@ -126,8 +127,10 @@ public class NailProjectileEntity extends Projectile {
         var soundEvent = ModSounds.NAILGUN_HIT.get();
 
         handleDamage(pResult, level(), damageType, (Player) this.getOwner());
-        handleGore(level());
         handleHitSound(pResult, null, level(), soundEvent, 1f, 1f);
+
+        if(QuakeWeaponsConfig.COMMON.enableGore.get()){
+            handleGore(level()); }
 
         this.discard();
     }

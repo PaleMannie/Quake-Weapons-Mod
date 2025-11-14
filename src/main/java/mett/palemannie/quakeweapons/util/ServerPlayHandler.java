@@ -131,7 +131,9 @@ public class ServerPlayHandler {
             Vec3 p = entityHit.getLocation();
             sLevel.sendParticles(ParticleTypes.DAMAGE_INDICATOR, p.x, p.y, p.z, 6, 0.2, 0.2, 0.2, 0.1);
             sLevel.sendParticles(ParticleTypes.CRIT, p.x, p.y, p.z, 3, 0.0, 0.2, 0.2, 0.2);
-            sLevel.sendParticles(ParticleTypes.LANDING_LAVA, p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.0);
+
+            if(QuakeWeaponsConfig.COMMON.enableGore.get()){
+            sLevel.sendParticles(ParticleTypes.LANDING_LAVA, p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.0);}
 
             level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_ENTITY.get(), SoundSource.PLAYERS, 1f, 1.0F);
             level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 1f, 1.0F);
@@ -257,27 +259,10 @@ public class ServerPlayHandler {
         Level lvl = player.level();
 
         ///Entity
-        double forwardOffset = 0.2;
-
-        Vec3 look = player.getLookAngle();
-        Vec3 right = look.cross(new Vec3(0, 0, 0)).normalize();
-
-        double spawnX = player.getX() + right.x+ look.x * forwardOffset;
-        double spawnY = player.getEyeY() - 0.25 + right.y + look.y * forwardOffset;
-        double spawnZ = player.getZ() + right.z + look.z * forwardOffset;
-
         GrenadeProjectileEntity grenade = new GrenadeProjectileEntity(ModEntities.GRENADE_PROJECTILE.get(), sevel);
 
         shootFromRotationNoMomentum(grenade, player, player.getXRot(), player.getYRot(), 0.8f, 0.0f);
         sevel.addFreshEntity(grenade);
-
-        if(isMuzzleFlashEnabled()){
-
-            MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
-            flash.setPos(spawnX, spawnY, spawnZ);
-
-            sevel.addFreshEntity(flash);
-        }
 
         ///Sound
         double posX = player.getX();
@@ -320,7 +305,10 @@ public class ServerPlayHandler {
                 target.hurt(sevel.damageSources().source(ModDamageTypes.SUPER_SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
 
                 Vec3 hitPos = entityHit.getLocation();
-                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+
+                if(QuakeWeaponsConfig.COMMON.enableGore.get()){
+                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d); }
+
                 sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
             }
             else if (blockHit != null && blockHit.getType() != HitResult.Type.MISS) {
@@ -393,10 +381,13 @@ public class ServerPlayHandler {
                 target.hurt(level.damageSources().source(ModDamageTypes.SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
 
                 Vec3 hitPos = entityHit.getLocation();
-                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+
+                if(QuakeWeaponsConfig.COMMON.enableGore.get()){
+                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);}
+
                 sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
             }
-            // Sonst Block
+
             else if (blockHit != null && blockHit.getType() != HitResult.Type.MISS) {
 
                 Vec3 hitPos = blockHit.getLocation();

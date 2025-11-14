@@ -49,12 +49,15 @@ public class ModEvents {
 
             DamageSource src = event.getSource();
 
-            if (src.is(DamageTypes.MAGIC) || src.is(DamageTypes.WITHER)) {
+            if (src.is(DamageTypes.MAGIC) || src.is(DamageTypes.WITHER) || src.is(DamageTypes.CACTUS) || src.is(DamageTypes.SWEET_BERRY_BUSH)
+                    || src.is(DamageTypes.DROWN) || src.is(DamageTypes.INDIRECT_MAGIC) || src.is(DamageTypes.MAGIC)
+                    || src.is(DamageTypes.WITHER_SKULL) || src.is(DamageTypes.THORNS) || src.is(DamageTypes.STING)) {
                 event.setCanceled(true);
             }
 
-            if(src.is(DamageTypes.IN_FIRE) || src.is(DamageTypes.ON_FIRE) || src.is(DamageTypes.UNATTRIBUTED_FIREBALL)
-                    || src.is(DamageTypes.FIREBALL) || src.is(DamageTypes.LAVA)){
+            if(src.is(DamageTypes.IN_FIRE) || src.is(DamageTypes.ON_FIRE) || src.is(DamageTypes.UNATTRIBUTED_FIREBALL) || src.is(DamageTypes.CRAMMING)
+                    || src.is(DamageTypes.FIREBALL) || src.is(DamageTypes.LAVA) || src.is(DamageTypes.HOT_FLOOR) || src.is(DamageTypes.FREEZE)
+                    || src.is(DamageTypes.LIGHTNING_BOLT) || src.is(DamageTypes.DRAGON_BREATH) || src.is(DamageTypes.SONIC_BOOM)){
 
                 event.setAmount(event.getAmount() / 2f);
             }

@@ -21,6 +21,7 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.BooleanValue enableMuzzleFlash;
         public final ForgeConfigSpec.BooleanValue enableRocketTrailLight;
         public final ForgeConfigSpec.BooleanValue enableThunderboltTracer;
+        public final ForgeConfigSpec.BooleanValue enableGore;
         public final ForgeConfigSpec.DoubleValue axeDamage;
         public final ForgeConfigSpec.DoubleValue shotgunDamage;
         public final ForgeConfigSpec.DoubleValue superShotgunDamage;
@@ -41,6 +42,9 @@ public class QuakeWeaponsConfig
                     .define("enableRocketTrailLight", false);
 
             enableThunderboltTracer = builder.comment("\nEnables/Disables Thunderbolt hitscan tracers")
+                    .define("enableThunderboltTracer", false);
+
+            enableGore = builder.comment("\nEnables/Disables Gore particles when hitting a mob with Quake weapons")
                     .define("enableThunderboltTracer", false);
 
             builder.pop();
