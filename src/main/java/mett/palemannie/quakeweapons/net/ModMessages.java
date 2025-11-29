@@ -17,7 +17,7 @@ public class ModMessages {
     }
     final static int version = 1;
 
-    public static final SimpleChannel INSTANCE = ChannelBuilder.named(new ResourceLocation(QuakeWeapons.MODID, "messages"))
+    public static final SimpleChannel INSTANCE = ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "messages"))
             .networkProtocolVersion(version)
             .clientAcceptedVersions(((status, version1) -> true))
             .serverAcceptedVersions(((status, version1) -> true))

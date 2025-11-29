@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileEntity> {
 
-    private static final ResourceLocation GRENADE_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile.png");
-    private static final ResourceLocation GRENADE_EMISSIVE_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile_glow.png");
+    private static final ResourceLocation GRENADE_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile.png");
+    private static final ResourceLocation GRENADE_EMISSIVE_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile_glow.png");
 
     private final GrenadeProjectileModel<GrenadeProjectileEntity> model;
 

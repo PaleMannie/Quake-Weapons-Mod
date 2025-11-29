@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEntity> {
 
-    private static final ResourceLocation RING_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/ring_powerup/ring_powerup.png");
+    private static final ResourceLocation RING_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/ring_powerup/ring_powerup.png");
     private final RingPowerupModel<RingofshadowsPowerupEntity> model;
 
     public RingPowerupRenderer(EntityRendererProvider.Context context) {

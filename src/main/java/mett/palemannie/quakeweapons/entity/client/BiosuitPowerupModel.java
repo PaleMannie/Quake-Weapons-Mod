@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation BIOSUIT_LAYER = new ModelLayerLocation(new ResourceLocation(QuakeWeapons.MODID, "biosuit_powerup"), "main");
+	public static final ModelLayerLocation BIOSUIT_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "biosuit_powerup"), "main");
 
 	private final ModelPart shoes;
 	private final ModelPart body;

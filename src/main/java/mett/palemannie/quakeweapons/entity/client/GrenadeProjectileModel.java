@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 public class GrenadeProjectileModel<T extends Entity> extends EntityModel<T> {
 
-    public static final ModelLayerLocation GRENADE_LAYER = new ModelLayerLocation(new ResourceLocation(QuakeWeapons.MODID, "grenade_projectile"), "main");
+    public static final ModelLayerLocation GRENADE_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "grenade_projectile"), "main");
     private final ModelPart grenade;
 
     public GrenadeProjectileModel(ModelPart root) {

@@ -10,18 +10,18 @@ public class ThunderboltModel extends GeoModel<ThunderboltItem> {
     @Override
     public ResourceLocation getModelResource(ThunderboltItem animatable) {
 
-        return new ResourceLocation(QuakeWeapons.MODID, "geo/thunderbolt.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/thunderbolt.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ThunderboltItem animatable) {
 
-        return new ResourceLocation(QuakeWeapons.MODID, "textures/item/thunderbolt.png");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "textures/item/thunderbolt.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(ThunderboltItem animatable) {
 
-        return new ResourceLocation(QuakeWeapons.MODID, "animations/thunderbolt.animations.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/thunderbolt.animations.json");
     }
 }

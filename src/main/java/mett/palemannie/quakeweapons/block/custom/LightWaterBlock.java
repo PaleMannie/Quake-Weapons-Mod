@@ -26,6 +26,6 @@ public class LightWaterBlock extends LiquidBlock {
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
-        return 15; // Leuchtet maximal
+        return 15;
     }
 }

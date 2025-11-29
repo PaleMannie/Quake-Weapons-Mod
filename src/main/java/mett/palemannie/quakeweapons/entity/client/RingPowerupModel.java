@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class RingPowerupModel<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation RING_LAYER = new ModelLayerLocation(new ResourceLocation(QuakeWeapons.MODID, "ring_powerup"), "main");
+	public static final ModelLayerLocation RING_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "ring_powerup"), "main");
 	private final ModelPart ring_powerup;
 
 	public RingPowerupModel(ModelPart root) {

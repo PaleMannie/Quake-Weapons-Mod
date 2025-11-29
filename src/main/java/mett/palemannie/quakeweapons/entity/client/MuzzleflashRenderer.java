@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MuzzleflashRenderer extends EntityRenderer<MuzzleflashEntity> {
 
-    private static final ResourceLocation FLASH_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/muzzleflash/muzzleflash.png");
+    private static final ResourceLocation FLASH_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/muzzleflash/muzzleflash.png");
     private final MuzzleflashModel<MuzzleflashEntity> model;
 
     public MuzzleflashRenderer(EntityRendererProvider.Context context) {

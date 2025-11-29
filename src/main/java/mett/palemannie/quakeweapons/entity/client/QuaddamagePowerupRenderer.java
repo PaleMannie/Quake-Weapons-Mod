@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupEntity> {
 
-    private static final ResourceLocation QUAD_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/quad_damage_powerup/quad_damage_powerup.png");
+    private static final ResourceLocation QUAD_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/quad_damage_powerup/quad_damage_powerup.png");
     private final QuadDamagePowerupModel<QuadDamagePowerupEntity> model;
 
     public QuaddamagePowerupRenderer(EntityRendererProvider.Context context) {

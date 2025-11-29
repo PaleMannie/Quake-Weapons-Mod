@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProjectileEntity> {
 
-    private static final ResourceLocation SUPER_NAIL_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/super_nail_projectile/super_nail_projectile.png");
+    private static final ResourceLocation SUPER_NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/super_nail_projectile/super_nail_projectile.png");
     private final SuperNailProjectileModel<SuperNailProjectileEntity> model;
 
     public SuperNailProjectileRenderer(EntityRendererProvider.Context context) {

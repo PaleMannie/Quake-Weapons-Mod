@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 public class QuadDamagePowerupModel<T extends Entity> extends EntityModel<T> {
 
-	public static final ModelLayerLocation QUAD_LAYER = new ModelLayerLocation(new ResourceLocation(QuakeWeapons.MODID, "quad_damage_powerup"), "main");
+	public static final ModelLayerLocation QUAD_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "quad_damage_powerup"), "main");
 	private final ModelPart quad_damage_powerup;
 
 	public QuadDamagePowerupModel(ModelPart root) {

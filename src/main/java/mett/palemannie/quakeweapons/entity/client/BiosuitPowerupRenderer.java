@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity> {
 
-    private static final ResourceLocation BIOSUIT_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/biosuit_powerup/biosuit_powerup.png");
+    private static final ResourceLocation BIOSUIT_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "textures/entity/biosuit_powerup/biosuit_powerup.png");
     private final BiosuitPowerupModel<BiosuitPowerupEntity> model;
 
     public BiosuitPowerupRenderer(EntityRendererProvider.Context context) {

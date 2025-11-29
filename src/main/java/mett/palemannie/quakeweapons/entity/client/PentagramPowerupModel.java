@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
 public class PentagramPowerupModel<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation PENTAGRAM_LAYER = new ModelLayerLocation(new ResourceLocation(QuakeWeapons.MODID, "pentagram_powerup"), "main");
+	public static final ModelLayerLocation PENTAGRAM_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "pentagram_powerup"), "main");
 	private final ModelPart pentagram_powerup;
 
 	public PentagramPowerupModel(ModelPart root) {
