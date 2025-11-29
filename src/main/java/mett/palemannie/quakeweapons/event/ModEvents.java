@@ -87,11 +87,6 @@ public class ModEvents {
             if (!entity.level().isClientSide) {
 
                 ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), event.getEntity());
-
-                /*ModMessages.INSTANCE.send(
-                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                        new S2CInvisPacket(entity.getId(), true)
-                );*/
             }
         }
 
@@ -180,7 +175,7 @@ public class ModEvents {
         }
     }
 
-    ///QW-invis break fix
+    ///QW-invis break fixes
 
     @SubscribeEvent
     public static void onEffectRemove(MobEffectEvent.Remove event) {
@@ -193,16 +188,28 @@ public class ModEvents {
 
             if(!event.getEntity().level().isClientSide()) {
 
-                ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), event.getEntity());
-                /*ModMessages.INSTANCE.send(
-                        PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                        new S2CInvisPacket(entity.getId(), false)
-                );*/
+                ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), false), event.getEntity());
             }
         }
     }
 
-    ///Mob deaggro upon and while qw-invis
+    @SubscribeEvent
+    public static void onEffectRemove(MobEffectEvent.Expired event) {
+
+        LivingEntity entity = event.getEntity();
+
+        if (event.getEffectInstance().getEffect() == ModEffects.QW_INVIS.get()) {
+
+            event.getEntity().setInvisible(false);
+
+            if(!event.getEntity().level().isClientSide()) {
+
+                ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), false), event.getEntity());
+            }
+        }
+    }
+
+    ///Mob deaggro upon and while QW-invis
 
     @SubscribeEvent
     public static void onTargetChange(LivingChangeTargetEvent event) {

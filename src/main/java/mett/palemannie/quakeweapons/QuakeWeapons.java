@@ -29,21 +29,26 @@ public class QuakeWeapons {
 
     public static final String MODID = "quakeweapons";
     private static final Logger LOGGER = LogUtils.getLogger();
+    public static QuakeWeapons instance;
 
-    public QuakeWeapons(FMLJavaModLoadingContext context){
+    public QuakeWeapons(){
 
-        IEventBus modEventBus = context.getModEventBus();
-        modEventBus.addListener(this::commonSetup);
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+
         MinecraftForge.EVENT_BUS.register(this);
-        modEventBus.addListener(this::addCreative);
+        eventBus.register(this);
+        instance = this;
+
+        eventBus.addListener(this::addCreative);
 
         GeckoLib.initialize();
-        ModCreativeModeTabs.register(modEventBus);
-        ModItems.register(modEventBus);
-        ModEffects.register(modEventBus);
-        ModEntities.register(modEventBus);
-        ModSounds.register(modEventBus);
-        ModBlocks.register(modEventBus);
+        ModCreativeModeTabs.register(eventBus);
+        ModItems.register(eventBus);
+        ModEffects.register(eventBus);
+        ModEntities.register(eventBus);
+        ModSounds.register(eventBus);
+        ModBlocks.register(eventBus);
 
         QuakeWeaponsConfig.registerConfigs();
     }
@@ -51,9 +56,9 @@ public class QuakeWeapons {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-    }
+    }*/
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {

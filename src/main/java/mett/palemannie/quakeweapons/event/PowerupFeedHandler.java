@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.event;
 
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.item.custom.AbstractPowerupItem;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,7 +32,7 @@ public class PowerupFeedHandler {
 
         if (powerupItem.getPowerupEffect() != null) {
 
-            living.addEffect(new MobEffectInstance(powerupItem.getPowerupEffect(), 600, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(powerupItem.getPowerupEffect(), QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(), 0, false, false, true));
             level.playSound(null, living.blockPosition(), SoundEvents.HORSE_EAT, net.minecraft.sounds.SoundSource.PLAYERS, 1f, 1f);
 
             if (!player.getAbilities().instabuild) {
