@@ -7,9 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class S2CInvisPacket {
     private final int entityId;
@@ -29,9 +27,9 @@ public class S2CInvisPacket {
         return new S2CInvisPacket(buf.readInt(), buf.readBoolean());
     }
 
-    public static void handle(S2CInvisPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> handleClient(msg));
-        ctx.get().setPacketHandled(true);
+    public static void handle(S2CInvisPacket msg, CustomPayloadEvent.Context ctx) {
+        ctx.enqueueWork(() -> handleClient(msg));
+        ctx.setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)

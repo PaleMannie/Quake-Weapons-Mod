@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEntity> {
 
-    private static final ResourceLocation PENTAGRAM_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/pentagram_powerup/pentagram_powerup.png");
+    private static final ResourceLocation PENTAGRAM_LOCATION = new ResourceLocation(QuakeWeapons.MODID,"textures/entity/pentagram_powerup/pentagram_powerup.png");
     private final PentagramPowerupModel<PentagramPowerupEntity> model;
 
     public PentagramPowerupRenderer(EntityRendererProvider.Context context) {

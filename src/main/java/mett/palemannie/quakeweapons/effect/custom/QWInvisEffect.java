@@ -51,21 +51,13 @@ public class QWInvisEffect extends MobEffect {
         }
     }
 
-    @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
         return true;
     }
 
     ///Assuring that upon breaking invis your armor and items in hand get visible again
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap map, int amplifier) {
-        super.removeAttributeModifiers(entity, map, amplifier);
-
-        if (!entity.level().isClientSide) {
-            ModMessages.INSTANCE.send(
-                    PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
-                    new S2CInvisPacket(entity.getId(), false)
-            );
-        }
+    public void removeAttributeModifiers(AttributeMap map) {
+        super.removeAttributeModifiers(map);
     }
 }

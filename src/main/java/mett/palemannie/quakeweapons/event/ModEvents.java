@@ -5,6 +5,7 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -21,7 +22,6 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -86,10 +86,12 @@ public class ModEvents {
 
             if (!entity.level().isClientSide) {
 
-                ModMessages.INSTANCE.send(
+                ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), event.getEntity());
+
+                /*ModMessages.INSTANCE.send(
                         PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
                         new S2CInvisPacket(entity.getId(), true)
-                );
+                );*/
             }
         }
 
@@ -190,10 +192,12 @@ public class ModEvents {
             event.getEntity().setInvisible(false);
 
             if(!event.getEntity().level().isClientSide()) {
-                ModMessages.INSTANCE.send(
+
+                ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), event.getEntity());
+                /*ModMessages.INSTANCE.send(
                         PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity),
                         new S2CInvisPacket(entity.getId(), false)
-                );
+                );*/
             }
         }
     }

@@ -10,18 +10,18 @@ public class GrenadelauncherModel extends GeoModel<GrenadelauncherItem> {
     @Override
     public ResourceLocation getModelResource(GrenadelauncherItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/grenadelauncher.geo.json");
+        return new ResourceLocation(QuakeWeapons.MODID, "geo/grenadelauncher.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(GrenadelauncherItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "textures/item/grenadelauncher.png");
+        return new ResourceLocation(QuakeWeapons.MODID, "textures/item/grenadelauncher.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(GrenadelauncherItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/grenadelauncher.animations.json");
+        return new ResourceLocation(QuakeWeapons.MODID, "animations/grenadelauncher.animations.json");
     }
 }

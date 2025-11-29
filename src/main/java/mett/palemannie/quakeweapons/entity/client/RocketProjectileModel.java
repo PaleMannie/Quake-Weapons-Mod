@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 public class RocketProjectileModel<T extends Entity> extends EntityModel<T> {
 
-	public static final ModelLayerLocation ROCKET_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "rocket_projectile"), "main");
+	public static final ModelLayerLocation ROCKET_LAYER = new ModelLayerLocation(new ResourceLocation(QuakeWeapons.MODID, "rocket_projectile"), "main");
 	private final ModelPart rocket;
 
 	public RocketProjectileModel(ModelPart root) {

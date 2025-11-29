@@ -9,7 +9,7 @@ import net.minecraft.world.damagesource.DamageType;
 public class ModDamageTypes {
 
     public static final ResourceKey<DamageType> register(String name){
-        return ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, name));
+        return ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(QuakeWeapons.MODID, name));
     }
 
     public static final ResourceKey<DamageType> NAILGUN_DAMAGE = register("nailgun_damage");

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 
 public class NailProjectileModel<T extends Entity> extends HierarchicalModel<T> {
 
-    public static final ModelLayerLocation NAIL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "nail_projectile"), "main");
+    public static final ModelLayerLocation NAIL_LAYER = new ModelLayerLocation(new ResourceLocation(QuakeWeapons.MODID, "nail_projectile"), "main");
     private static final String MAIN = "main";
     private final ModelPart root;
 
