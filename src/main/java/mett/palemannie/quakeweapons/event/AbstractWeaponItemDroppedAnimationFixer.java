@@ -11,7 +11,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.List;
 
@@ -64,25 +63,5 @@ public class AbstractWeaponItemDroppedAnimationFixer {
                 }
             }
         }
-
-        /*if (event.phase != TickEvent.Phase.END) return;
-        if (!(event.level instanceof ServerLevel serverLevel)) return;
-
-
-        for (ItemEntity itemEntity : serverLevel.getEntitiesOfClass(ItemEntity.class, new AABB(
-                serverLevel.getMinBuildHeight(), -64, serverLevel.getMinBuildHeight(),
-                serverLevel.getMaxBuildHeight(), serverLevel.getMaxBuildHeight(), serverLevel.getMaxBuildHeight()))) {
-
-            ItemStack stack = itemEntity.getItem();
-
-            if (stack.getItem() instanceof AbstractWeapon weapon) {
-
-                if(serverLevel.getRandomPlayer() != null) {
-                    weapon.stopShootingAnimation(serverLevel.getRandomPlayer(), serverLevel, stack);
-                    weapon.stopAmmoEmptyAnimation(serverLevel.getRandomPlayer(), serverLevel, stack);
-                    weapon.stopIdleAnimation(serverLevel.getRandomPlayer(), serverLevel, stack);
-                }
-            }
-        }*/
     }
 }
