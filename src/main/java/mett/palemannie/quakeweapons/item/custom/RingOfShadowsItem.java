@@ -20,6 +20,6 @@ public class RingOfShadowsItem extends AbstractPowerupItem{
 
     @Override
     protected void onPowerupUse(Level level, Player player, ItemStack stack, int duration) {
-        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS.get(), getPowerupDuration()));
+        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS.getHolder().get(), getPowerupDuration()));
     }
 }

@@ -1,8 +1,6 @@
 package mett.palemannie.quakeweapons.effect.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
-import mett.palemannie.quakeweapons.net.ModMessages;
-import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
@@ -11,7 +9,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraftforge.network.PacketDistributor;
 
 public class QWInvisEffect extends MobEffect {
 
@@ -21,19 +18,21 @@ public class QWInvisEffect extends MobEffect {
 
     /// Effect done through Events
     /// Only Expiring sounds here (and vanilla invis)
+    ///
+    /// @return
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
 
         entity.setInvisible(true);
 
-        if(!entity.hasEffect(ModEffects.QW_INVIS.get())){
+        if(!entity.hasEffect(ModEffects.QW_INVIS.getHolder().get())){
 
             entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0, false, false, false));
             entity.setInvisible(false);
         }
 
-        MobEffectInstance inst = entity.getEffect(ModEffects.QW_INVIS.get());
+        MobEffectInstance inst = entity.getEffect(ModEffects.QW_INVIS.getHolder().get());
         if (inst != null) {
             int remaining = inst.getDuration();
 
@@ -49,6 +48,7 @@ public class QWInvisEffect extends MobEffect {
                 }
             }
         }
+        return true;
     }
 
     @Override

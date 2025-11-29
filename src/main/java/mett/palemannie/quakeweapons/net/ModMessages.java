@@ -3,11 +3,11 @@ package mett.palemannie.quakeweapons.net;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.*;
+import net.minecraftforge.network.SimpleChannel;
 
 public class ModMessages {
 

@@ -42,7 +42,8 @@ public class QuakeWeapons {
 
         eventBus.addListener(this::addCreative);
 
-        GeckoLib.initialize();
+        GeckoLib.DATA_COMPONENTS_REGISTER.register(eventBus);
+
         ModCreativeModeTabs.register(eventBus);
         ModItems.register(eventBus);
         ModEffects.register(eventBus);

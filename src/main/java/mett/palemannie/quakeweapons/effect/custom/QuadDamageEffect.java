@@ -16,11 +16,13 @@ public class QuadDamageEffect extends MobEffect {
 
     /// Effect done through Events
     /// Only Expiring sounds here
+    ///
+    /// @return
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
 
-        MobEffectInstance inst = entity.getEffect(ModEffects.QUAD_DAMAGE.get());
+        MobEffectInstance inst = entity.getEffect(ModEffects.QUAD_DAMAGE.getHolder().get());
         if (inst != null) {
             int remaining = inst.getDuration();
 
@@ -31,6 +33,7 @@ public class QuadDamageEffect extends MobEffect {
                 }
             }
         }
+        return true;
     }
 
     @Override

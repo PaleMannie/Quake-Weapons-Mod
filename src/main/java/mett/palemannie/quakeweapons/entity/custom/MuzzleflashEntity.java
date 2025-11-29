@@ -4,6 +4,7 @@ import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.entity.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -25,7 +26,7 @@ public class MuzzleflashEntity extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
     @Override
     public boolean isNoGravity() {

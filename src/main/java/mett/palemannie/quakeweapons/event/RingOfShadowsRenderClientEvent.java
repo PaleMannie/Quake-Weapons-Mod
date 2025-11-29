@@ -17,7 +17,7 @@ public class RingOfShadowsRenderClientEvent {
     public static void onRenderPlayer(RenderLivingEvent.Pre<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> event) {
 
         LivingEntity entity = event.getEntity();
-        if (entity.hasEffect(ModEffects.QW_INVIS.get())) {
+        if (entity.hasEffect(ModEffects.QW_INVIS.getHolder().get())) {
 
             event.setCanceled(true);
         }

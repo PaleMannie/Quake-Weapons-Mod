@@ -25,13 +25,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -128,7 +128,7 @@ public class ThunderboltItem extends AbstractWeapon{
                 target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
                 //the real damage
                 target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
-                        player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
+                        player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
                                 : ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage));
 
                 //particles and sound

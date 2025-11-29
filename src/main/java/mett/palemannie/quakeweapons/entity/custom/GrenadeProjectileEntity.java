@@ -6,6 +6,7 @@ import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -27,7 +28,7 @@ public class GrenadeProjectileEntity extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
     @Override
     public boolean isNoGravity() {
@@ -37,7 +38,7 @@ public class GrenadeProjectileEntity extends Projectile {
     public static float computeRadiusFromDamage(float configDamage, Player player) {
 
         if(player == null){ return ((configDamage - 1) / 7.0F)/2; } else {
-            return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;
+            return player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;
         }
     }
 
@@ -56,7 +57,7 @@ public class GrenadeProjectileEntity extends Projectile {
             }
         }
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.get());
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.getHolder().get());
 
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
@@ -76,9 +77,9 @@ public class GrenadeProjectileEntity extends Projectile {
 
         this.discard();
     }
-
     public float lastTumbleX = 0;
     public float lastTumbleY = 0;
+
     public float lastTumbleZ = 0;
 
     @Override

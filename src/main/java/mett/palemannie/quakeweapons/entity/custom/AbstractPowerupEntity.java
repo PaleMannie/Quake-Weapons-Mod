@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +25,8 @@ public abstract class AbstractPowerupEntity extends Entity {
     public static int durationOnPickup = 0;
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+    }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
@@ -74,7 +76,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         if (!level().isClientSide && stack.is(Items.TOTEM_OF_UNDYING)) {
 
             this.spawnAtLocation(getPowerupItem());
-            level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 2.0F);
+            level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.get(), SoundSource.PLAYERS, 1.0F, 2.0F);
 
             if(!player.isCreative()){
 

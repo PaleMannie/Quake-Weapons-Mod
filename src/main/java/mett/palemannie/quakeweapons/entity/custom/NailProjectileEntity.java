@@ -6,6 +6,7 @@ import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,7 +36,7 @@ public class NailProjectileEntity extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {}
 
     @Override
     public boolean isNoGravity() {
@@ -71,7 +72,7 @@ public class NailProjectileEntity extends Projectile {
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
+            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
         }
     }
 

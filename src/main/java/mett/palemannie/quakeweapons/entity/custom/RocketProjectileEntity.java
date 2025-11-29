@@ -7,17 +7,23 @@ import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
@@ -32,7 +38,7 @@ public class RocketProjectileEntity extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {}
 
     @Override
     public boolean isNoGravity() {
@@ -42,7 +48,7 @@ public class RocketProjectileEntity extends Projectile {
     public static float computeRadiusFromDamage(float configDamage, Player player) {
 
         if(player == null){ return ((configDamage - 1) / 7.0F)/2;} else{
-            return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;}
+            return player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;}
     }
 
     private void quakeExplosion(Level level) {
@@ -59,7 +65,7 @@ public class RocketProjectileEntity extends Projectile {
             }
         }
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.get());
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.getHolder().get());
 
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
@@ -195,7 +201,7 @@ public class RocketProjectileEntity extends Projectile {
 
         pResult.getEntity().hurt(level().damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner()), Float.MIN_VALUE);
         pResult.getEntity().hurt(level().damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, null, null),
-                player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat()/4) * 4 : (QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat()/4));
+                player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? (QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat()/4) * 4 : (QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat()/4));
 
         quakeExplosion(this.level());
 

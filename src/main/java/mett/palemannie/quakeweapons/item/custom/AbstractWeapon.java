@@ -17,7 +17,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 /*
@@ -81,7 +81,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
 
-        pPlayer.removeEffect(ModEffects.QW_INVIS.get());
+        pPlayer.removeEffect(ModEffects.QW_INVIS.getHolder().get());
         pPlayer.setInvisible(false);
 
         if (pUsedHand != InteractionHand.MAIN_HAND) {
@@ -122,14 +122,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
         if(entity instanceof  Player player && level instanceof ServerLevel serverLevel) {
 
-            if (stack.hasTag() && stack.getTag().getBoolean("WasDropped")) {
-
-                stopShootingAnimation((LivingEntity) entity, serverLevel, stack);
-                stopAmmoEmptyAnimation((LivingEntity) entity, serverLevel, stack);
-                startIdleAnimation((LivingEntity) entity, serverLevel, stack);
-                stack.getTag().remove("WasDropped");
-            }
-
             if ((!selected || !player.isUsingItem()) ) {
 
                 stopShootingAnimation((LivingEntity) entity, serverLevel, stack);
@@ -145,7 +137,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller", "shooting");
     }
 
-    /// stopTriggeredAnim doesn't exist...
+    /// stopTriggeredAnim doesn't exist in older Geckolib versions...
 
     public void stopShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 

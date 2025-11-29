@@ -16,7 +16,7 @@ public class BiosuitPowerupEntity extends AbstractPowerupEntity{
 
     @Override
     protected void onPickup(Player player) {
-        player.addEffect(new MobEffectInstance(ModEffects.BIOSUIT.get(), getPowerupDuration()));
+        player.addEffect(new MobEffectInstance(ModEffects.BIOSUIT.getHolder().get(), getPowerupDuration()));
     }
 
     @Override
