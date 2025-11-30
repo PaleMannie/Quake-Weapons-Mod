@@ -90,9 +90,9 @@ public class ServerPlayHandler {
         ServerLevel sLevel = (ServerLevel) level;
 
         double reach = 3.0D;
-        if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
+        /*if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
             reach = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).getValue();
-        }
+        }*/
 
         // Ray setup
         Vec3 eye = player.getEyePosition(1.0F);

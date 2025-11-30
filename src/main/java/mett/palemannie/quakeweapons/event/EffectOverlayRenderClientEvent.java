@@ -1,4 +1,4 @@
-package mett.palemannie.quakeweapons.event;
+/*package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.effect.ModEffects;
@@ -152,4 +152,4 @@ public class EffectOverlayRenderClientEvent {
             event.getGuiGraphics().fill(0, 0, screenW, screenH, color);
         }
     }
-}
+}*/

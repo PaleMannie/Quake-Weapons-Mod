@@ -34,7 +34,7 @@ public class PowerupFeedHandler {
 
         if (powerupItem.getPowerupEffect() != null) {
 
-            living.addEffect(new MobEffectInstance(powerupItem.getPowerupEffect(), QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(), 0, false, false, true));
+            living.addEffect(new MobEffectInstance((Holder<MobEffect>) powerupItem.getPowerupEffect(), QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(), 0, false, false, true));
             level.playSound(null, living.blockPosition(), SoundEvents.HORSE_EAT, net.minecraft.sounds.SoundSource.PLAYERS, 1f, 1f);
 
             if (!player.getAbilities().instabuild) {
