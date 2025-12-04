@@ -22,6 +22,6 @@ public class QWAxeModel extends GeoModel<QWAxeItem> {
     @Override
     public ResourceLocation getAnimationResource(QWAxeItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/qwaxe.animations.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/qwaxe.animation.json");
     }
 }

@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity> {
 
     private static final ResourceLocation NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/nail_projectile/nail_projectile.png");
-    private final NailProjectileModel<NailProjectileEntity> model;
+    private final NailProjectileModel model;
 
     public NailProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new NailProjectileModel<>(context.bakeLayer(NailProjectileModel.NAIL_LAYER));
+        this.model = new NailProjectileModel(context.bakeLayer(NailProjectileModel.NAIL_LAYER));
     }
 
     public void render(NailProjectileEntity nailEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
@@ -37,7 +37,7 @@ public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity>
 
         this.model.setupAnim(nailEntity, v2, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(NAIL_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
 
         super.render(nailEntity, v1, v2, poseStack, bufferSource, packedLight);

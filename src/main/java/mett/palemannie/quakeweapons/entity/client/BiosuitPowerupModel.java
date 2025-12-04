@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.entity.custom.BiosuitPowerupEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -11,7 +12,9 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
+public class BiosuitPowerupModel extends EntityModel<BiosuitPowerupEntity> {
+
+
 	public static final ModelLayerLocation BIOSUIT_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "biosuit_powerup"), "main");
 
 	private final ModelPart shoes;
@@ -21,6 +24,7 @@ public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
 	private final ModelPart backpack;
 
 	public BiosuitPowerupModel(ModelPart root) {
+
 		this.shoes = root.getChild("shoes");
 		this.body = root.getChild("body");
 		this.arms = root.getChild("arms");
@@ -55,16 +59,19 @@ public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
+	@Override
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+
+		shoes.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		arms.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		backpack.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		shoes.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		arms.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		backpack.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);	}
+	public void setupAnim(BiosuitPowerupEntity biosuitPowerupEntity, float v, float v1, float v2, float v3, float v4) {
+
+	}
 }

@@ -3,6 +3,8 @@ package mett.palemannie.quakeweapons.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -11,14 +13,14 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class SuperNailProjectileModel<T extends Entity> extends HierarchicalModel<T> {
+public class SuperNailProjectileModel extends EntityModel<SuperNailProjectileEntity> {
 
     public static final ModelLayerLocation SUPER_NAIL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "super_nail_projectile"), "main");
     private static final String MAIN = "main";
-    private final ModelPart root;
+    private final ModelPart supernail;
 
     public SuperNailProjectileModel(ModelPart root) {
-        this.root = root;
+        this.supernail = root;
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -36,15 +38,16 @@ public class SuperNailProjectileModel<T extends Entity> extends HierarchicalMode
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
+
+        supernail.render(poseStack, vertexConsumer, red, green, blue);
     }
 
-    @Override
-    public ModelPart root() { return this.root; }
+    /*@Override
+    public ModelPart root() { return this.supernail; }*/
 
     @Override
-    public void setupAnim(T t, float v, float v1, float v2, float v3, float v4) {
+    public void setupAnim(SuperNailProjectileEntity t, float v, float v1, float v2, float v3, float v4) {
 
     }
 }

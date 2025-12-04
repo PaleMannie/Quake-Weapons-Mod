@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.entity.custom.QuadDamagePowerupEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -11,7 +12,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class QuadDamagePowerupModel<T extends Entity> extends EntityModel<T> {
+public class QuadDamagePowerupModel extends EntityModel<QuadDamagePowerupEntity> {
 
 	public static final ModelLayerLocation QUAD_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "quad_damage_powerup"), "main");
 	private final ModelPart quad_damage_powerup;
@@ -39,12 +40,13 @@ public class QuadDamagePowerupModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(QuadDamagePowerupEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		quad_damage_powerup.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
+
+		quad_damage_powerup.render(poseStack, vertexConsumer, red, green, blue);
 	}
 }

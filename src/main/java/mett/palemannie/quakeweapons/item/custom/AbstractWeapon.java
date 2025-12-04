@@ -42,7 +42,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         ItemStack itemStack = player.getItemInHand(hand);
         if (!itemStack.isEmpty() && !player.isUsingItem()) {
             player.useItem = itemStack;
-            player.useItemRemaining = itemStack.getUseDuration();
+            player.useItemRemaining = itemStack.getUseDuration(player);
             if (!player.level().isClientSide()) {
                 player.setLivingEntityFlag(1, true);
                 player.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
@@ -64,7 +64,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack pStack) {
+    public int getUseDuration(ItemStack pStack, LivingEntity entity) {
         return 2000000000;
     }
 

@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEntity> {
 
     private static final ResourceLocation RING_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/ring_powerup/ring_powerup.png");
-    private final RingPowerupModel<RingofshadowsPowerupEntity> model;
+    private final RingPowerupModel model;
 
     public RingPowerupRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new RingPowerupModel<>(context.bakeLayer(RingPowerupModel.RING_LAYER));
+        this.model = new RingPowerupModel(context.bakeLayer(RingPowerupModel.RING_LAYER));
     }
 
     float bobbingSpeed = 0.05f;
@@ -44,10 +44,10 @@ public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEnti
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(RING_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
 
         VertexConsumer $$5 = bufferSource.getBuffer(RenderType.eyes(RING_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
 
         poseStack.popPose();
 

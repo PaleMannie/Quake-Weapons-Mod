@@ -22,6 +22,6 @@ public class GrenadelauncherModel extends GeoModel<GrenadelauncherItem> {
     @Override
     public ResourceLocation getAnimationResource(GrenadelauncherItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/grenadelauncher.animations.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/grenadelauncher.animation.json");
     }
 }

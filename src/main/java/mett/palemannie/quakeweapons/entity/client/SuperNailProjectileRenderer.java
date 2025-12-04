@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProjectileEntity> {
 
     private static final ResourceLocation SUPER_NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/super_nail_projectile/super_nail_projectile.png");
-    private final SuperNailProjectileModel<SuperNailProjectileEntity> model;
+    private final SuperNailProjectileModel model;
 
     public SuperNailProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new SuperNailProjectileModel<>(context.bakeLayer(SuperNailProjectileModel.SUPER_NAIL_LAYER));
+        this.model = new SuperNailProjectileModel(context.bakeLayer(SuperNailProjectileModel.SUPER_NAIL_LAYER));
     }
 
     public void render(SuperNailProjectileEntity nailEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
@@ -37,7 +37,7 @@ public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProject
 
         this.model.setupAnim(nailEntity, v2, 0.0F, -0.1F, 0.0F, 0.0F);
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(SUPER_NAIL_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
 
         super.render(nailEntity, v1, v2, poseStack, bufferSource, packedLight);

@@ -22,6 +22,6 @@ public class ThunderboltModel extends GeoModel<ThunderboltItem> {
     @Override
     public ResourceLocation getAnimationResource(ThunderboltItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/thunderbolt.animations.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/thunderbolt.animation.json");
     }
 }

@@ -21,11 +21,11 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
     private static final ResourceLocation GRENADE_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile.png");
     private static final ResourceLocation GRENADE_EMISSIVE_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile_glow.png");
 
-    private final GrenadeProjectileModel<GrenadeProjectileEntity> model;
+    private final GrenadeProjectileModel model;
 
     public GrenadeProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new GrenadeProjectileModel<>(context.bakeLayer(GrenadeProjectileModel.GRENADE_LAYER));
+        this.model = new GrenadeProjectileModel(context.bakeLayer(GrenadeProjectileModel.GRENADE_LAYER));
     }
 
     public void render(GrenadeProjectileEntity grenadeEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
@@ -59,10 +59,10 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
         }
 
         VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(GRENADE_LOCATION));
-        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY);
 
         VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(GRENADE_EMISSIVE_LOCATION));
-        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY);
         poseStack.popPose();
 
         super.render(grenadeEntity, v1, partialTicks, poseStack, bufferSource, packedLight);

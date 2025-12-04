@@ -190,7 +190,7 @@ public class ThunderboltItem extends AbstractWeapon{
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
 
-                        ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
+                        ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack, user)-pRemainingUseDuration);
                 } else {
 
                     ServerPlayHandler.playAmmoEmptySound(serverPlayer);

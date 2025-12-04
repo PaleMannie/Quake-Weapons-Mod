@@ -22,6 +22,6 @@ public class SuperNailGunModel extends GeoModel<SuperNailgunItem> {
     @Override
     public ResourceLocation getAnimationResource(SuperNailgunItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/super_nailgun.animations.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/super_nailgun.animation.json");
     }
 }

@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupEntity> {
 
     private static final ResourceLocation QUAD_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/quad_damage_powerup/quad_damage_powerup.png");
-    private final QuadDamagePowerupModel<QuadDamagePowerupEntity> model;
+    private final QuadDamagePowerupModel model;
 
     public QuaddamagePowerupRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new QuadDamagePowerupModel<>(context.bakeLayer(QuadDamagePowerupModel.QUAD_LAYER));
+        this.model = new QuadDamagePowerupModel(context.bakeLayer(QuadDamagePowerupModel.QUAD_LAYER));
     }
 
     float bobbingSpeed = 0.05f;
@@ -44,10 +44,10 @@ public class QuaddamagePowerupRenderer extends EntityRenderer<QuadDamagePowerupE
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(QUAD_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
 
         VertexConsumer $$7 = bufferSource.getBuffer(RenderType.eyes(QUAD_LOCATION));
-        this.model.renderToBuffer(poseStack, $$7, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$7, packedLight, OverlayTexture.NO_OVERLAY);
 
         poseStack.popPose();
 

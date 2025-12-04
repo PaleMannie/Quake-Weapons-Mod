@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity> {
 
     private static final ResourceLocation BIOSUIT_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "textures/entity/biosuit_powerup/biosuit_powerup.png");
-    private final BiosuitPowerupModel<BiosuitPowerupEntity> model;
+    private final BiosuitPowerupModel model;
 
     public BiosuitPowerupRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new BiosuitPowerupModel<>(context.bakeLayer(BiosuitPowerupModel.BIOSUIT_LAYER));
+        this.model = new BiosuitPowerupModel(context.bakeLayer(BiosuitPowerupModel.BIOSUIT_LAYER));
     }
 
     float bobbingSpeed = 0.05f;
@@ -45,10 +45,10 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
         poseStack.mulPose(Axis.YN.rotationDegrees(rotation));
 
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(BIOSUIT_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
 
         VertexConsumer $$5 = bufferSource.getBuffer(RenderType.eyes(BIOSUIT_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
 
         poseStack.popPose();
 

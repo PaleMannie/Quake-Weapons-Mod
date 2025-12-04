@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEntity> {
 
     private static final ResourceLocation PENTAGRAM_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/pentagram_powerup/pentagram_powerup.png");
-    private final PentagramPowerupModel<PentagramPowerupEntity> model;
+    private final PentagramPowerupModel model;
 
     public PentagramPowerupRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new PentagramPowerupModel<>(context.bakeLayer(PentagramPowerupModel.PENTAGRAM_LAYER));
+        this.model = new PentagramPowerupModel(context.bakeLayer(PentagramPowerupModel.PENTAGRAM_LAYER));
     }
 
     float bobbingSpeed = 0.05f;
@@ -44,10 +44,10 @@ public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEnt
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
         VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(PENTAGRAM_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
 
         VertexConsumer $$5 = bufferSource.getBuffer(RenderType.eyes(PENTAGRAM_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
 
         poseStack.popPose();
 

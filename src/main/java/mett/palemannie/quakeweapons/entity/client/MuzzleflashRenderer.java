@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
 public class MuzzleflashRenderer extends EntityRenderer<MuzzleflashEntity> {
 
     private static final ResourceLocation FLASH_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/muzzleflash/muzzleflash.png");
-    private final MuzzleflashModel<MuzzleflashEntity> model;
+    private final MuzzleflashModel model;
 
     public MuzzleflashRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new MuzzleflashModel<>(context.bakeLayer(MuzzleflashModel.FLASH_LAYER));
+        this.model = new MuzzleflashModel(context.bakeLayer(MuzzleflashModel.FLASH_LAYER));
     }
 
     public void render(MuzzleflashEntity nailEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
