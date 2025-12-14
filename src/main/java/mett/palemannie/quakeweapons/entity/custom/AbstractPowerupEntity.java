@@ -75,7 +75,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         /// Rightclicking the entity with totem of undying will drop it
         if (!level().isClientSide && stack.is(Items.TOTEM_OF_UNDYING)) {
 
-            this.spawnAtLocation(getPowerupItem());
+            this.spawnAtLocation(player.level().getServer().getLevel(player.level().dimension()), getPowerupItem());
             level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.get(), SoundSource.PLAYERS, 1.0F, 2.0F);
 
             if(!player.isCreative()){

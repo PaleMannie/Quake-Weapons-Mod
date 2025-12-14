@@ -10,11 +10,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity> {
+public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity, EntityRenderState> {
 
     private static final ResourceLocation BIOSUIT_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "textures/entity/biosuit_powerup/biosuit_powerup.png");
     private final BiosuitPowerupModel model;
@@ -28,7 +29,7 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
     float bobbingHeight = 0.1f;
     float rotationSpeed = 5f;
 
-    public void render(BiosuitPowerupEntity rocketEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(EntityRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
 
@@ -36,7 +37,7 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
         poseStack.scale(1f, 1f, 1f);
         poseStack.mulPose(Axis.XP.rotationDegrees(180f));
 
-        float ageInTicks = rocketEntity.tickCount + partialTicks;
+        float ageInTicks = state.ageInTicks;
 
         double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
         poseStack.translate(0.0D, 0.25D + bob, 0.0D);
@@ -52,7 +53,7 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
 
         poseStack.popPose();
 
-        super.render(rocketEntity, v1, partialTicks, poseStack, bufferSource, packedLight);
+        super.render(state, poseStack, bufferSource, packedLight);
     }
 
     @Override
@@ -61,6 +62,16 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity>
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull BiosuitPowerupEntity spit) { return BIOSUIT_LOCATION; }
+    public EntityRenderState createRenderState() {
+        return new EntityRenderState();
+    }
+
+    @Override
+    public void extractRenderState(BiosuitPowerupEntity pEntity, EntityRenderState pReusedState, float pPartialTick) {
+        super.extractRenderState(pEntity, pReusedState, pPartialTick);
+    }
+
+    /*@Override
+    public @NotNull ResourceLocation getTextureLocation(@NotNull BiosuitPowerupEntity spit) { return BIOSUIT_LOCATION; }*/
 
 }

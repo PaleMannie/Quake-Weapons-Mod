@@ -9,12 +9,14 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
-public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity> {
+public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity, LlamaSpitRenderState> {
 
     private static final ResourceLocation NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/nail_projectile/nail_projectile.png");
     private final NailProjectileModel model;
@@ -24,23 +26,21 @@ public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity>
         this.model = new NailProjectileModel(context.bakeLayer(NailProjectileModel.NAIL_LAYER));
     }
 
-    public void render(NailProjectileEntity nailEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(LlamaSpitRenderState pRenderState, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight) {
 
-        poseStack.pushPose();
+        pPoseStack.pushPose();
 
-        poseStack.translate(0.0F, 0.05f, 0.0F);
+        pPoseStack.translate(0f, 0.1f, 0f);
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(v2, nailEntity.yRotO, nailEntity.getYRot()) + 180f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(v2, nailEntity.xRotO, nailEntity.getXRot()) ));
+        pPoseStack.mulPose(Axis.YP.rotationDegrees(pRenderState.yRot));
+        pPoseStack.mulPose(Axis.XP.rotationDegrees(-pRenderState.xRot + 180f));
 
-        poseStack.scale(0.75F, 0.75F, 0.75F);
+        this.model.setupAnim(pRenderState);
+        VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(NAIL_LOCATION));
+        this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);
+        pPoseStack.popPose();
 
-        this.model.setupAnim(nailEntity, v2, 0.0F, -0.1F, 0.0F, 0.0F);
-        VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(NAIL_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY);
-        poseStack.popPose();
-
-        super.render(nailEntity, v1, v2, poseStack, bufferSource, packedLight);
+        super.render(pRenderState, pPoseStack, pBufferSource, pPackedLight);
     }
 
     @Override
@@ -49,6 +49,17 @@ public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity>
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull NailProjectileEntity spit) { return NAIL_LOCATION; }
+    public LlamaSpitRenderState createRenderState() {
+        return new LlamaSpitRenderState();
+    }
+
+    public void extractRenderState(NailProjectileEntity pEntity, LlamaSpitRenderState renderState, float pPartialTick) {
+        super.extractRenderState(pEntity, renderState, pPartialTick);
+        renderState.xRot = pEntity.getXRot(pPartialTick);
+        renderState.yRot = pEntity.getYRot(pPartialTick);
+    }
+
+    /*@Override
+    public @NotNull ResourceLocation getTextureLocation(@NotNull NailProjectileEntity spit) { return NAIL_LOCATION; }*/
 
 }

@@ -1,9 +1,11 @@
-package mett.palemannie.quakeweapons.event;
+/*package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.effect.ModEffects;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -14,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 public class RingOfShadowsRenderClientEvent {
 
     @SubscribeEvent
-    public static void onRenderPlayer(RenderLivingEvent.Pre<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> event) {
+    public static void onRenderPlayer(RenderLivingEvent.Pre<AbstractClientPlayer, LivingEntityRenderState, >> event) {
 
         LivingEntity entity = event.getEntity();
         if (entity.hasEffect(ModEffects.QW_INVIS.getHolder().get())) {
@@ -22,4 +24,4 @@ public class RingOfShadowsRenderClientEvent {
             event.setCanceled(true);
         }
     }
-}
+}*/

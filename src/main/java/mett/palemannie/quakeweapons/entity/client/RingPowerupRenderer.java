@@ -10,11 +10,12 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEntity> {
+public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEntity, EntityRenderState> {
 
     private static final ResourceLocation RING_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/ring_powerup/ring_powerup.png");
     private final RingPowerupModel model;
@@ -28,14 +29,14 @@ public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEnti
     float bobbingHeight = 0.1f;
     float rotationSpeed = 5f;
 
-    public void render(RingofshadowsPowerupEntity rocketEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(EntityRenderState state, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
 
         poseStack.translate(0.0F, 0.0f, 0.0F);
         poseStack.scale(1f, 1f, 1f);
 
-        float ageInTicks = rocketEntity.tickCount + partialTicks;
+        float ageInTicks = state.ageInTicks + partialTicks;
 
         double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
         poseStack.translate(0.0D, 0.25D + bob, 0.0D);
@@ -51,7 +52,7 @@ public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEnti
 
         poseStack.popPose();
 
-        super.render(rocketEntity, v1, partialTicks, poseStack, bufferSource, packedLight);
+        super.render(state, poseStack, bufferSource, packedLight);
     }
 
     @Override
@@ -60,6 +61,13 @@ public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEnti
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull RingofshadowsPowerupEntity spit) { return RING_LOCATION; }
+    public EntityRenderState createRenderState() {
+        return new EntityRenderState();
+    }
+
+
+
+    /*@Override
+    public @NotNull ResourceLocation getTextureLocation(@NotNull RingofshadowsPowerupEntity spit) { return RING_LOCATION; }*/
 
 }

@@ -4,7 +4,6 @@ import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.RocketlauncherRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -15,11 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import java.util.function.Consumer;
 
@@ -54,8 +49,7 @@ public class RocketlauncherItem extends AbstractWeapon{
         consumer.accept(new IClientItemExtensions() {
             private RocketlauncherRenderer renderer;
 
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            public RocketlauncherRenderer getCustomRenderer() {
                 if(this.renderer == null) {
                     this.renderer = new RocketlauncherRenderer();
                 }

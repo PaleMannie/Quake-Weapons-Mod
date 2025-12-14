@@ -9,16 +9,18 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class RocketProjectileModel extends EntityModel<RocketProjectileEntity> {
+public class RocketProjectileModel extends EntityModel<LlamaSpitRenderState> {
 
 	public static final ModelLayerLocation ROCKET_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "rocket_projectile"), "main");
 	private final ModelPart rocket;
 
 	public RocketProjectileModel(ModelPart root) {
-		this.rocket = root.getChild("rocket");
+        super(root);
+        this.rocket = root.getChild("rocket");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -35,7 +37,7 @@ public class RocketProjectileModel extends EntityModel<RocketProjectileEntity> {
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
-	@Override
+	/*@Override
 	public void setupAnim(RocketProjectileEntity t, float v, float v1, float v2, float v3, float v4) {
 	}
 
@@ -43,5 +45,5 @@ public class RocketProjectileModel extends EntityModel<RocketProjectileEntity> {
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
 
 		rocket.render(poseStack, vertexConsumer, red, green, blue);
-	}
+	}*/
 }

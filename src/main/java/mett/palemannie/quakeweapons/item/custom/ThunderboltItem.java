@@ -8,7 +8,6 @@ import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,11 +26,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.animation.AnimatableManager;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.*;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -67,8 +62,7 @@ public class ThunderboltItem extends AbstractWeapon{
         consumer.accept(new IClientItemExtensions() {
             private ThunderboltRenderer renderer;
 
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
+            public ThunderboltRenderer getCustomRenderer() {
                 if(this.renderer == null) {
                     this.renderer = new ThunderboltRenderer();
                 }

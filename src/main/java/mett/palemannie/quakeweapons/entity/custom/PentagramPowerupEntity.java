@@ -2,6 +2,8 @@ package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -22,5 +24,10 @@ public class PentagramPowerupEntity extends AbstractPowerupEntity{
     @Override
     protected Item getPowerupItem() {
         return ModItems.PENTAGRAM_POWERUP.get();
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel pLevel, DamageSource pDamageSource, float pAmount) {
+        return false;
     }
 }

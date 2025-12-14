@@ -139,7 +139,7 @@ public class ServerPlayHandler {
         } else if (blockHit.getType() != HitResult.Type.MISS) {
 
             Vec3 hitP = blockHit.getLocation();
-            Vec3 n = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal()).normalize();
+            Vec3 n = Vec3.atLowerCornerOf(blockHit.getDirection().getUnitVec3i());
             Vec3 spawn = hitP.add(n.scale(0.01));
 
             sLevel.sendParticles(ParticleTypes.SMOKE,
@@ -305,9 +305,9 @@ public class ServerPlayHandler {
                 Vec3 hitPos = entityHit.getLocation();
 
                 if(QuakeWeaponsConfig.COMMON.enableGore.get()){
-                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d); }
 
-                sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+                    sevel.sendParticles(ParticleTypes.LANDING_LAVA, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d); }
+                    sevel.sendParticles(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
             }
             else if (blockHit != null && blockHit.getType() != HitResult.Type.MISS) {
                 Vec3 hitPos = blockHit.getLocation();
@@ -381,15 +381,15 @@ public class ServerPlayHandler {
                 Vec3 hitPos = entityHit.getLocation();
 
                 if(QuakeWeaponsConfig.COMMON.enableGore.get()){
-                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);}
+                sevel.sendParticles(ParticleTypes.LANDING_LAVA, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);}
 
-                sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+                sevel.sendParticles(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
             }
 
             else if (blockHit != null && blockHit.getType() != HitResult.Type.MISS) {
 
                 Vec3 hitPos = blockHit.getLocation();
-                sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.1d, 0.1d, 0.1d, 0d);
+                sevel.sendParticles(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 1, 0.1d, 0.1d, 0.1d, 0d);
             }
         }
 

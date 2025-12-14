@@ -65,7 +65,7 @@ public class RocketProjectileEntity extends Projectile {
             }
         }
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.getHolder().get());
+        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.getHolder().get());
 
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,

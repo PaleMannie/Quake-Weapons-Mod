@@ -1,23 +1,21 @@
 package mett.palemannie.quakeweapons.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.entity.custom.RingofshadowsPowerupEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 
-public class RingPowerupModel extends EntityModel<RingofshadowsPowerupEntity>{
+public class RingPowerupModel extends EntityModel<EntityRenderState>{
 	public static final ModelLayerLocation RING_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "ring_powerup"), "main");
 	private final ModelPart ring_powerup;
 
 	public RingPowerupModel(ModelPart root) {
-		this.ring_powerup = root.getChild("ring_powerup");
+        super(root);
+        this.ring_powerup = root.getChild("ring_powerup");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -37,7 +35,7 @@ public class RingPowerupModel extends EntityModel<RingofshadowsPowerupEntity>{
 		return LayerDefinition.create(meshdefinition, 16, 16);
 	}
 
-	@Override
+	/*@Override
 	public void setupAnim(RingofshadowsPowerupEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
 	}
@@ -46,5 +44,5 @@ public class RingPowerupModel extends EntityModel<RingofshadowsPowerupEntity>{
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
 
 		ring_powerup.render(poseStack, vertexConsumer, red, green, blue);
-	}
+	}*/
 }

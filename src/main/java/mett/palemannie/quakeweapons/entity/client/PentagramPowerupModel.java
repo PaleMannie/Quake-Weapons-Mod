@@ -9,15 +9,17 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class PentagramPowerupModel extends EntityModel<PentagramPowerupEntity>{
+public class PentagramPowerupModel extends EntityModel<EntityRenderState>{
 	public static final ModelLayerLocation PENTAGRAM_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "pentagram_powerup"), "main");
 	private final ModelPart pentagram_powerup;
 
 	public PentagramPowerupModel(ModelPart root) {
-		this.pentagram_powerup = root.getChild("pentagram_powerup");
+        super(root);
+        this.pentagram_powerup = root.getChild("pentagram_powerup");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -44,7 +46,7 @@ public class PentagramPowerupModel extends EntityModel<PentagramPowerupEntity>{
 		return LayerDefinition.create(meshdefinition, 32, 32);
 	}
 
-	@Override
+	/*@Override
 	public void setupAnim(PentagramPowerupEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
 	}
@@ -53,5 +55,5 @@ public class PentagramPowerupModel extends EntityModel<PentagramPowerupEntity>{
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
 
 		pentagram_powerup.render(poseStack, vertexConsumer, red, green, blue);
-	}
+	}*/
 }

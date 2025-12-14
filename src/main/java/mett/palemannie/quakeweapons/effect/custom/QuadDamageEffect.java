@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.effect.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -20,7 +21,7 @@ public class QuadDamageEffect extends MobEffect {
     /// @return
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
 
         MobEffectInstance inst = entity.getEffect(ModEffects.QUAD_DAMAGE.getHolder().get());
         if (inst != null) {

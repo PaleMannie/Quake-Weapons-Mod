@@ -8,15 +8,23 @@
   },
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ItemInHandRendererMixin",
-    "LocalPlayerMixin",
-    "MinecraftMixin",
+    "HorseArmorLayerMixin",
     "HumanoidArmorLayerMixin",
     "ItemInHandLayerMixin",
-    "HorseArmorLayerMixin",
-    "LlamaDecorLayerMixin"
+    "ItemInHandRendererMixin",
+    "LlamaDecorLayerMixin",
+    "LlamaRenderStateMixin",
+    "LocalPlayerMixin",
+    "MinecraftMixin",
+    "HorseRendererMixin",
+    "HorseRenderStateMixin",
+    "LivingEntityRendererMixin",
+    "ArmedEntityRenderStateMixin",
+    "LlamaRendererMixin"
+
   ],
   "client": [
+
   ],
   "server": [
   ]

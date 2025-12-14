@@ -9,15 +9,17 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-public class GrenadeProjectileModel extends EntityModel<GrenadeProjectileEntity> {
+public class GrenadeProjectileModel extends EntityModel<EntityRenderState> {
 
     public static final ModelLayerLocation GRENADE_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "grenade_projectile"), "main");
     private final ModelPart grenade;
 
     public GrenadeProjectileModel(ModelPart root) {
+        super(root);
         this.grenade = root.getChild("grenade");
     }
 
@@ -35,7 +37,7 @@ public class GrenadeProjectileModel extends EntityModel<GrenadeProjectileEntity>
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-    @Override
+    /*@Override
     public void setupAnim(GrenadeProjectileEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
 
     }
@@ -43,5 +45,5 @@ public class GrenadeProjectileModel extends EntityModel<GrenadeProjectileEntity>
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
         grenade.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-    }
+    }*/
 }

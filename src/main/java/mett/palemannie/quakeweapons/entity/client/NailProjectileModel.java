@@ -1,25 +1,22 @@
 package mett.palemannie.quakeweapons.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 
-public class NailProjectileModel extends EntityModel<NailProjectileEntity> {
+public class NailProjectileModel extends EntityModel<EntityRenderState> {
 
     public static final ModelLayerLocation NAIL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "nail_projectile"), "main");
     private static final String MAIN = "main";
     private final ModelPart nail;
 
     public NailProjectileModel(ModelPart root) {
+        super(root);
         this.nail = root;
     }
 
@@ -37,17 +34,17 @@ public class NailProjectileModel extends EntityModel<NailProjectileEntity> {
         return LayerDefinition.create(meshdefinition, 16, 16);
     }
 
-    @Override
+    /*@Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
 
         nail.render(poseStack, vertexConsumer, red, green, blue);
     }
 
     /*@Override
-    public ModelPart root() { return this.nail; }*/
+    public ModelPart root() { return this.nail; }
 
     @Override
     public void setupAnim(NailProjectileEntity t, float v, float v1, float v2, float v3, float v4) {
 
-    }
+    }*/
 }

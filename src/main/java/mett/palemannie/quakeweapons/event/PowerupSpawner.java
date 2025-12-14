@@ -103,7 +103,7 @@ public class PowerupSpawner {
         RandomSource random = level.random;
         int x = player.blockPosition().getX() + Mth.nextInt(random, -128, 128);
         int z = player.blockPosition().getZ() + Mth.nextInt(random, -128, 128);
-        int y = Mth.nextInt(random, level.getMinBuildHeight() + 5, level.getMaxBuildHeight() - 5);
+        int y = Mth.nextInt(random, -59, 314);
         BlockPos candidate = new BlockPos(x, y, z);
 
         if (tryFindSpawnPos(level, candidate, searchRadius, searchRadius, pos -> {

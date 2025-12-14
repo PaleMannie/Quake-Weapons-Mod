@@ -57,7 +57,10 @@ public class GrenadeProjectileEntity extends Projectile {
             }
         }
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.getHolder().get());
+        level().explode(null, source, null, center.x, center.y, center.z,
+                computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()),
+                false, Level.ExplosionInteraction.NONE, ParticleTypes.FLAME, ParticleTypes.FLAME,
+                ModSounds.EXPLOSION.getHolder().get());
 
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
@@ -79,11 +82,15 @@ public class GrenadeProjectileEntity extends Projectile {
     }
     public float lastTumbleX = 0;
     public float lastTumbleY = 0;
-
     public float lastTumbleZ = 0;
+
+    public float xRotO, yRotO;
 
     @Override
     public void tick() {
+
+        this.xRotO = this.getXRot();
+        this.yRotO = this.getYRot();
 
         super.tick();
 
@@ -109,7 +116,7 @@ public class GrenadeProjectileEntity extends Projectile {
         if (blockHit.getType() != HitResult.Type.MISS) {
             this.onHitBlock(blockHit);
 
-            Vec3 normal = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal());
+            Vec3 normal = Vec3.atLowerCornerOf(blockHit.getDirection().getUnitVec3i());
             Vec3 bounced = motion.subtract(normal.scale(2 * motion.dot(normal)));
 
             float loss = 0.5f + this.random.nextFloat() * 0.25f;
@@ -130,7 +137,7 @@ public class GrenadeProjectileEntity extends Projectile {
                 this,
                 this.position(),
                 this.position().add(motion),
-                this.getBoundingBox().expandTowards(motion).inflate(0.3d),
+                this.getBoundingBox().expandTowards(motion).inflate(0.5d),
                 this::canHitEntity,
                 motion.lengthSqr()
         );

@@ -1,24 +1,22 @@
 package mett.palemannie.quakeweapons.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.entity.custom.QuadDamagePowerupEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 
-public class QuadDamagePowerupModel extends EntityModel<QuadDamagePowerupEntity> {
+public class QuadDamagePowerupModel extends EntityModel<EntityRenderState> {
 
 	public static final ModelLayerLocation QUAD_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "quad_damage_powerup"), "main");
 	private final ModelPart quad_damage_powerup;
 
 	public QuadDamagePowerupModel(ModelPart root) {
-		this.quad_damage_powerup = root.getChild("quad_damage_powerup");
+        super(root);
+        this.quad_damage_powerup = root.getChild("quad_damage_powerup");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -39,7 +37,7 @@ public class QuadDamagePowerupModel extends EntityModel<QuadDamagePowerupEntity>
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
-	@Override
+	/*@Override
 	public void setupAnim(QuadDamagePowerupEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 
 	}
@@ -48,5 +46,5 @@ public class QuadDamagePowerupModel extends EntityModel<QuadDamagePowerupEntity>
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
 
 		quad_damage_powerup.render(poseStack, vertexConsumer, red, green, blue);
-	}
+	}*/
 }
