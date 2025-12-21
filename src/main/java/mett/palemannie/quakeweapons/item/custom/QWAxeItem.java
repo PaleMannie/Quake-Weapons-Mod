@@ -13,6 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animatable.processing.AnimationController;
 import software.bernie.geckolib.animation.*;
 
 import java.util.function.Consumer;
@@ -32,10 +34,10 @@ public class QWAxeItem extends AbstractWeapon{
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
 
-        controllerRegistrar.add(new AnimationController<>(this, "controller", 0, state -> PlayState.CONTINUE)
+        controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("shooting", SHOOT_ANIM));
 
-        controllerRegistrar.add(new AnimationController<>(this, "controller3", 0, state -> PlayState.CONTINUE)
+        controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("idle", IDLE_ANIM));
     }
 

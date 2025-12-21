@@ -14,6 +14,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public abstract class AbstractPowerupEntity extends Entity {
 
@@ -29,12 +31,10 @@ public abstract class AbstractPowerupEntity extends Entity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-    }
+    protected void readAdditionalSaveData(ValueInput valueInput) {}
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-    }
+    protected void addAdditionalSaveData(ValueOutput valueOutput) {}
 
     protected int getPowerupDuration() {
         return QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();

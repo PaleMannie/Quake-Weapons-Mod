@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
-    @WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;startAttack()Z"))
+    @WrapOperation(method = "Lnet/minecraft/client/Minecraft;handleKeybinds()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;startAttack()Z"))
     // Replaces the attack action with the use action when firing Quake weapons
     private boolean doQuakeWeaponAttack(Minecraft instance, Operation<Boolean> original) {
         if (instance.player.getMainHandItem().getItem() instanceof AbstractWeapon) {
@@ -27,7 +27,7 @@ public class MinecraftMixin {
         return original.call(instance);
     }
 
-    @WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;isDown()Z"))
+    @WrapOperation(method = "Lnet/minecraft/client/Minecraft;handleKeybinds()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;isDown()Z"))
     // Keeps the Quake weapons firing. Replace right click check with left click check when Quake weapons are fired to ensure that.
     private boolean isQuakeWeaponFired(KeyMapping key, Operation<Boolean> original) {
         Minecraft instance = Minecraft.getInstance();

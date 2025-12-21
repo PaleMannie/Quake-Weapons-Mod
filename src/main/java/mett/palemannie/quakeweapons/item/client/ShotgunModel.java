@@ -3,19 +3,18 @@ package mett.palemannie.quakeweapons.item.client;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.item.custom.ShotgunItem;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.GeoRenderer;
+import software.bernie.geckolib.renderer.base.GeoRenderState;
 
 public class ShotgunModel extends GeoModel<ShotgunItem> {
 
     @Override
-    public ResourceLocation getModelResource(ShotgunItem shotgunItem, @Nullable GeoRenderer<ShotgunItem> geoRenderer) {
+    public ResourceLocation getModelResource(GeoRenderState geoRenderState) {
         return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/shotgun.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureResource(ShotgunItem shotgunItem, @Nullable GeoRenderer<ShotgunItem> geoRenderer) {
+    public ResourceLocation getTextureResource(GeoRenderState geoRenderState) {
         return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "textures/item/shotgun.png");
     }
 

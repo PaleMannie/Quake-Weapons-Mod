@@ -15,8 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -31,25 +30,19 @@ public class QuakeWeapons {
     private static final Logger LOGGER = LogUtils.getLogger();
     public static QuakeWeapons instance;
 
-    public QuakeWeapons(){
+    public QuakeWeapons(FMLJavaModLoadingContext context){
 
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
+        var modBusGroup = context.getModBusGroup();
+        FMLCommonSetupEvent.getBus(modBusGroup).addListener(QuakeWeapons::commonSetup);
 
-        MinecraftForge.EVENT_BUS.register(this);
-        eventBus.register(this);
-        instance = this;
+        GeckoLib.DATA_COMPONENTS_REGISTER.register(modBusGroup);
 
-        eventBus.addListener(this::addCreative);
-
-        GeckoLib.DATA_COMPONENTS_REGISTER.register(eventBus);
-
-        ModCreativeModeTabs.register(eventBus);
-        ModItems.register(eventBus);
-        ModEffects.register(eventBus);
-        ModEntities.register(eventBus);
-        ModSounds.register(eventBus);
-        ModBlocks.register(eventBus);
+        ModCreativeModeTabs.register(modBusGroup);
+        ModItems.register(modBusGroup);
+        ModEffects.register(modBusGroup);
+        ModEntities.register(modBusGroup);
+        ModSounds.register(modBusGroup);
+        ModBlocks.register(modBusGroup);
 
         QuakeWeaponsConfig.registerConfigs();
     }
@@ -84,7 +77,7 @@ public class QuakeWeapons {
     public void clientSetup(FMLClientSetupEvent e) {
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
+    private static void commonSetup(final FMLCommonSetupEvent event) {
 
         event.enqueueWork(ModMessages::register);
     }

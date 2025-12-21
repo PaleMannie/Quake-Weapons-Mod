@@ -8,7 +8,7 @@
   },
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "HorseArmorLayerMixin",
+    "SimpleEquipmentLayerMixin",
     "HumanoidArmorLayerMixin",
     "ItemInHandLayerMixin",
     "ItemInHandRendererMixin",

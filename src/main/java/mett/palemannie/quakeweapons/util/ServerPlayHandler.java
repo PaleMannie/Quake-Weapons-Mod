@@ -119,7 +119,8 @@ public class ServerPlayHandler {
                         e instanceof LivingEntity &&
                         e != player;
 
-        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, eye, maxEnd, pathBB, canHit);
+        //EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, eye, maxEnd, pathBB, canHit);
+        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, eye, maxEnd, pathBB, canHit, reach);
 
         if (entityHit != null) {
             LivingEntity target = (LivingEntity) entityHit.getEntity();
@@ -159,7 +160,7 @@ public class ServerPlayHandler {
     public static void handleThunderboltShoot(ServerPlayer player, int useTime){
 
         Level lvl = player.level();
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().overworld();
 
         ///Entity
         double forwardOffset = 0.2;
@@ -218,7 +219,7 @@ public class ServerPlayHandler {
 
     public static void handleRocketLauncherShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().overworld();
         Level lvl = player.level();
 
         ///Entity
@@ -253,7 +254,7 @@ public class ServerPlayHandler {
 
     public static void handleGrenadeLauncherShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().overworld();
         Level lvl = player.level();
 
         ///Entity
@@ -271,7 +272,7 @@ public class ServerPlayHandler {
 
     public static void handleSuperShotgunShoot(ServerPlayer player) {
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().overworld();
         Vec3 eyePos = player.getEyePosition();
         Vec3 look = player.getLookAngle();
 
@@ -293,10 +294,10 @@ public class ServerPlayHandler {
             ));
 
             EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
-                    sevel, player, eyePos, endPos,
+                    player, eyePos, endPos,
                     new AABB(eyePos, endPos).inflate(1.0),
                     e -> e instanceof LivingEntity && e != player
-            );
+            , RANGE);
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
                 LivingEntity target = (LivingEntity) entityHit.getEntity();
@@ -343,7 +344,7 @@ public class ServerPlayHandler {
 
     public static void handleShotgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().overworld();
         Level level = player.level();
 
 
@@ -369,9 +370,9 @@ public class ServerPlayHandler {
             ));
 
             EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
-                    level, player, eyePos, endPos,
+                    player, eyePos, endPos,
                     new AABB(eyePos, endPos).inflate(1.0),
-                    e -> e instanceof LivingEntity && e != player
+                    e -> e instanceof LivingEntity && e != player, RANGE
             );
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
@@ -420,7 +421,7 @@ public class ServerPlayHandler {
 
     public static void handleSuperNailgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().overworld();
         Level lvl = player.level();
 
         ///Entity
@@ -455,7 +456,7 @@ public class ServerPlayHandler {
 
     public static void handleNailgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.getServer().overworld();
         Level lvl = player.level();
 
         ///Entity

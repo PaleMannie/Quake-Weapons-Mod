@@ -46,7 +46,7 @@ public class PowerupOverlay implements IForgeGuiGraphics {
 
         int color = (alpha << 24) | rgb;
 
-        RenderSystem.enableBlend();
+        //RenderSystem.enableBlend();
         g.fill(0, 0, width, height, color);
     }
 }

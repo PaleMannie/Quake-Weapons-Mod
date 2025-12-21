@@ -20,7 +20,7 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -40,7 +40,8 @@ public class ModEvents {
         /// Pentagram apply invulnerability
         if (event.getEntity().hasEffect(ModEffects.INVULNERABILITY.getHolder().get())) {
 
-            event.setCanceled(true);
+            //event.setCanceled(true);
+            event.setAmount(0f);
             event.getEntity().level().playSound(null, event.getEntity().blockPosition(), ModSounds.PENTAGRAM_USE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
 
@@ -52,7 +53,8 @@ public class ModEvents {
             if (src.is(DamageTypes.MAGIC) || src.is(DamageTypes.WITHER) || src.is(DamageTypes.CACTUS) || src.is(DamageTypes.SWEET_BERRY_BUSH)
                     || src.is(DamageTypes.DROWN) || src.is(DamageTypes.INDIRECT_MAGIC) || src.is(DamageTypes.MAGIC)
                     || src.is(DamageTypes.WITHER_SKULL) || src.is(DamageTypes.THORNS) || src.is(DamageTypes.STING)) {
-                event.setCanceled(true);
+                //event.setCanceled(true);
+                event.setAmount(0f);
             }
 
             if(src.is(DamageTypes.IN_FIRE) || src.is(DamageTypes.ON_FIRE) || src.is(DamageTypes.UNATTRIBUTED_FIREBALL) || src.is(DamageTypes.CRAMMING)
@@ -146,7 +148,8 @@ public class ModEvents {
             event.getEntity().removeEffect(ModEffects.QW_INVIS.getHolder().get());
             event.getEntity().removeEffect(MobEffects.INVISIBILITY);
             event.getEntity().setInvisible(false);
-            event.setCanceled(true);
+            //event.setCanceled(true);
+
         }
     }
 
@@ -215,7 +218,8 @@ public class ModEvents {
     public static void onTargetChange(LivingChangeTargetEvent event) {
         if (event.getNewTarget() instanceof Player player) {
             if (player.hasEffect(ModEffects.QW_INVIS.getHolder().get())) {
-                event.setCanceled(true);
+                //event.setCanceled(true);
+                event.setNewTarget(null);
             }
         }
     }

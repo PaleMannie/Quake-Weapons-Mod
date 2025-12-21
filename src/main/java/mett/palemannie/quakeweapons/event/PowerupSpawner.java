@@ -14,7 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
@@ -108,7 +108,7 @@ public class PowerupSpawner {
 
         if (tryFindSpawnPos(level, candidate, searchRadius, searchRadius, pos -> {
             AbstractPowerupEntity entity = randomPowerup(level);
-            entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+            entity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
             level.addFreshEntity(entity);
             debug(level, "§aSpawned " + entity.getType().toShortString() + " at " + pos);
         })) return;
