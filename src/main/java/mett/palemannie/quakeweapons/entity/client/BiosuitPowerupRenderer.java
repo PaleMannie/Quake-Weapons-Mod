@@ -26,7 +26,7 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity,
     }
 
     float bobbingSpeed = 0.05f;
-    float bobbingHeight = 0.1f;
+    float bobbingHeight = 0.2f;
     float rotationSpeed = 5f;
 
     public void render(EntityRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {

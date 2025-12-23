@@ -26,17 +26,17 @@ public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEnt
     }
 
     float bobbingSpeed = 0.05f;
-    float bobbingHeight = 0.1f;
+    float bobbingHeight = 0.2f;
     float rotationSpeed = 5f;
 
-    public void render(EntityRenderState state, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(EntityRenderState state, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
 
         poseStack.translate(0.0F, 0.0f, 0.0F);
         poseStack.scale(2f, 2f, 2f);
 
-        float ageInTicks = state.ageInTicks + partialTicks;
+        float ageInTicks = state.ageInTicks;
 
         double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
         poseStack.translate(0.0D, 0.25D + bob, 0.0D);
