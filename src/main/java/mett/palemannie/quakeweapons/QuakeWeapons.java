@@ -12,9 +12,7 @@ import mett.palemannie.quakeweapons.util.ModCreativeModeTabs;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -25,6 +23,13 @@ import software.bernie.geckolib.GeckoLib;
 
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
+
+    /// TODO: Itemtexturen wiederherstellen
+    /// TODO: QW-Unsichbarkeit komplett überarbeiten
+    /// TODO: Effektsounds beim erhalt wiederherstellen
+    /// TODO: Effekt-GUI-Einfärbung wiederherstellen
+    /// TODO: Schieß-Slowdown wieder entfernen
+    /// TODO: Gründliche tests oder so
 
     public static final String MODID = "quakeweapons";
     private static final Logger LOGGER = LogUtils.getLogger();

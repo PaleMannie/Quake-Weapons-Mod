@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "quakeweapons:item/rocketlauncher",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

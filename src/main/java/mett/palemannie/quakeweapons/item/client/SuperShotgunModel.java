@@ -10,7 +10,7 @@ public class SuperShotgunModel extends GeoModel<SuperShotgunItem> {
 
     @Override
     public ResourceLocation getModelResource(GeoRenderState geoRenderState) {
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/super_shotgun.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "super_shotgun");
     }
 
     @Override
@@ -21,6 +21,6 @@ public class SuperShotgunModel extends GeoModel<SuperShotgunItem> {
     @Override
     public ResourceLocation getAnimationResource(SuperShotgunItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/super_shotgun.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "super_shotgun");
     }
 }

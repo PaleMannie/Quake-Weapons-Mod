@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import mett.palemannie.quakeweapons.item.client.GrenadelauncherRenderer;
 import mett.palemannie.quakeweapons.item.client.QWAxeRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
@@ -11,12 +12,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
 import software.bernie.geckolib.animatable.processing.AnimationController;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class QWAxeItem extends AbstractWeapon{
@@ -42,17 +46,24 @@ public class QWAxeItem extends AbstractWeapon{
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
             private QWAxeRenderer renderer;
 
-            public QWAxeRenderer getCustomRenderer() {
-                if(this.renderer == null) {
+            @Override
+            @Nullable
+            public GeoItemRenderer<QWAxeItem> getGeoItemRenderer() {
+                if (this.renderer == null)
                     this.renderer = new QWAxeRenderer();
-                }
 
                 return this.renderer;
             }
+        });
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
 
             //Keeps the item in the bow holding position when it's not used
             @Override

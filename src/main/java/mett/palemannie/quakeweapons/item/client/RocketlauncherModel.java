@@ -10,7 +10,7 @@ public class RocketlauncherModel extends GeoModel<RocketlauncherItem> {
 
     @Override
     public ResourceLocation getModelResource(GeoRenderState geoRenderState) {
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/rocketlauncher.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "rocketlauncher");
     }
 
     @Override
@@ -21,6 +21,6 @@ public class RocketlauncherModel extends GeoModel<RocketlauncherItem> {
     @Override
     public ResourceLocation getAnimationResource(RocketlauncherItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/rocketlauncher.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "rocketlauncher");
     }
 }

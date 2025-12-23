@@ -10,7 +10,7 @@ public class QWAxeModel extends GeoModel<QWAxeItem> {
 
     @Override
     public ResourceLocation getModelResource(GeoRenderState geoRenderState) {
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/qwaxe.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "qwaxe");
     }
 
     @Override
@@ -21,6 +21,6 @@ public class QWAxeModel extends GeoModel<QWAxeItem> {
     @Override
     public ResourceLocation getAnimationResource(QWAxeItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/qwaxe.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "qwaxe");
     }
 }

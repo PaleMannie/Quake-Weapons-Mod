@@ -28,11 +28,12 @@ public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEnt
         this.model = new RocketProjectileModel(context.bakeLayer(RocketProjectileModel.ROCKET_LAYER));
     }
 
-    public void render(LlamaSpitRenderState rocketEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    public void render(LlamaSpitRenderState rocketEntity, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
 
         poseStack.pushPose();
 
         poseStack.scale(0.25F, 0.25F, 0.25F);
+        poseStack.translate(0.0F, 0.1f, 0.0F);
 
         poseStack.mulPose(Axis.YP.rotationDegrees(rocketEntity.yRot));
         poseStack.mulPose(Axis.XP.rotationDegrees(-rocketEntity.xRot + 180f));

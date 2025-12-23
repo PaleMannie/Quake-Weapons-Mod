@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
+import mett.palemannie.quakeweapons.item.client.SuperShotgunRenderer;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
@@ -24,12 +25,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
 import software.bernie.geckolib.animatable.processing.AnimationController;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -60,17 +64,24 @@ public class ThunderboltItem extends AbstractWeapon{
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
             private ThunderboltRenderer renderer;
 
-            public ThunderboltRenderer getCustomRenderer() {
-                if(this.renderer == null) {
+            @Override
+            @Nullable
+            public GeoItemRenderer<ThunderboltItem> getGeoItemRenderer() {
+                if (this.renderer == null)
                     this.renderer = new ThunderboltRenderer();
-                }
 
                 return this.renderer;
             }
+        });
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
 
             //Keeps the item in the bow holding position when it's not used
             @Override

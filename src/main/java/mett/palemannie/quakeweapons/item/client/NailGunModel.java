@@ -10,7 +10,7 @@ public class NailGunModel extends GeoModel<NailgunItem> {
 
     @Override
     public ResourceLocation getModelResource(GeoRenderState geoRenderState) {
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "geo/nailgun.geo.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "nailgun");
     }
 
     @Override
@@ -21,6 +21,6 @@ public class NailGunModel extends GeoModel<NailgunItem> {
     @Override
     public ResourceLocation getAnimationResource(NailgunItem animatable) {
 
-        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/nailgun.animation.json");
+        return ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "nailgun");
     }
 }

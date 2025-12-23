@@ -33,7 +33,7 @@ public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity,
         pPoseStack.translate(0f, 0.1f, 0f);
 
         pPoseStack.mulPose(Axis.YP.rotationDegrees(pRenderState.yRot));
-        pPoseStack.mulPose(Axis.XP.rotationDegrees(-pRenderState.xRot + 180f));
+        pPoseStack.mulPose(Axis.XP.rotationDegrees(-pRenderState.xRot));
 
         this.model.setupAnim(pRenderState);
         VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(NAIL_LOCATION));
