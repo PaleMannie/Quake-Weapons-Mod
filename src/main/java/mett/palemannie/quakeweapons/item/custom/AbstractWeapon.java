@@ -139,8 +139,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         triggerAnim(pLivingEntity, GeoItem.getId(stack), "controller", "shooting");
     }
 
-    /// stopTriggeredAnim doesn't exist in older Geckolib versions...
-
     public void stopShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
         stopTriggeredAnim(pLivingEntity, GeoItem.getId(stack), "controller", "shooting");
