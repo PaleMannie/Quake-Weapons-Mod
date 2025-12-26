@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.net.packets;
 
+import mett.palemannie.quakeweapons.util.QuakeClientSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -34,10 +35,20 @@ public class S2CInvisPacket {
 
     @OnlyIn(Dist.CLIENT)
     private static void handleClient(S2CInvisPacket msg) {
+
         Level level = Minecraft.getInstance().level;
         if (level == null) return;
 
         Entity e = level.getEntity(msg.entityId);
+
+        if (e == Minecraft.getInstance().player) {
+            if (msg.invisible) {
+                QuakeClientSounds.startInvisSound(Minecraft.getInstance().player);
+            } else {
+                QuakeClientSounds.stopInvisSound();
+            }
+        }
+
         if (e instanceof LivingEntity living) {
             living.getPersistentData().putBoolean("QWInvis", msg.invisible);
         }
