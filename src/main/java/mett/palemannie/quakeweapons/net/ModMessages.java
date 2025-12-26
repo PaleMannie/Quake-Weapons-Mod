@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.net;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
+import mett.palemannie.quakeweapons.net.packets.S2CPowerupSoundPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.ChannelBuilder;
@@ -29,6 +30,12 @@ public class ModMessages {
                 .decoder(S2CInvisPacket::decode)
                 .encoder(S2CInvisPacket::encode)
                 .consumerMainThread(S2CInvisPacket::handle)
+                .add();
+
+        INSTANCE.messageBuilder(S2CPowerupSoundPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(S2CPowerupSoundPacket::decode)
+                .encoder(S2CPowerupSoundPacket::encode)
+                .consumerMainThread(S2CPowerupSoundPacket::handle)
                 .add();
     }
 

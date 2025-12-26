@@ -26,21 +26,4 @@ public class MuzzleflashModel extends EntityModel<EntityRenderState> {
 
         return LayerDefinition.create(meshdefinition, 16, 16);
     }
-
-    /*@Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
-
-        root.render(poseStack, vertexConsumer, red, green, blue);
-    }
-
-    @Override
-    public ModelPart root() { return this.root; }
-
-    public ModelPart getRoot() {
-        return this.root;
-    }
-
-    @Override
-    public void setupAnim(MuzzleflashEntity t, float v, float v1, float v2, float v3, float v4) {
-    }*/
 }

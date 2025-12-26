@@ -5,7 +5,6 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -66,35 +65,19 @@ public class ModEvents {
         }
     }
 
-    /// Effect pickup sounds
+    /// Invis packet
+
     @SubscribeEvent
     public static void onEffectGotten(MobEffectEvent.Added event){
 
         LivingEntity entity = event.getEntity();
 
-        if(event.getEffectInstance().getEffect().equals(ModEffects.QUAD_DAMAGE.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.QUAD_DAMAGE_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-
-        if(event.getEffectInstance().getEffect().equals(ModEffects.INVULNERABILITY.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.PENTAGRAM_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-
         if(event.getEffectInstance().getEffect().equals(ModEffects.QW_INVIS.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.RING_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
             if (!entity.level().isClientSide) {
 
                 ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), event.getEntity());
             }
-        }
-
-        if(event.getEffectInstance().getEffect().equals(ModEffects.BIOSUIT.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.BIOSUIT_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
     }
 

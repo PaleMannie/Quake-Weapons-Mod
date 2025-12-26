@@ -4,18 +4,14 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.entity.custom.NailProjectileEntity;
 import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LlamaSpitRenderer;
 import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
 
 public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProjectileEntity, LlamaSpitRenderState> {
 
@@ -58,8 +54,4 @@ public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProject
         renderState.xRot = pEntity.getXRot(pPartialTick);
         renderState.yRot = pEntity.getYRot(pPartialTick);
     }
-
-    /*@Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull SuperNailProjectileEntity spit) { return SUPER_NAIL_LOCATION; }*/
-
 }

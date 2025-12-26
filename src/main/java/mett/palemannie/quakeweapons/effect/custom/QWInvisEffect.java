@@ -1,13 +1,13 @@
 package mett.palemannie.quakeweapons.effect.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
-import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.net.ModMessages;
+import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
+import mett.palemannie.quakeweapons.net.packets.S2CPowerupSoundPacket;
+import mett.palemannie.quakeweapons.util.PowerupSoundEventType;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 
@@ -17,44 +17,24 @@ public class QWInvisEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, 0x4D194D);
     }
 
-    /// Effect done through Events
-    /// Only Expiring sounds here (and vanilla invis)
-    ///
-    /// @return
+    @Override
+    public void onEffectAdded(LivingEntity entity, int pAmplifier) {
+
+        ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), entity);
+        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QW_INVIS.getId(), PowerupSoundEventType.ADD), entity);
+    }
 
     @Override
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
 
-        entity.setInvisible(true);
 
-        if(!entity.hasEffect(ModEffects.QW_INVIS.getHolder().get())){
-
-            entity.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0, false, false, false));
-            entity.setInvisible(false);
-        }
-
-        MobEffectInstance inst = entity.getEffect(ModEffects.QW_INVIS.getHolder().get());
-        if (inst != null) {
-            int remaining = inst.getDuration();
-
-            if(remaining % 60 == 0 && remaining > 50){
-
-                entity.level().playLocalSound(entity.getX(), entity.getY(), entity.getZ(), ModSounds.RING_USE.get(), SoundSource.PLAYERS, 1f, 1f, false);
-            }
-
-            if (remaining == 60) {
-                if (entity.level().isClientSide) {
-
-                    entity.level().playLocalSound(entity.getX(), entity.getY(), entity.getZ(), ModSounds.RING_EXPIRE.get(), SoundSource.PLAYERS, 3f, 1f, false);
-                }
-            }
-        }
+        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QW_INVIS.getId(), PowerupSoundEventType.EXPIRING), entity);
         return true;
     }
 
     @Override
-    public boolean shouldApplyEffectTickThisTick(int pDuration, int pAmplifier) {
-        return true;
+    public boolean shouldApplyEffectTickThisTick(int duration, int pAmplifier) {
+        return duration == 60;
     }
 
     ///Assuring that upon breaking invis your armor and items in hand get visible again

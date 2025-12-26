@@ -1,8 +1,15 @@
 package mett.palemannie.quakeweapons.effect.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
+import mett.palemannie.quakeweapons.net.ModMessages;
+import mett.palemannie.quakeweapons.net.packets.S2CPowerupSoundPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.PowerupSoundEventType;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -17,30 +24,25 @@ public class BiosuitEffect extends MobEffect {
 
     /// Effect done through Events
     /// Only Expiring sounds here
-    ///
-    /// @return
+
+    @Override
+    public void onEffectAdded(LivingEntity entity, int pAmplifier) {
+
+        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.ADD), entity);
+    }
 
     @Override
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
 
         entity.setAirSupply(entity.getMaxAirSupply());
 
-        MobEffectInstance inst = entity.getEffect(ModEffects.BIOSUIT.getHolder().get());
-        if (inst != null) {
-            int remaining = inst.getDuration();
+        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.EXPIRING), entity);
 
-            if (remaining == 60) {
-                if (entity.level().isClientSide) {
-
-                    entity.level().playLocalSound(entity.getX(), entity.getY(), entity.getZ(), ModSounds.BIOSUIT_EXPIRE.get(), SoundSource.PLAYERS, 3f, 1f, false);
-                }
-            }
-        }
         return true;
     }
 
     @Override
-    public boolean shouldApplyEffectTickThisTick(int pDuration, int pAmplifier) {
-        return true;
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
+        return duration == 60;
     }
 }

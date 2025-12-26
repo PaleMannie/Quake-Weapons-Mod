@@ -24,9 +24,7 @@ import software.bernie.geckolib.GeckoLib;
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
 
-    /// TODO: Itemtexturen wiederherstellen
     /// TODO: QW-Unsichbarkeit komplett überarbeiten
-    /// TODO: Effektsounds beim erhalt wiederherstellen
     /// TODO: Effekt-GUI-Einfärbung wiederherstellen
     /// TODO: Schieß-Slowdown wieder entfernen
     /// TODO: Gründliche tests oder so
@@ -54,10 +52,6 @@ public class QuakeWeapons {
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
     }
-
-    /*@SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-    }*/
 
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {

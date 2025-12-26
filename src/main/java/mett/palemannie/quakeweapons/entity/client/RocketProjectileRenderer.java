@@ -64,8 +64,4 @@ public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEnt
         renderState.xRot = pEntity.getXRot(pPartialTick);
         renderState.yRot = pEntity.getYRot(pPartialTick);
     }
-
-    /*@Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull RocketProjectileEntity spit) { return ROCKET_LOCATION; }*/
-
 }

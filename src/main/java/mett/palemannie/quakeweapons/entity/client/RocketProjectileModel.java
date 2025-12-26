@@ -1,9 +1,6 @@
 package mett.palemannie.quakeweapons.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.entity.custom.RocketProjectileEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -11,7 +8,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 
 public class RocketProjectileModel extends EntityModel<LlamaSpitRenderState> {
 
@@ -36,14 +32,4 @@ public class RocketProjectileModel extends EntityModel<LlamaSpitRenderState> {
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
-
-	/*@Override
-	public void setupAnim(RocketProjectileEntity t, float v, float v1, float v2, float v3, float v4) {
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
-
-		rocket.render(poseStack, vertexConsumer, red, green, blue);
-	}*/
 }

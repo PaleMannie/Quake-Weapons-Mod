@@ -9,12 +9,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
 
 public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity, LlamaSpitRenderState> {
 
@@ -58,8 +55,4 @@ public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity,
         renderState.xRot = pEntity.getXRot(pPartialTick);
         renderState.yRot = pEntity.getYRot(pPartialTick);
     }
-
-    /*@Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull NailProjectileEntity spit) { return NAIL_LOCATION; }*/
-
 }

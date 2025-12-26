@@ -33,18 +33,4 @@ public class NailProjectileModel extends EntityModel<EntityRenderState> {
 
         return LayerDefinition.create(meshdefinition, 16, 16);
     }
-
-    /*@Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int red, int green, int blue) {
-
-        nail.render(poseStack, vertexConsumer, red, green, blue);
-    }
-
-    /*@Override
-    public ModelPart root() { return this.nail; }
-
-    @Override
-    public void setupAnim(NailProjectileEntity t, float v, float v1, float v2, float v3, float v4) {
-
-    }*/
 }
