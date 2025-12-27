@@ -51,7 +51,7 @@ public class ModEvents {
 
             if (src.is(DamageTypes.MAGIC) || src.is(DamageTypes.WITHER) || src.is(DamageTypes.CACTUS) || src.is(DamageTypes.SWEET_BERRY_BUSH)
                     || src.is(DamageTypes.DROWN) || src.is(DamageTypes.INDIRECT_MAGIC) || src.is(DamageTypes.MAGIC)
-                    || src.is(DamageTypes.WITHER_SKULL) || src.is(DamageTypes.THORNS) || src.is(DamageTypes.STING)) {
+                    || src.is(DamageTypes.WITHER_SKULL) || src.is(DamageTypes.THORNS) || src.is(DamageTypes.STING) || src.is(DamageTypes.DROWN)) {
                 //event.setCanceled(true);
                 event.setAmount(0f);
             }
@@ -209,6 +209,12 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+
+        if(event.getEntity().hasEffect(ModEffects.BIOSUIT.getHolder().get())){
+
+            event.getEntity().setAirSupply(event.getEntity().getMaxAirSupply());
+            event.getEntity().clearFire();
+        }
 
         if (event.getEntity() instanceof Mob mob && mob.getTarget() instanceof Player player) {
 
