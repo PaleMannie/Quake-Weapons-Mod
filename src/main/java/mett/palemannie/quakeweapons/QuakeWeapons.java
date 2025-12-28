@@ -25,9 +25,9 @@ import software.bernie.geckolib.GeckoLib;
 public class QuakeWeapons {
 
     /// TODO: QW-Unsichbarkeit komplett überarbeiten
-    /// TODO: Effekt-GUI-Einfärbung wiederherstellen
     /// TODO: Schieß-Slowdown wieder entfernen
     /// TODO: Gründliche tests oder so
+    /// TODO: evtl. live tests wg. mixin-refmap
 
     public static final String MODID = "quakeweapons";
     private static final Logger LOGGER = LogUtils.getLogger();
