@@ -32,6 +32,9 @@ public class QWAxeItem extends AbstractWeapon{
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
+
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("qwaxe.animations.shooting", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("qwaxe.animations.idle", Animation.LoopType.LOOP);
 

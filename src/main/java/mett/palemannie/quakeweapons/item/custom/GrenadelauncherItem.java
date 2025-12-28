@@ -32,6 +32,9 @@ public class GrenadelauncherItem extends AbstractWeapon{
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
+
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("grenadelauncher.animations.shooting", Animation.LoopType.LOOP);
     private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("grenadelauncher.animations.ammoempty", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("grenadelauncher.animations.idle", Animation.LoopType.LOOP);

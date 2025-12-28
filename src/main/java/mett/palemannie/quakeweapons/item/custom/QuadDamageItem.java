@@ -1,11 +1,8 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
+import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 
 public class QuadDamageItem extends AbstractPowerupItem{
 
@@ -14,12 +11,7 @@ public class QuadDamageItem extends AbstractPowerupItem{
     }
 
     @Override
-    public MobEffect getPowerupEffect() {
-        return ModEffects.QUAD_DAMAGE.get();
-    }
-
-    @Override
-    protected void onPowerupUse(Level level, Player player, ItemStack stack, int duration) {
-        player.addEffect(new MobEffectInstance(ModEffects.QUAD_DAMAGE.getHolder().get(), getPowerupDuration()));
+    public Holder<MobEffect> getPowerupEffect() {
+        return ModEffects.QUAD_DAMAGE.getHolder().get();
     }
 }

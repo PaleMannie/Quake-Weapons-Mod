@@ -27,6 +27,10 @@ import java.util.function.Consumer;
 public class SuperNailgunItem extends AbstractWeapon{
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
+
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("super_nailgun.animations.shooting", Animation.LoopType.LOOP);
     private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("super_nailgun.animations.ammoempty", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("super_nailgun.animations.idle", Animation.LoopType.LOOP);

@@ -30,16 +30,13 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class AbstractWeapon extends Item implements GeoItem {
 
-    protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    //protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public AbstractWeapon(Properties pProperties) {
         super(pProperties);
 
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 
     public void setCurrentHand(InteractionHand hand, LivingEntity player) {
         ItemStack itemStack = player.getItemInHand(hand);
@@ -116,6 +113,13 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         /// this ensures, that the Nailgun always starts shooting from the right barrel
         NailgunItem.rightSide = false;
         return false;
+    }
+
+    @Override
+    public boolean onDroppedByPlayer(ItemStack stack, Player player) {
+
+        startIdleAnimation(player, (ServerLevel) player.level(), stack);
+        return super.onDroppedByPlayer(stack, player);
     }
 
     @Override

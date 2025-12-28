@@ -46,6 +46,9 @@ public class ThunderboltItem extends AbstractWeapon{
 
     private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
+
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("thunderbolt.animations.shooting", Animation.LoopType.LOOP);
     private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("thunderbolt.animations.ammoempty", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("thunderbolt.animations.idle", Animation.LoopType.LOOP);

@@ -1,9 +1,14 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
+import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,9 +27,8 @@ public abstract class AbstractPowerupItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
-
-            int duration = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
-            onPowerupUse(level, player, stack, duration);
+            int duration = getPowerupDuration();
+            applyPowerupTo(player, duration);
 
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
@@ -34,12 +38,38 @@ public abstract class AbstractPowerupItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    @Nullable
-    public MobEffect getPowerupEffect() {
-        return null;
+    @Override
+    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
+
+        Level level = player.level();
+
+        if (!level.isClientSide) {
+
+            int duration = getPowerupDuration();
+            applyPowerupTo(target, duration);
+            level.playSound(null, player.blockPosition(), SoundEvents.HORSE_EAT, SoundSource.PLAYERS, 1f, 1f);
+
+            if (!player.getAbilities().instabuild) {
+
+                stack.shrink(1);
+            }
+            return InteractionResult.SUCCESS;
+        }
+        return InteractionResult.CONSUME; // Client: Animation abspielen
     }
 
-    protected abstract void onPowerupUse(Level level, Player player, ItemStack stack, int duration);
+    private void applyPowerupTo(LivingEntity entity, int duration) {
+        Holder<MobEffect> effect = getPowerupEffect();
+        if (effect != null) {
+            entity.addEffect(new MobEffectInstance(effect, duration, 0, false, false, true));
+        }
+
+    }
+
+    @Nullable
+    public Holder<MobEffect> getPowerupEffect() {
+        return null;
+    }
 
     protected int getPowerupDuration() {
         return QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
