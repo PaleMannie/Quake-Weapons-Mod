@@ -30,8 +30,6 @@ public class QWAxeItem extends AbstractWeapon{
         this.cooldown = 8;
     }
 
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 

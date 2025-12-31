@@ -30,7 +30,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public abstract class AbstractWeapon extends Item implements GeoItem {
 
-    //protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public AbstractWeapon(Properties pProperties) {
         super(pProperties);

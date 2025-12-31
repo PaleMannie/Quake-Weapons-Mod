@@ -44,8 +44,6 @@ public class ThunderboltItem extends AbstractWeapon{
         this.cooldown = 1;
     }
 
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 

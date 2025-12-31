@@ -26,8 +26,6 @@ import java.util.function.Consumer;
 
 public class SuperNailgunItem extends AbstractWeapon{
 
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 

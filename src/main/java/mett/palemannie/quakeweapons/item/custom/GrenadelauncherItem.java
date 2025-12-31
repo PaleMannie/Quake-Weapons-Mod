@@ -30,8 +30,6 @@ public class GrenadelauncherItem extends AbstractWeapon{
         this.cooldown = 10;
     }
 
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 

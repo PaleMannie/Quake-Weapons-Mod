@@ -31,8 +31,6 @@ public class RocketlauncherItem extends AbstractWeapon{
         this.cooldown = 14;
     }
 
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 

@@ -31,8 +31,6 @@ public class SuperShotgunItem extends AbstractWeapon{
         this.cooldown = 12;
     }
 
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 
