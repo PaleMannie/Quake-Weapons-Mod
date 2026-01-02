@@ -1,12 +1,16 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -93,6 +97,9 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 
+        /// anti use-slowdown
+        pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5d);
+
         executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
     }
 
@@ -108,6 +115,10 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
             stopAmmoEmptyAnimation(pLivingEntity, serverLevel, stack);
             startIdleAnimation(pLivingEntity, serverLevel, stack);
         }
+
+        /// resets the anti-use-slowdown
+        pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
+
         /// this ensures, that the Nailgun always starts shooting from the right barrel
         NailgunItem.rightSide = false;
         return false;

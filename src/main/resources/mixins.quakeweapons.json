@@ -8,12 +8,9 @@
   },
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-
-    "LocalPlayerMixin",
     "MinecraftMixin"
   ],
   "client": [
-
   ],
   "server": [
   ]
