@@ -2,7 +2,6 @@ package mett.palemannie.quakeweapons;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 
 public class QuakeWeaponsConfig
@@ -21,6 +20,7 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.BooleanValue enableRocketTrailLight;
         public final ForgeConfigSpec.BooleanValue enableThunderboltTracer;
         public final ForgeConfigSpec.BooleanValue enableGore;
+        public final ForgeConfigSpec.BooleanValue enableAltModel;
         public final ForgeConfigSpec.DoubleValue axeDamage;
         public final ForgeConfigSpec.DoubleValue shotgunDamage;
         public final ForgeConfigSpec.DoubleValue superShotgunDamage;
@@ -45,6 +45,10 @@ public class QuakeWeaponsConfig
 
             enableGore = builder.comment("\nEnables/Disables Gore particles when hitting a mob with Quake weapons")
                     .define("enableThunderboltTracer", false);
+
+            enableAltModel = builder
+                    .comment("Alternative model for weapons")
+                    .define("enableAltModel", false);
 
             builder.pop();
             builder.push("Weapon damage");
@@ -80,6 +84,7 @@ public class QuakeWeaponsConfig
             grenadelauncherDamage = builder
                     .comment("\nHow much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
                     .defineInRange("grenadelauncherDamage", 28, 0.0, Float.MAX_VALUE);
+
 
             builder.pop();
         }

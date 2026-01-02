@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
+import mett.palemannie.quakeweapons.item.custom.GrenadelauncherItem;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -20,6 +21,13 @@ public class QWConfigEvents {
             PowerupSpawner.reloadConfigValues();
             AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
         }
+
+        if(event.getConfig().getSpec() == QuakeWeaponsConfig.COMMON_SPEC){
+
+            System.out.println("[QW] COMMON config reloaded — reloading animation switches");
+
+            GrenadelauncherItem.reloadConfigValues();
+        }
     }
 
     @SubscribeEvent
@@ -30,6 +38,13 @@ public class QWConfigEvents {
 
             PowerupSpawner.reloadConfigValues();
             AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
+        }
+
+        if(event.getConfig().getSpec() == QuakeWeaponsConfig.COMMON_SPEC){
+
+            System.out.println("[QW] COMMON config reloaded — reloading animation switches");
+
+            GrenadelauncherItem.reloadConfigValues();
         }
     }
 }

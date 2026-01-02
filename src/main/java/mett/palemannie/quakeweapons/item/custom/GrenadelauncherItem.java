@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.GrenadelauncherRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
@@ -30,26 +31,56 @@ public class GrenadelauncherItem extends AbstractWeapon{
         this.cooldown = 10;
     }
 
+    private static boolean enableAltModel = false;
+
+    public static void reloadConfigValues() {
+
+        try {
+            enableAltModel = QuakeWeaponsConfig.COMMON.enableAltModel.get();
+
+            System.out.println("[QuakeWeapons] Grenade Launcher alternative model config reloaded:");
+            System.out.println(" enableAltModel=" + enableAltModel);
+
+        } catch (Exception e) {
+            System.err.println("[QuakeWeapons] Failed to load config values, using defaults!");
+            enableAltModel = false;
+        }
+
+        System.out.println("[QuakeWeapons] Config values after load: enableAltModel:"
+                + QuakeWeaponsConfig.COMMON.enableAltModel.get());
+    }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("grenadelauncher.animations.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("grenadelauncher.animations.ammoempty", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("grenadelauncher.animations.idle", Animation.LoopType.LOOP);
+    private static String getAnimPrefix() {
+        return enableAltModel
+                ? "grenadelauncher_alt.animations"
+                : "grenadelauncher.animations";
+    }
+
+    private RawAnimation getShootAnim() {
+        return RawAnimation.begin().then(getAnimPrefix() + ".shooting", Animation.LoopType.LOOP);
+    }
+
+    private RawAnimation getAmmoEmptyAnim() {
+        return RawAnimation.begin().then(getAnimPrefix() + ".ammoempty", Animation.LoopType.LOOP);
+    }
+
+    private RawAnimation getIdleAnim() {
+        return RawAnimation.begin().then(getAnimPrefix() + ".idle", Animation.LoopType.LOOP);
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
         controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", SHOOT_ANIM));
+                .triggerableAnim("shooting", getShootAnim()));
 
         controllerRegistrar.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
+                .triggerableAnim("ammoempty", getAmmoEmptyAnim()));
 
         controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("idle", IDLE_ANIM));
-
-
+                .triggerableAnim("idle", getIdleAnim()));
     }
 
     @Override

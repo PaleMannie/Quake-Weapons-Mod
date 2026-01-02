@@ -101,6 +101,11 @@ public class ModItems {
                     .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "biosuit")))
                     .stacksTo(1)));
 
+    public static final RegistryObject<Item> TEST_WEAPON = ITEMS.register("testweapon",
+            () -> new TestWeaponItem(new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "testweapon")))
+                    .stacksTo(1), 10, 1));
+
     public static void register(BusGroup eventBus) {
         ITEMS.register(eventBus);
     }
