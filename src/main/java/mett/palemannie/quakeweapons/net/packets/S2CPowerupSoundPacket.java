@@ -1,7 +1,10 @@
 package mett.palemannie.quakeweapons.net.packets;
 
+import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.util.PowerupSoundEventType;
 import mett.palemannie.quakeweapons.util.PowerupSoundRegistry;
+import mett.palemannie.quakeweapons.util.QWPowerupSoundInstance;
+import mett.palemannie.quakeweapons.util.QuakeClientSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +12,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class S2CPowerupSoundPacket {
@@ -40,33 +46,26 @@ public class S2CPowerupSoundPacket {
 
     public static void handle(S2CPowerupSoundPacket packet, CustomPayloadEvent.Context ctx) {
 
-        ctx.enqueueWork(() -> {
-            Minecraft mc = Minecraft.getInstance();
-            Level level = mc.level;
-            if (level == null) return;
-
-            Entity entity = level.getEntity(packet.entityId);
-            if (!(entity instanceof LivingEntity living)) return;
-
-            SoundEvent sound = PowerupSoundRegistry.getSound(
-                    packet.effectId,
-                    packet.type
-            );
-
-            if (sound != null) {
-                level.playLocalSound(
-                        living.getX(),
-                        living.getY(),
-                        living.getZ(),
-                        sound,
-                        SoundSource.PLAYERS,
-                        1.0F,
-                        1.0F,
-                        false
-                );
-            }
-        });
-
+        ctx.enqueueWork(() -> handleClient(packet));
         ctx.setPacketHandled(true);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static void handleClient(S2CPowerupSoundPacket packet) {
+
+        Minecraft mc = Minecraft.getInstance();
+        Level level = mc.level;
+        if (level == null) return;
+
+        if (packet.entityId != mc.player.getId()) return;
+
+        Entity entity = level.getEntity(packet.entityId);
+        if (!(entity instanceof LivingEntity living)) return;
+
+        SoundEvent sound = PowerupSoundRegistry.getSound(packet.effectId, packet.type);
+        if (sound != null) {
+            QWPowerupSoundInstance instance = new QWPowerupSoundInstance(mc.player, sound);
+            mc.getSoundManager().play(instance);
+        }
     }
 }

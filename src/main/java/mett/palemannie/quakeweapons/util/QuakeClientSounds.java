@@ -10,17 +10,19 @@ public final class QuakeClientSounds {
 
     private static QWInvisLoopSound invisSound;
 
-    public static void startInvisSound(LocalPlayer player) {
+    public static void startInvisLoopSound(LocalPlayer player) {
         if (invisSound != null) return;
 
         invisSound = new QWInvisLoopSound(player);
         Minecraft.getInstance().getSoundManager().play(invisSound);
     }
 
-    public static void stopInvisSound() {
+    public static void stopInvisLoopSound() {
         if (invisSound != null) {
             invisSound.stop();
             invisSound = null;
         }
     }
+
+
 }

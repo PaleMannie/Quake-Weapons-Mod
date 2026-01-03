@@ -4,6 +4,7 @@ import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.net.packets.S2CPowerupSoundPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.ChannelBuilder;
 import net.minecraftforge.network.NetworkDirection;
@@ -45,5 +46,9 @@ public class ModMessages {
 
     public static <MSG> void sendToTrackingEntityAndSelf(MSG message, LivingEntity entity) {
         INSTANCE.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
+    }
+
+    public static <MSG> void sendToPlayer(MSG message, ServerPlayer entity) {
+        INSTANCE.send(message, PacketDistributor.PLAYER.with(entity));
     }
 }

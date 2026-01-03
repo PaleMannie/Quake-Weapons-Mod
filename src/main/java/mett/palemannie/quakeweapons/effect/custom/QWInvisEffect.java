@@ -4,12 +4,16 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.net.packets.S2CPowerupSoundPacket;
+import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.PowerupSoundEventType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.level.Level;
 
 public class QWInvisEffect extends MobEffect {
 
@@ -20,15 +24,28 @@ public class QWInvisEffect extends MobEffect {
     @Override
     public void onEffectAdded(LivingEntity entity, int pAmplifier) {
 
-        ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), entity);
-        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QW_INVIS.getId(), PowerupSoundEventType.ADD), entity);
+        Level level = entity.level();
+        if (!level.isClientSide) {
+
+            ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), entity);
+
+            if (entity instanceof ServerPlayer player) {
+
+                ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QW_INVIS.getId(), PowerupSoundEventType.ADD), player);
+            }
+        }
     }
 
     @Override
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
 
+        Level level = entity.level();
+        if (!level.isClientSide) {
 
-        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QW_INVIS.getId(), PowerupSoundEventType.EXPIRING), entity);
+            if (entity instanceof ServerPlayer player) {
+                ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QW_INVIS.getId(), PowerupSoundEventType.EXPIRING), player);
+            }
+        }
         return true;
     }
 
@@ -37,7 +54,7 @@ public class QWInvisEffect extends MobEffect {
         return duration == 60;
     }
 
-    ///Assuring that upon breaking invis your armor and items in hand get visible again
+    ///Assuring that upon breaking invis you get visible again by removing "QWInviss"
     @Override
     public void removeAttributeModifiers(AttributeMap map) {
         super.removeAttributeModifiers(map);

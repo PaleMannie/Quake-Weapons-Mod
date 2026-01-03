@@ -43,9 +43,9 @@ public class S2CInvisPacket {
 
         if (e == Minecraft.getInstance().player) {
             if (msg.invisible) {
-                QuakeClientSounds.startInvisSound(Minecraft.getInstance().player);
+                QuakeClientSounds.startInvisLoopSound(Minecraft.getInstance().player);
             } else {
-                QuakeClientSounds.stopInvisSound();
+                QuakeClientSounds.stopInvisLoopSound();
             }
         }
 

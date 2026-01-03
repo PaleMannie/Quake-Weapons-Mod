@@ -4,17 +4,20 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+@OnlyIn(Dist.CLIENT)
 public final class PowerupSoundRegistry {
 
     private static final Map<ResourceLocation, Map<PowerupSoundEventType, SoundEvent>> SOUNDS = new HashMap<>();
 
-    static {
+    public static void init() {
 
         register(ModEffects.BIOSUIT.getId(), ModSounds.BIOSUIT_PICKUP.get(), ModSounds.BIOSUIT_EXPIRE.get());
         register(ModEffects.QUAD_DAMAGE.getId(), ModSounds.QUAD_DAMAGE_PICKUP.get(), ModSounds.QUAD_DAMAGE_EXPIRE.get());

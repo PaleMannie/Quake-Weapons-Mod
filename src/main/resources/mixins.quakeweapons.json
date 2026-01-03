@@ -11,6 +11,8 @@
     "MinecraftMixin"
   ],
   "client": [
+    "LivingEntityRendererMixin",
+    "LivingEntityRenderStateAccessor"
   ],
   "server": [
   ]

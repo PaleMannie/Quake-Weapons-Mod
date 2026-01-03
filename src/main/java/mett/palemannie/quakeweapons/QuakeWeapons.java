@@ -9,6 +9,7 @@ import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModCreativeModeTabs;
+import mett.palemannie.quakeweapons.util.PowerupSoundRegistry;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,12 +25,12 @@ import software.bernie.geckolib.GeckoLib;
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
 
-    /// TODO: QW-Unsichbarkeit komplett überarbeiten
+    /// TODO: Unterwasser item use slowdown noch da, diagonal laufen während man schießt ist schneller als gewollt
     /// TODO: Gründliche tests oder so
     /// TODO: evtl. live tests wg. mixin-refmap
 
     public static final String MODID = "quakeweapons";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public static QuakeWeapons instance;
 
     public QuakeWeapons(FMLJavaModLoadingContext context){
@@ -67,6 +68,8 @@ public class QuakeWeapons {
             EntityRenderers.register(ModEntities.PENTAGRAM_POWERUP.get(), PentagramPowerupRenderer::new);
             EntityRenderers.register(ModEntities.RING_POWERUP.get(), RingPowerupRenderer::new);
             EntityRenderers.register(ModEntities.BIOSUIT_POWERUP.get(), BiosuitPowerupRenderer::new);
+
+            PowerupSoundRegistry.init();
         }
     }
 

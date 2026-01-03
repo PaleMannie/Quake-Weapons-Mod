@@ -157,7 +157,7 @@ public class ThunderboltItem extends AbstractWeapon{
 
     private boolean hasLineOfSight(Level level, Vec3 from, LivingEntity target) {
         Vec3 to = target.position().add(0, target.getBbHeight() / 2, 0);
-        BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, (Entity) null));
+        BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, target));
         return hit.getType() == HitResult.Type.MISS;
     }
 

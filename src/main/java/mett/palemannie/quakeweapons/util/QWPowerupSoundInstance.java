@@ -1,26 +1,27 @@
 package mett.palemannie.quakeweapons.util;
 
-import mett.palemannie.quakeweapons.effect.ModEffects;
-import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class QWInvisLoopSound extends AbstractTickableSoundInstance {
+public class QWPowerupSoundInstance extends AbstractTickableSoundInstance {
 
     private final LocalPlayer player;
+    private final SoundEvent sound;
 
-    public QWInvisLoopSound(LocalPlayer player) {
-        super(ModSounds.RING_USE.get(), SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
+    public QWPowerupSoundInstance(LocalPlayer player, SoundEvent sound) {
+        super(sound, SoundSource.PLAYERS, SoundInstance.createUnseededRandom());
         this.player = player;
+        this.sound = sound;
 
-        this.looping = true;
-        this.volume = 1f;
-        this.pitch = 1f;
+        this.looping = false;
+        this.volume = 1.0F;
+        this.pitch = 1.0F;
         this.delay = 0;
 
         this.x = player.getX();
@@ -30,7 +31,7 @@ public class QWInvisLoopSound extends AbstractTickableSoundInstance {
 
     @Override
     public void tick() {
-        if (player.isRemoved() || !player.hasEffect(ModEffects.QW_INVIS.getHolder().get())) {
+        if (player.isRemoved()) {
             this.stop();
             return;
         }

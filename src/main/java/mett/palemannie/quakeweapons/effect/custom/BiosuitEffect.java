@@ -9,12 +9,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 
 public class BiosuitEffect extends MobEffect {
 
@@ -22,21 +24,28 @@ public class BiosuitEffect extends MobEffect {
         super(pCategory, pColor);
     }
 
-    /// Effect done through Events
-    /// Only Expiring sounds here
-
     @Override
     public void onEffectAdded(LivingEntity entity, int pAmplifier) {
 
-        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.ADD), entity);
+        Level level = entity.level();
+        if (!level.isClientSide) {
+
+            if (entity instanceof ServerPlayer player) {
+                ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.ADD), player);
+            }
+        }
     }
 
     @Override
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
 
-        entity.setAirSupply(entity.getMaxAirSupply());
+        Level level = entity.level();
+        if (!level.isClientSide) {
 
-        ModMessages.sendToTrackingEntityAndSelf(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.EXPIRING), entity);
+            if (entity instanceof ServerPlayer player) {
+                ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.EXPIRING), player);
+            }
+        }
 
         return true;
     }

@@ -9,10 +9,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 public class PowerupOverlay {
 
     /// RGBA
-    private static final int[] QUAD   = {25, 25, 255, 51};
-    private static final int[] SUIT   = {0, 255, 0, 51};
-    private static final int[] RING   = {100, 68, 100, 51};
-    private static final int[] PENT   = {255, 255, 0, 51};
+    private static final int[] QUAD   = {61, 102, 204, 100};
+    private static final int[] SUIT   = {0, 255, 128, 100};
+    private static final int[] RING   = {77, 26, 77, 100};
+    private static final int[] PENT   = {255, 214, 0, 100};
 
     public static void render(GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight) {
 

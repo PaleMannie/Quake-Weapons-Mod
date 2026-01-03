@@ -1,16 +1,16 @@
 package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.custom.AbstractWeapon;
 import mett.palemannie.quakeweapons.util.PowerupOverlay;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ComputeFovModifierEvent;
-import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -25,21 +25,34 @@ public class ClientEvents {
                 event.getWindow().getGuiScaledHeight());
     }
 
-    /// the anti use-slowdown unfortunately changes FOV massively. This event turns the FOV change to normal
+    /// the anti use-slowdown unfortunately changes FOV massively. This event turns the FOV change to normal depending on the usual movement speed
     @SubscribeEvent
     public static void onComputeFov(ComputeFovModifierEvent event) {
 
         LocalPlayer player = (LocalPlayer) event.getPlayer();
         ItemStack stack = player.getMainHandItem();
 
-        if(stack.getItem() instanceof AbstractWeapon) {
+        if (!(stack.getItem() instanceof AbstractWeapon)) { return; }
 
-            event.setNewFovModifier(1f);
+        float fov = 1.0F;
+        double speedMultiplier = 1.0;
+
+        var speed = player.getEffect(MobEffects.SPEED);
+        if (speed != null) {
+            speedMultiplier += 0.2 * (speed.getAmplifier() + 1);
         }
 
-        if(player.isSprinting() && stack.getItem() instanceof AbstractWeapon) {
-
-            event.setNewFovModifier(1.15f);
+        var slow = player.getEffect(MobEffects.SLOWNESS);
+        if (slow != null) {
+            speedMultiplier -= 0.15 * (slow.getAmplifier() + 1);
         }
+
+        if (player.isSprinting()) {
+            speedMultiplier *= 1.3;
+        }
+
+        fov *= (float)((speedMultiplier + 1.0) / 2.0);
+
+        event.setNewFovModifier(fov);
     }
 }
