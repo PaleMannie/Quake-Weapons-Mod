@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
-    @WrapOperation(method = "Lnet/minecraft/client/Minecraft;handleKeybinds()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;startAttack()Z"))
+    @WrapOperation(method = "handleKeybinds()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;startAttack()Z"))
     // Replaces the attack action with the use action when firing Quake weapons
     private boolean doQuakeWeaponAttack(Minecraft instance, Operation<Boolean> original) {
         if (instance.player.getMainHandItem().getItem() instanceof AbstractWeapon) {
@@ -36,7 +36,7 @@ public class MinecraftMixin {
         return original.call(instance);
     }
 
-    @WrapOperation(method = "Lnet/minecraft/client/Minecraft;handleKeybinds()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;isDown()Z"))
+    @WrapOperation(method = "handleKeybinds()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;isDown()Z"))
     // Keeps the Quake weapons firing. Replace right click check with left click check when Quake weapons are fired to ensure that.
     private boolean isQuakeWeaponFired(KeyMapping key, Operation<Boolean> original) {
         Minecraft instance = Minecraft.getInstance();
@@ -46,26 +46,5 @@ public class MinecraftMixin {
             return true;
 
         return original.call(key);
-    }
-
-    @Shadow
-    @Nullable
-    public LocalPlayer player;
-    @Shadow public Options options;
-
-    @Inject(
-            method = "tick",
-            at = @At("TAIL")
-    )
-    private void quakeweapons$fireLoop(CallbackInfo ci) {
-        if (player == null) return;
-
-        if (options.keyAttack.isDown()) {
-            ItemStack stack = player.getMainHandItem();
-
-            if (stack.getItem() instanceof IQuakeWeapon quakeWeapon) {
-                quakeWeapon.onQuakeFire(player, stack);
-            }
-        }
     }
 }

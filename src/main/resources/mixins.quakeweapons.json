@@ -8,12 +8,12 @@
   },
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "MinecraftMixin"
-  ],
-  "client": [
+    "MinecraftMixin",
     "LivingEntityRendererMixin",
     "LivingEntityRenderStateAccessor",
     "LocalPlayerMixin"
+  ],
+  "client": [
   ],
   "server": [
   ]

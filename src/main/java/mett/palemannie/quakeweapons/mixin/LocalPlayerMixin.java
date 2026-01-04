@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {
 
-    @Inject(method = "aiStep", at = @At("HEAD"))
+    @Inject(method = "aiStep()V", at = @At("HEAD"))
     private void quake$fixDiagonalMovement(CallbackInfo ci) {
         LocalPlayer player = (LocalPlayer)(Object)this;
 

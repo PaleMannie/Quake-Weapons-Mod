@@ -42,12 +42,12 @@ public class QuakeWeapons {
 
         GeckoLib.DATA_COMPONENTS_REGISTER.register(modBusGroup);
 
-        ModCreativeModeTabs.register(modBusGroup);
         ModItems.register(modBusGroup);
         ModEffects.register(modBusGroup);
         ModEntities.register(modBusGroup);
         ModSounds.register(modBusGroup);
         ModBlocks.register(modBusGroup);
+        ModCreativeModeTabs.register(modBusGroup);
 
         QuakeWeaponsConfig.registerConfigs();
     }
