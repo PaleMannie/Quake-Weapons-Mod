@@ -33,7 +33,7 @@ public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEnt
         poseStack.pushPose();
 
         poseStack.scale(0.25F, 0.25F, 0.25F);
-        poseStack.translate(0.0F, 0.1f, 0.0F);
+        poseStack.translate(0.0F, 0.25f, 0.0F);
 
         poseStack.mulPose(Axis.YP.rotationDegrees(rocketEntity.yRot));
         poseStack.mulPose(Axis.XP.rotationDegrees(-rocketEntity.xRot + 180f));

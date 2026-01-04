@@ -30,7 +30,8 @@ public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProject
         pPoseStack.translate(0f, 0.1f, 0f);
 
         pPoseStack.mulPose(Axis.YP.rotationDegrees(pRenderState.yRot));
-        pPoseStack.mulPose(Axis.XP.rotationDegrees(-pRenderState.xRot));
+        pPoseStack.mulPose(Axis.XP.rotationDegrees(-pRenderState.xRot + 180f));
+        pPoseStack.mulPose(Axis.ZP.rotationDegrees(180f));
 
         VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(SUPER_NAIL_LOCATION));
         this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);

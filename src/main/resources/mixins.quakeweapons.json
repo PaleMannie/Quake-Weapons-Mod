@@ -12,7 +12,8 @@
   ],
   "client": [
     "LivingEntityRendererMixin",
-    "LivingEntityRenderStateAccessor"
+    "LivingEntityRenderStateAccessor",
+    "LocalPlayerMixin"
   ],
   "server": [
   ]

@@ -1,6 +1,8 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
+import net.minecraft.client.player.ClientInput;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -96,11 +98,13 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
         /// anti use-slowdown
         pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5d);
+        pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.25d);
         executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 
         if(pLivingEntity.isDeadOrDying()){
 
             pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
+            pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
         }
     }
 
@@ -119,6 +123,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
         /// resets the anti-use-slowdown
         pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
+        pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
 
         /// this ensures, that the Nailgun always starts shooting from the right barrel
         NailgunItem.rightSide = false;
@@ -129,9 +134,12 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public boolean onDroppedByPlayer(ItemStack stack, Player player) {
 
         player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
+        player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+
         stopShootingAnimation(player, (ServerLevel) player.level(), stack);
         stopAmmoEmptyAnimation(player, (ServerLevel) player.level(), stack);
         stopIdleAnimation(player, (ServerLevel) player.level(), stack);
+
         return super.onDroppedByPlayer(stack, player);
     }
 

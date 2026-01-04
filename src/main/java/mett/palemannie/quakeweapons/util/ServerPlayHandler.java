@@ -14,6 +14,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -89,7 +90,7 @@ public class ServerPlayHandler {
 
         ServerLevel sLevel = (ServerLevel) level;
 
-        double reach = 3.0D;
+        double reach = 5d;
         /*if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
             reach = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).getValue();
         }*/
@@ -118,7 +119,6 @@ public class ServerPlayHandler {
                         e.isPickable() &&
                         e instanceof LivingEntity &&
                         e != player;
-
         //EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, eye, maxEnd, pathBB, canHit);
         EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, eye, maxEnd, pathBB, canHit, reach);
 

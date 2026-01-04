@@ -25,7 +25,9 @@ import software.bernie.geckolib.GeckoLib;
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
 
-    /// TODO: Unterwasser item use slowdown noch da, diagonal laufen während man schießt ist schneller als gewollt
+    /// TODO: Diagonal laufen während man schießt ist schneller als gewollt
+    /// TODO: Axt Reichweite weiter machen
+    /// TODO: Echt großer random rückstoß mit den Nailguns
     /// TODO: Gründliche tests oder so
     /// TODO: evtl. live tests wg. mixin-refmap
 
