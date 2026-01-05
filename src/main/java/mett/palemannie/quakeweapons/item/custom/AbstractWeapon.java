@@ -1,7 +1,7 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
-import net.minecraft.client.player.ClientInput;
+import mett.palemannie.quakeweapons.util.QWPlayer;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -97,7 +97,13 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 
         /// anti use-slowdown
-        pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5d);
+        if(pLivingEntity instanceof LocalPlayer player && pLevel.isClientSide()) {
+
+            if(QWPlayer.isMovingDiagonally(player)){
+
+                player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.35355d); }
+        } else {pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5d);}
+
         pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.25d);
         executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 

@@ -10,8 +10,7 @@
   "mixins": [
     "MinecraftMixin",
     "LivingEntityRendererMixin",
-    "LivingEntityRenderStateAccessor",
-    "LocalPlayerMixin"
+    "LivingEntityRenderStateAccessor"
   ],
   "client": [
   ],
