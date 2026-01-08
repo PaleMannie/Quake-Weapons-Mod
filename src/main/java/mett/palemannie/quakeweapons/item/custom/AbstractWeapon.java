@@ -49,7 +49,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
                 player.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
                 player.gameEvent(GameEvent.ITEM_INTERACT_START);
             }
-
         }
     }
 
@@ -147,6 +146,22 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         stopIdleAnimation(player, (ServerLevel) player.level(), stack);
 
         return super.onDroppedByPlayer(stack, player);
+    }
+
+    @Override
+    public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
+        super.onStopUsing(stack, entity, count);
+
+        entity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
+        entity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+    }
+
+    @Override
+    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
+
+        pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
+        pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+        return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 
     @Override
