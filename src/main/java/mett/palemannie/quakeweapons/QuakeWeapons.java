@@ -25,9 +25,8 @@ import software.bernie.geckolib.GeckoLib;
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
 
-    /// TODO: Axt Reichweite weiter machen
-    /// TODO: Gründliche tests oder so
-    /// TODO: evtl. live tests wg. mixin-refmap
+    /// TODO: gedroppte Waffen sind unsichtbar und Hotbar spinnt displaymäßig rum mit den Waffen beim aufheben
+    /// TODO: Entityschatten bei QWInsis muss weg
 
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();

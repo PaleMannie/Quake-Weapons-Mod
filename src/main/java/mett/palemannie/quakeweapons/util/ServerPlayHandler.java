@@ -5,7 +5,9 @@ import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.custom.*;
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -18,6 +20,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
@@ -91,16 +95,13 @@ public class ServerPlayHandler {
         ServerLevel sLevel = (ServerLevel) level;
 
         double reach = 5d;
-        /*if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
-            reach = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).getValue();
-        }*/
 
-        // Ray setup
+        /// Ray setup
         Vec3 eye = player.getEyePosition(1.0F);
         Vec3 look = player.getViewVector(1.0F);
         Vec3 end = eye.add(look.scale(reach));
 
-        // Block raycast
+        /// Block raycast
         BlockHitResult blockHit = level.clip(new ClipContext(
                 eye, end,
                 ClipContext.Block.OUTLINE,
@@ -112,16 +113,16 @@ public class ServerPlayHandler {
             maxEnd = blockHit.getLocation();
         }
 
-        // Entity raycast
-        AABB pathBB = new AABB(eye, maxEnd).inflate(0.25D);
+        /// Entity raycast
+        AABB pathBB = new AABB(eye, maxEnd).inflate(0.25d);
         Predicate<Entity> canHit = e ->
                 e.isAlive() &&
                         e.isPickable() &&
                         e instanceof LivingEntity &&
                         e != player;
-        //EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, eye, maxEnd, pathBB, canHit);
-        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, eye, maxEnd, pathBB, canHit, reach);
+        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, eye, end, pathBB, canHit, reach+reach-1);
 
+        /// Sounds and particles for blockhits, entityhits and airhits
         if (entityHit != null) {
             LivingEntity target = (LivingEntity) entityHit.getEntity();
 
@@ -454,13 +455,33 @@ public class ServerPlayHandler {
         lvl.playSound(null, posX, posY, posZ, ModSounds.SUPER_NAILGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
     }
 
+    private static boolean getNailgunRight(ItemStack stack) {
+        CustomData cd = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        return cd.copyTag().getBoolean(NailgunItem.KEY_RIGHT).orElse(false);
+    }
+
+    private static void toggleNailgunRight(ItemStack stack) {
+        stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, oldCd -> {
+            CompoundTag tag = oldCd.copyTag();
+            tag.putBoolean(NailgunItem.KEY_RIGHT, !tag.getBoolean(NailgunItem.KEY_RIGHT).orElse(false));
+            return CustomData.of(tag);
+        });
+    }
+
     public static void handleNailgunShoot(ServerPlayer player){
 
         ServerLevel sevel = player.getServer().overworld();
         Level lvl = player.level();
 
-        ///Entity
-        boolean rightSide = NailgunItem.rightSide;
+        // Stack bestimmen: bevorzugt Use-Item, fallback Mainhand
+        ItemStack stack = player.getUseItem();
+        if (!(stack.getItem() instanceof NailgunItem)) {
+            stack = player.getMainHandItem();
+        }
+        if (!(stack.getItem() instanceof NailgunItem)) return;
+
+        // Side pro Stack (nicht global!)
+        boolean rightSide = getNailgunRight(stack);
         double offset = rightSide ? 0.3 : -0.3;
         double forwardOffset = 0.4;
 
@@ -478,18 +499,17 @@ public class ServerPlayHandler {
         sevel.addFreshEntity(nail);
 
         if(isMuzzleFlashEnabled()){
-
             MuzzleflashEntity flash = new MuzzleflashEntity(sevel, player);
             flash.setPos(spawnX, spawnY, spawnZ);
-
             sevel.addFreshEntity(flash);
         }
 
-        ///Sound
-        double posX = player.getX();
-        double posY = player.getY();
-        double posZ = player.getZ();
-        lvl.playSound(null, posX, posY, posZ, ModSounds.NAILGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
+        // Sound
+        lvl.playSound(null, player.getX(), player.getY(), player.getZ(),
+                ModSounds.NAILGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
+
+        // WICHTIG: erst nach dem Spawn togglen
+        toggleNailgunRight(stack);
     }
 
     public static void playAmmoEmptySound(ServerPlayer player){

@@ -25,10 +25,6 @@ public class C2SDiagonalMovementPacket {
             ServerPlayer sender = ctx.getSender();
             if (sender == null) return;
 
-            // Optional: einfache Plausibilitätsprüfung (Anti-Cheat-light)
-            // Wenn du willst, dass der Server nicht blind vertraut:
-            // boolean serverSeesDiagonal = sender.xxa != 0.0F && sender.zza != 0.0F;
-            // boolean diagonal = msg.diagonal && serverSeesDiagonal;
             boolean diagonal = msg.diagonal;
 
             sender.getPersistentData().putBoolean("QWDiagonal", diagonal);

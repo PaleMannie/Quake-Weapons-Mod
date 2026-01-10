@@ -1,7 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.item.ModItems;
-import mett.palemannie.quakeweapons.item.client.GrenadelauncherRenderer;
 import mett.palemannie.quakeweapons.item.client.NailGunRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
@@ -15,10 +14,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
 import software.bernie.geckolib.animatable.processing.AnimationController;
-import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import javax.annotation.Nullable;
@@ -98,7 +98,7 @@ public class NailgunItem extends AbstractWeapon {
     }
 
     //the Nailgun starts shooting from the right barrel
-    public static boolean rightSide = false;
+    public static final String KEY_RIGHT = "QWNailRight";
 
     @Override
     protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
@@ -114,7 +114,7 @@ public class NailgunItem extends AbstractWeapon {
                         stopAmmoEmptyAnimation(user, serverLevel, stack);
                         stopIdleAnimation(user, serverLevel, stack);
                         startShootingAnimation(user, serverLevel, stack); }
-                    rightSide = !rightSide;
+                    //rightSide = !rightSide;
                     ServerPlayHandler.handleNailgunShoot(serverPlayer);
 
                 } else {

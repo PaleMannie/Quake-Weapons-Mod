@@ -22,7 +22,6 @@ public class QWPlayer {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
-        // Nur senden, wenn wirklich eine Waffe benutzt wird (Spam vermeiden)
         boolean usingWeapon = player.isUsingItem()
                 && player.getUseItem().getItem() instanceof AbstractWeapon;
 
@@ -32,7 +31,6 @@ public class QWPlayer {
                     && (player.input.keyPresses.left() || player.input.keyPresses.right());
         }
 
-        // nur senden wenn Zustand wechselt
         if (diagonal != lastDiagonal) {
             lastDiagonal = diagonal;
             ModMessages.sendToServer(new C2SDiagonalMovementPacket(diagonal));

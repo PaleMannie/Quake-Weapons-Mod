@@ -1,8 +1,8 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
-import mett.palemannie.quakeweapons.net.ModMessages;
-import mett.palemannie.quakeweapons.net.packets.C2SDiagonalMovementPacket;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,9 +14,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -32,6 +34,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public abstract class AbstractWeapon extends Item implements GeoItem {
 
     protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    /// Squake check
+    private static final boolean HAS_SQUAKE = ModList.get().isLoaded("squakeport_1_21_6");
 
     public AbstractWeapon(Properties pProperties) {
         super(pProperties);
@@ -74,8 +79,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public InteractionResult use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
 
         pPlayer.removeEffect(ModEffects.QW_INVIS.getHolder().get());
-        //pPlayer.setInvisible(false);
-        //pPlayer.getPersistentData().putBoolean("QWDiagonal", true);
 
         if (pUsedHand != InteractionHand.MAIN_HAND) {
             return InteractionResult.FAIL;
@@ -99,19 +102,35 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         var ms = pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
         var we = pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
 
-        if(pRemainingUseDuration >= pStack.getUseDuration(pLivingEntity)-1){ ms.setBaseValue(0.5d);}
 
         /// anti use-slowdown
         if (pLivingEntity instanceof Player player && !player.level().isClientSide()) {
 
-            boolean diagonal1 = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
+            boolean squakeEnabled = player.getPersistentData().getBoolean("QWSquakeEnabled").orElse(false);
 
-            if (ms != null) {
-                ms.setBaseValue(diagonal1 ? 0.35355d : 0.5d);
+            if(!squakeEnabled || !HAS_SQUAKE ) {
+
+                if (pRemainingUseDuration >= pStack.getUseDuration(pLivingEntity) - 1) {
+
+                    ms.setBaseValue(0.25d);
+                } else { ms.setBaseValue(0.125); }
+
+                boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
+
+                if (ms != null) {
+
+                    ms.setBaseValue(diagonal ? 0.35355d : 0.5d);
+                }
+
+            } else {
+
+                boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
+                ms.setBaseValue(diagonal ? 0.35355d/2d : 0.25d);
             }
         }
 
-        if(we != null) we.setBaseValue(0.25d);
+        if (we != null) we.setBaseValue(0.25d);
+
 
         if(pLivingEntity.isDeadOrDying() && ms != null && we != null){
 
@@ -140,7 +159,16 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
 
         /// this ensures, that the Nailgun always starts shooting from the right barrel
-        NailgunItem.rightSide = false;
+        //NailgunItem.rightSide = false;
+
+        if (stack.getItem() instanceof NailgunItem) {
+            stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, oldCd -> {
+                CompoundTag tag = oldCd.copyTag();
+                tag.putBoolean(NailgunItem.KEY_RIGHT, true);
+                return CustomData.of(tag);
+            });
+        }
+
         return false;
     }
 
@@ -192,31 +220,31 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     public void startShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
-        triggerAnim(pLivingEntity, GeoItem.getId(stack), "controller", "shooting");
+        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller", "shooting");
     }
 
     public void stopShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
-        stopTriggeredAnim(pLivingEntity, GeoItem.getId(stack), "controller", "shooting");
+        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller", "shooting");
     }
 
     public void startAmmoEmptyAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
-        triggerAnim(pLivingEntity, GeoItem.getId(stack), "controller2", "ammoempty");
+        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller2", "ammoempty");
     }
 
     public void stopAmmoEmptyAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
-        stopTriggeredAnim(pLivingEntity, GeoItem.getId(stack), "controller2", "ammoempty");
+        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller2", "ammoempty");
     }
 
     public void startIdleAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
-        triggerAnim(pLivingEntity, GeoItem.getId(stack), "controller3", "idle");
+        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller3", "idle");
     }
 
     public void stopIdleAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
-        stopTriggeredAnim(pLivingEntity, GeoItem.getId(stack), "controller3", "idle");
+        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller3", "idle");
     }
 }
