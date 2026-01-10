@@ -1,8 +1,8 @@
 package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
-import mett.palemannie.quakeweapons.util.QWPlayer;
-import net.minecraft.client.player.LocalPlayer;
+import mett.palemannie.quakeweapons.net.ModMessages;
+import mett.palemannie.quakeweapons.net.packets.C2SDiagonalMovementPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -74,7 +74,8 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public InteractionResult use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
 
         pPlayer.removeEffect(ModEffects.QW_INVIS.getHolder().get());
-        pPlayer.setInvisible(false);
+        //pPlayer.setInvisible(false);
+        //pPlayer.getPersistentData().putBoolean("QWDiagonal", true);
 
         if (pUsedHand != InteractionHand.MAIN_HAND) {
             return InteractionResult.FAIL;
@@ -95,22 +96,30 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
 
+        var ms = pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
+        var we = pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
+
+        if(pRemainingUseDuration >= pStack.getUseDuration(pLivingEntity)-1){ ms.setBaseValue(0.5d);}
+
         /// anti use-slowdown
-        if(pLivingEntity instanceof LocalPlayer player && pLevel.isClientSide()) {
+        if (pLivingEntity instanceof Player player && !player.level().isClientSide()) {
 
-            if(QWPlayer.isMovingDiagonally(player)){
+            boolean diagonal1 = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
 
-                player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.35355d); }
-        } else {pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5d);}
-
-        pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.25d);
-        executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
-
-        if(pLivingEntity.isDeadOrDying()){
-
-            pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
-            pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+            if (ms != null) {
+                ms.setBaseValue(diagonal1 ? 0.35355d : 0.5d);
+            }
         }
+
+        if(we != null) we.setBaseValue(0.25d);
+
+        if(pLivingEntity.isDeadOrDying() && ms != null && we != null){
+
+            ms.setBaseValue(0.1d);
+            we.setBaseValue(0d);
+        }
+
+        executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
     }
 
     int cooldown;
@@ -161,6 +170,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
         pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
         pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 

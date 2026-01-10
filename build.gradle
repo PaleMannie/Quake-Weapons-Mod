@@ -8,7 +8,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '[6.0.24,6.2)'
+    id 'net.minecraftforge.gradle' version '[6.0.36,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
@@ -25,6 +25,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
+
+    reobf = false
 
     mappings channel: mapping_channel, version: mapping_version
 
@@ -95,9 +97,6 @@ dependencies {
     implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.2")) { jarJar.ranged(it, "[0.5.2,)") }
 
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
-
-    implementation(jarJar("org.jetbrains:annotations:24.1.0")) { jarJar.ranged(it, "[24.1.0,)") }
-
 }
 
 mixin {

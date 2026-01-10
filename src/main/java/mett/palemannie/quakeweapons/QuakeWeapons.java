@@ -8,7 +8,6 @@ import mett.palemannie.quakeweapons.entity.client.*;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;
-import mett.palemannie.quakeweapons.util.KeyBinding;
 import mett.palemannie.quakeweapons.util.ModCreativeModeTabs;
 import mett.palemannie.quakeweapons.util.PowerupSoundRegistry;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -32,7 +31,6 @@ public class QuakeWeapons {
 
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static QuakeWeapons instance;
 
     public QuakeWeapons(FMLJavaModLoadingContext context){
 
