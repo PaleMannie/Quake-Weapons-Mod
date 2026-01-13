@@ -44,6 +44,8 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
+    int cooldown;
+
     public void setCurrentHand(InteractionHand hand, LivingEntity player) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (!itemStack.isEmpty() && !player.isUsingItem()) {
@@ -57,6 +59,41 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         }
     }
 
+    /// Anti-slowdown methods
+    private boolean doAntiSlow(Player player) {
+        boolean squakeEnabled = player.getPersistentData().getBoolean("QWSquakeEnabled").orElse(false);
+        return (!HAS_SQUAKE) || (!squakeEnabled);
+    }
+
+    private void applyAntiFirstTickDash(Player player, boolean diagonal) {
+        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
+        if (ms != null) ms.setBaseValue(diagonal ? 0.707106781186d : 0.1);
+        if (we != null) we.setBaseValue(0.25d);
+    }
+
+    private void applyAntiSlowSpeed(Player player, boolean diagonal) {
+        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
+        if (ms != null) ms.setBaseValue(diagonal ? 0.353553390593d : 0.5d);
+        if (we != null) we.setBaseValue(0.25d);
+    }
+
+    private void applySquakeAntiSlowSpeed(Player player, boolean diagonal) {
+        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
+        if (ms != null) ms.setBaseValue(diagonal ? 0.353553390593d/2d : 0.25d);
+        if (we != null) we.setBaseValue(0.25d);
+    }
+
+    private void resetMovement(Player player) {
+        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
+        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
+        if (ms != null) ms.setBaseValue(0.1d);
+        if (we != null) we.setBaseValue(0.0d);
+    }
+
+    /// Item Properties
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) { return false; }
 
@@ -76,91 +113,74 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     @Override
-    public InteractionResult use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-
-        pPlayer.removeEffect(ModEffects.QW_INVIS.getHolder().get());
-
-        if (pUsedHand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.FAIL;
-        } else {
-            setCurrentHand(pUsedHand, (LivingEntity) pPlayer);
-            return InteractionResult.PASS;
-        }
+    public InteractionResult useOn(UseOnContext pContext) {
+        return InteractionResult.PASS;
     }
 
+    ///
     @Override
-    public InteractionResult useOn(UseOnContext pContext) {
+    public InteractionResult use(Level level, Player player, InteractionHand usedHand) {
+
+        player.removeEffect(ModEffects.QW_INVIS.getHolder().get());
+        boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
+        applyAntiFirstTickDash(player, diagonal);
+
+        if (usedHand != InteractionHand.MAIN_HAND) return InteractionResult.FAIL;
+
+        setCurrentHand(usedHand, player);
+
+        if (!level.isClientSide()) {
+            if (doAntiSlow(player)) {
+                applyAntiSlowSpeed(player, diagonal);
+            } else {
+
+                applySquakeAntiSlowSpeed(player, diagonal);
+            }
+        }
+
         return InteractionResult.PASS;
     }
 
     protected abstract void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration);
 
     @Override
-    public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
-        super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
+    public void onUseTick(Level level, LivingEntity ent, ItemStack stack, int remaining) {
+        super.onUseTick(level, ent, stack, remaining);
 
-        var ms = pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
-        var we = pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
-
-
-        /// anti use-slowdown
-        if (pLivingEntity instanceof Player player && !player.level().isClientSide()) {
-
-            boolean squakeEnabled = player.getPersistentData().getBoolean("QWSquakeEnabled").orElse(false);
-
-            if(!squakeEnabled || !HAS_SQUAKE ) {
-
-                if (pRemainingUseDuration >= pStack.getUseDuration(pLivingEntity) - 1) {
-
-                    ms.setBaseValue(0.25d);
-                } else { ms.setBaseValue(0.125); }
-
+        if (!level.isClientSide() && ent instanceof Player player) {
+            if (doAntiSlow(player)) {
                 boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
-
-                if (ms != null) {
-
-                    ms.setBaseValue(diagonal ? 0.35355d : 0.5d);
-                }
-
+                applyAntiSlowSpeed(player, diagonal);
             } else {
 
                 boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
-                ms.setBaseValue(diagonal ? 0.35355d/2d : 0.25d);
+                applySquakeAntiSlowSpeed(player, diagonal);
             }
         }
 
-        if (we != null) we.setBaseValue(0.25d);
-
-
-        if(pLivingEntity.isDeadOrDying() && ms != null && we != null){
-
-            ms.setBaseValue(0.1d);
-            we.setBaseValue(0d);
-        }
-
-        executeWeaponFire(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
+        executeWeaponFire(level, ent, stack, remaining);
     }
 
-    int cooldown;
-
     @Override
-    public boolean releaseUsing(ItemStack stack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
-        super.releaseUsing(stack, pLevel, pLivingEntity, pTimeCharged);
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity entity, int pTimeCharged) {
+        super.releaseUsing(stack, level, entity, pTimeCharged);
 
-        if(pLivingEntity instanceof Player) ((Player) pLivingEntity).getCooldowns().addCooldown(stack, cooldown);
-        if (pLevel instanceof ServerLevel serverLevel){
-            stopShootingAnimation(pLivingEntity, serverLevel, stack);
-            stopAmmoEmptyAnimation(pLivingEntity, serverLevel, stack);
-            startIdleAnimation(pLivingEntity, serverLevel, stack);
+        /// apply cooldown
+        if(entity instanceof Player) ((Player) entity).getCooldowns().addCooldown(stack, cooldown);
+
+        /// animations
+        if (level instanceof ServerLevel serverLevel){
+            stopShootingAnimation(entity, serverLevel, stack);
+            stopAmmoEmptyAnimation(entity, serverLevel, stack);
+            startIdleAnimation(entity, serverLevel, stack);
         }
 
         /// resets the anti-use-slowdown
-        pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
-        pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+        if (entity instanceof Player player && !level.isClientSide()) {
+            resetMovement(player);
+        }
 
         /// this ensures, that the Nailgun always starts shooting from the right barrel
-        //NailgunItem.rightSide = false;
-
         if (stack.getItem() instanceof NailgunItem) {
             stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, oldCd -> {
                 CompoundTag tag = oldCd.copyTag();
@@ -175,12 +195,17 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     @Override
     public boolean onDroppedByPlayer(ItemStack stack, Player player) {
 
-        player.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
-        player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+        if (!player.level().isClientSide()) {
 
-        stopShootingAnimation(player, (ServerLevel) player.level(), stack);
-        stopAmmoEmptyAnimation(player, (ServerLevel) player.level(), stack);
-        stopIdleAnimation(player, (ServerLevel) player.level(), stack);
+            resetMovement(player);
+
+            if (player.level() instanceof ServerLevel sl) {
+
+                stopShootingAnimation(player, sl, stack);
+                stopAmmoEmptyAnimation(player, sl, stack);
+                stopIdleAnimation(player, sl, stack);
+            }
+        }
 
         return super.onDroppedByPlayer(stack, player);
     }
@@ -189,17 +214,15 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
         super.onStopUsing(stack, entity, count);
 
-        entity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
-        entity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+        resetMovement((Player) entity);
     }
 
     @Override
-    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
+    public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity entity) {
 
-        pLivingEntity.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.1d);
-        pLivingEntity.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY).setBaseValue(0.0d);
+        resetMovement((Player) entity);
 
-        return super.finishUsingItem(pStack, pLevel, pLivingEntity);
+        return super.finishUsingItem(pStack, pLevel, entity);
     }
 
     @Override
@@ -218,6 +241,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         if (!player.getAbilities().mayBuild) return;
     }
 
+    /// Animation starters and stoppers
     public void startShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
 
         triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller", "shooting");
