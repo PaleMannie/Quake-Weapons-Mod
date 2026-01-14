@@ -26,7 +26,6 @@ import software.bernie.geckolib.GeckoLib;
 public class QuakeWeapons {
 
     /// TODO: gedroppte Waffen sind unsichtbar und Hotbar spinnt displaymäßig rum mit den Waffen beim aufheben
-    /// TODO: Entityschatten bei QWInsis muss weg
 
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();

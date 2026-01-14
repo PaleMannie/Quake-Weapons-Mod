@@ -30,6 +30,10 @@ public class LivingEntityRendererMixin {
         if (entity.getPersistentData().getBoolean("QWInvis").orElse(false)) {
 
             state.isInvisibleToPlayer = true;
-        } else state.isInvisibleToPlayer = false;
+            state.isInvisible = true;
+        } else {
+
+            state.isInvisibleToPlayer = false;
+        }
     }
 }

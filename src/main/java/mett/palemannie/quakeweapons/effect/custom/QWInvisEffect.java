@@ -56,7 +56,5 @@ public class QWInvisEffect extends MobEffect {
 
     ///Assuring that upon breaking invis you get visible again by removing "QWInvis"
     @Override
-    public void removeAttributeModifiers(AttributeMap map) {
-        super.removeAttributeModifiers(map);
-    }
+    public void removeAttributeModifiers(AttributeMap map) { super.removeAttributeModifiers(map); }
 }
