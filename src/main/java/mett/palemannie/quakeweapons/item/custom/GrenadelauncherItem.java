@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
 import software.bernie.geckolib.animatable.processing.AnimationController;
 import software.bernie.geckolib.animation.*;
@@ -27,61 +26,19 @@ import java.util.function.Consumer;
 public class GrenadelauncherItem extends AbstractWeapon{
 
     public GrenadelauncherItem(Properties pProperties) {
+
         super(pProperties);
         this.cooldown = 10;
     }
 
-    private static boolean enableAltModel = false;
+    @Override
+    protected String baseAnimPrefix() { return "grenadelauncher.animations"; }
 
-    public static void reloadConfigValues() {
-
-        try {
-            enableAltModel = QuakeWeaponsConfig.COMMON.enableAltModel.get();
-
-            System.out.println("[QuakeWeapons] Grenade Launcher alternative model config reloaded:");
-            System.out.println(" enableAltModel=" + enableAltModel);
-
-        } catch (Exception e) {
-            System.err.println("[QuakeWeapons] Failed to load config values, using defaults!");
-            enableAltModel = false;
-        }
-
-        System.out.println("[QuakeWeapons] Config values after load: enableAltModel:"
-                + QuakeWeaponsConfig.COMMON.enableAltModel.get());
-    }
+    @Override
+    protected String altAnimPrefix() { return "grenadelauncher_alt.animations"; }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
-
-    private static String getAnimPrefix() {
-        return enableAltModel
-                ? "grenadelauncher_alt.animations"
-                : "grenadelauncher.animations";
-    }
-
-    private RawAnimation getShootAnim() {
-        return RawAnimation.begin().then(getAnimPrefix() + ".shooting", Animation.LoopType.LOOP);
-    }
-
-    private RawAnimation getAmmoEmptyAnim() {
-        return RawAnimation.begin().then(getAnimPrefix() + ".ammoempty", Animation.LoopType.LOOP);
-    }
-
-    private RawAnimation getIdleAnim() {
-        return RawAnimation.begin().then(getAnimPrefix() + ".idle", Animation.LoopType.LOOP);
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", getShootAnim()));
-
-        controllerRegistrar.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("ammoempty", getAmmoEmptyAnim()));
-
-        controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("idle", getIdleAnim()));
-    }
 
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {

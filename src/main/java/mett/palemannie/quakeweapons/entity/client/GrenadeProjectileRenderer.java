@@ -60,7 +60,7 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
     public void extractRenderState(GrenadeProjectileEntity entity, GrenadeRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
 
-        // Wichtige Render-Daten aus der Entity in den State extrahieren
+        /// Tumble n shiet
         RandomSource random = RandomSource.create(entity.getId());
 
         if (!entity.hasStopped) {

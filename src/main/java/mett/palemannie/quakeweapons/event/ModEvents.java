@@ -39,7 +39,6 @@ public class ModEvents {
         /// Pentagram apply invulnerability
         if (event.getEntity().hasEffect(ModEffects.INVULNERABILITY.getHolder().get())) {
 
-            //event.setCanceled(true);
             event.setAmount(0f);
             event.getEntity().level().playSound(null, event.getEntity().blockPosition(), ModSounds.PENTAGRAM_USE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         }
@@ -52,7 +51,6 @@ public class ModEvents {
             if (src.is(DamageTypes.MAGIC) || src.is(DamageTypes.WITHER) || src.is(DamageTypes.CACTUS) || src.is(DamageTypes.SWEET_BERRY_BUSH)
                     || src.is(DamageTypes.DROWN) || src.is(DamageTypes.INDIRECT_MAGIC) || src.is(DamageTypes.MAGIC)
                     || src.is(DamageTypes.WITHER_SKULL) || src.is(DamageTypes.THORNS) || src.is(DamageTypes.STING) || src.is(DamageTypes.DROWN)) {
-                //event.setCanceled(true);
                 event.setAmount(0f);
             }
 

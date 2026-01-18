@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -24,10 +25,15 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animatable.processing.AnimationController;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 /*
- *   Major credit goes to byteManiaks MCQuake3 - semi-appropriated to Forge
+ *   Credit goes to byteManiaks MCQuake3 - semi-appropriated to Forge
  *   https://github.com/bytemaniak/mcquake3
  */
 
@@ -44,14 +50,105 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
+
+
+
+    private static boolean enableAltModels = false;
+
+    /**
+     * Optional: Call once after config load / on reload.
+     * Benutzt Reflection, damit AbstractWeapon keine harte Abhängigkeit auf die Config-Klasse braucht.
+     */
+    public static void reloadAltModelConfig() {
+
+        try {
+            enableAltModels = QuakeWeaponsConfig.COMMON.enableAltModels.get();
+
+            System.out.println("[QuakeWeapons] Grenade Launcher alternative model config reloaded:");
+            System.out.println(" enableAltModel=" + enableAltModels);
+
+        } catch (Exception e) {
+
+            System.err.println("[QuakeWeapons] Failed to load config values, using defaults!");
+            enableAltModels = false;
+        }
+
+        System.out.println("[QuakeWeapons] Config values after load: enableAltModel:"
+                + QuakeWeaponsConfig.COMMON.enableAltModels.get());
+    }
+
+    /** Override in subclasses if you want custom behavior per weapon. */
+    protected boolean isAltModelEnabled() {
+        return enableAltModels;
+    }
+
+    /** Must be provided by each weapon. Example: "nailgun.animations" */
+    protected abstract String baseAnimPrefix();
+
+    /** Optional. Example: "nailgun_alt.animations". Return null/"" if no alt. */
+    protected String altAnimPrefix() { return null; }
+
+    protected final String animPrefix() {
+        if (isAltModelEnabled()) {
+            String alt = altAnimPrefix();
+            if (alt != null && !alt.isBlank()) return alt;
+        }
+        return baseAnimPrefix();
+    }
+
+    protected final RawAnimation animShoot() {
+        return RawAnimation.begin().then(animPrefix() + ".shooting", Animation.LoopType.LOOP);
+    }
+
+    protected final RawAnimation animAmmoEmpty() {
+        return RawAnimation.begin().then(animPrefix() + ".ammoempty", Animation.LoopType.LOOP);
+    }
+
+    protected final RawAnimation animIdle() {
+        return RawAnimation.begin().then(animPrefix() + ".idle", Animation.LoopType.LOOP);
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+        controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("shooting", animShoot()));
+
+        controllerRegistrar.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("ammoempty", animAmmoEmpty()));
+
+        controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("idle", animIdle()));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     int cooldown;
 
     public void setCurrentHand(InteractionHand hand, LivingEntity player) {
+
         ItemStack itemStack = player.getItemInHand(hand);
         if (!itemStack.isEmpty() && !player.isUsingItem()) {
+
             player.useItem = itemStack;
             player.useItemRemaining = itemStack.getUseDuration(player);
             if (!player.level().isClientSide()) {
+
                 player.setLivingEntityFlag(1, true);
                 player.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
                 player.gameEvent(GameEvent.ITEM_INTERACT_START);
@@ -61,11 +158,13 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     /// Anti-slowdown methods
     private boolean doAntiSlow(Player player) {
+
         boolean squakeEnabled = player.getPersistentData().getBoolean("QWSquakeEnabled").orElse(false);
         return (!HAS_SQUAKE) || (!squakeEnabled);
     }
 
     private void applyAntiFirstTickDash(Player player, boolean diagonal) {
+
         var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
         var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
         if (ms != null) ms.setBaseValue(diagonal ? 0.707106781186d : 0.1);
@@ -73,6 +172,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     private void applyAntiSlowSpeed(Player player, boolean diagonal) {
+
         var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
         var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
         if (ms != null) ms.setBaseValue(diagonal ? 0.353553390593d : 0.5d);
@@ -80,6 +180,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     private void applySquakeAntiSlowSpeed(Player player, boolean diagonal) {
+
         var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
         var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
         if (ms != null) ms.setBaseValue(diagonal ? 0.353553390593d/2d : 0.25d);
@@ -87,6 +188,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     private void resetMovement(Player player) {
+
         var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
         var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
         if (ms != null) ms.setBaseValue(0.1d);
@@ -117,7 +219,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         return InteractionResult.PASS;
     }
 
-    ///
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand usedHand) {
 
@@ -130,7 +231,9 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         setCurrentHand(usedHand, player);
 
         if (!level.isClientSide()) {
+
             if (doAntiSlow(player)) {
+
                 applyAntiSlowSpeed(player, diagonal);
             } else {
 

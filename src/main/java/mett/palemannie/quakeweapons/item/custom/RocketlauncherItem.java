@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 public class RocketlauncherItem extends AbstractWeapon{
 
     public RocketlauncherItem(Properties pProperties) {
+
         super(pProperties);
         this.cooldown = 14;
     }
@@ -34,22 +35,11 @@ public class RocketlauncherItem extends AbstractWeapon{
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("rocketlauncher.animations.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("rocketlauncher.animations.ammoempty", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("rocketlauncher.animations.idle", Animation.LoopType.LOOP);
+    @Override
+    protected String baseAnimPrefix() { return "rocketlauncher.animations"; }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
-        controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", SHOOT_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("idle", IDLE_ANIM));
-    }
+    protected String altAnimPrefix() { return "rocketlauncher_alt.animations"; }
 
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {

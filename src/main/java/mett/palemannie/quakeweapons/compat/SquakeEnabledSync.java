@@ -10,6 +10,8 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class SquakeEnabledSync {
+
+    /// Squake Compatibility with Squake Ported even in a server
     private static boolean last = false;
 
     @SubscribeEvent

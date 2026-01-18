@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"nailgun.animations.shooting": {
+		"nailgun_alt.animations.shooting": {
 			"loop": true,
 			"animation_length": 0.2,
 			"bones": {
@@ -96,7 +96,7 @@
 				}
 			}
 		},
-		"nailgun.animations.ammoempty": {
+		"nailgun_alt.animations.ammoempty": {
 			"loop": true,
 			"animation_length": 0.11,
 			"bones": {
@@ -141,7 +141,7 @@
 				}
 			}
 		},
-		"nailgun.animations.idle": {
+		"nailgun_alt.animations.idle": {
 			"loop": true,
 			"bones": {
 				"right_fire": {

@@ -1,7 +1,6 @@
 package mett.palemannie.quakeweapons.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;

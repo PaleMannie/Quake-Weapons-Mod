@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 public final class SquakeCompat {
     private SquakeCompat() {}
 
-    // Modid ggf. anpassen (aus mods.toml von Squake)
+    /// Achieving compatibility with Squake Ported
     private static final String SQUAKE_MODID = "squakeport_1_21_6";
     private static final String CONFIG_CLASS = "mett.palemannie.squakeport_1_21_6.ModConfig";
 

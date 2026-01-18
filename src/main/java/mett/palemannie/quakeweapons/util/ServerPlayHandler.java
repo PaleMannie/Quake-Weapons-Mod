@@ -16,7 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -473,14 +472,12 @@ public class ServerPlayHandler {
         ServerLevel sevel = player.getServer().overworld();
         Level lvl = player.level();
 
-        // Stack bestimmen: bevorzugt Use-Item, fallback Mainhand
         ItemStack stack = player.getUseItem();
         if (!(stack.getItem() instanceof NailgunItem)) {
             stack = player.getMainHandItem();
         }
         if (!(stack.getItem() instanceof NailgunItem)) return;
 
-        // Side pro Stack (nicht global!)
         boolean rightSide = getNailgunRight(stack);
         double offset = rightSide ? 0.3 : -0.3;
         double forwardOffset = 0.4;
@@ -504,11 +501,9 @@ public class ServerPlayHandler {
             sevel.addFreshEntity(flash);
         }
 
-        // Sound
         lvl.playSound(null, player.getX(), player.getY(), player.getZ(),
                 ModSounds.NAILGUN_SHOOT.get(), SoundSource.PLAYERS, 1f, 1f);
 
-        // WICHTIG: erst nach dem Spawn togglen
         toggleNailgunRight(stack);
     }
 

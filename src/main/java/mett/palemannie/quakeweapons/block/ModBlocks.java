@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 * Credit goes to AtomicStrykers Dynamic Lights mod
 * https://github.com/AtomicStryker/atomicstrykers-minecraft-mods/tree/1.21.4/DynamicLights
 * https://github.com/AtomicStryker/atomicstrykers-minecraft-mods
-* */
+*/
 
 public class ModBlocks {
 

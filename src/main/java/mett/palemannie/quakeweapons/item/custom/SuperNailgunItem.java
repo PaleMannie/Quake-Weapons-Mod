@@ -26,32 +26,20 @@ import java.util.function.Consumer;
 
 public class SuperNailgunItem extends AbstractWeapon{
 
+    public SuperNailgunItem(Properties pProperties) {
+
+        super(pProperties);
+        this.cooldown = 1;
+    }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("super_nailgun.animations.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("super_nailgun.animations.ammoempty", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("super_nailgun.animations.idle", Animation.LoopType.LOOP);
-
+    @Override
+    protected String baseAnimPrefix() { return "super_nailgun.animations"; }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
-        controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", SHOOT_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("idle", IDLE_ANIM));
-    }
-
-    public SuperNailgunItem(Properties pProperties) {
-        super(pProperties);
-        this.cooldown = 1;
-
-    }
+    protected String altAnimPrefix() { return "super_nailgun_alt.animations"; }
 
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {

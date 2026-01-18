@@ -27,10 +27,12 @@ public abstract class AbstractPowerupItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
+
             int duration = getPowerupDuration();
             applyPowerupTo(player, duration);
 
             if (!player.getAbilities().instabuild) {
+
                 stack.shrink(1);
             }
         }
@@ -55,12 +57,15 @@ public abstract class AbstractPowerupItem extends Item {
             }
             return InteractionResult.SUCCESS;
         }
-        return InteractionResult.CONSUME; // Client: Animation abspielen
+        return InteractionResult.CONSUME;
     }
 
     private void applyPowerupTo(LivingEntity entity, int duration) {
+
         Holder<MobEffect> effect = getPowerupEffect();
+
         if (effect != null) {
+
             entity.addEffect(new MobEffectInstance(effect, duration, 0, false, false, true));
         }
 

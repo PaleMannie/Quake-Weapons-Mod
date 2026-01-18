@@ -40,6 +40,7 @@ import java.util.function.Consumer;
 public class ThunderboltItem extends AbstractWeapon{
 
     public ThunderboltItem(Properties pProperties) {
+
         super(pProperties);
         this.cooldown = 1;
     }
@@ -47,22 +48,11 @@ public class ThunderboltItem extends AbstractWeapon{
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("thunderbolt.animations.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("thunderbolt.animations.ammoempty", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("thunderbolt.animations.idle", Animation.LoopType.LOOP);
+    @Override
+    protected String baseAnimPrefix() { return "thunderbolt.animations"; }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
-        controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", SHOOT_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("idle", IDLE_ANIM));
-    }
+    protected String altAnimPrefix() { return "thunderbolt_alt.animations"; }
 
     @Override
     public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
