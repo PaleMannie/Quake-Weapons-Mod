@@ -14,4 +14,7 @@ public class QuaddamagePowerupRenderer<R extends LivingEntityRenderState & GeoRe
         this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
         this.withScale(0.5f);
     }
+
+    private void addRenderLayer(AutoGlowingGeoLayer<QuadDamagePowerupEntity, Void,R> biosuitPowerupEntityVoidRAutoGlowingGeoLayer) {
+    }
 }

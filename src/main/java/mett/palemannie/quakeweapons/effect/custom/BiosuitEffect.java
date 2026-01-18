@@ -21,7 +21,7 @@ public class BiosuitEffect extends MobEffect {
     public void onEffectAdded(LivingEntity entity, int pAmplifier) {
 
         Level level = entity.level();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
 
             if (entity instanceof ServerPlayer player) {
                 ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.ADD), player);
@@ -33,7 +33,7 @@ public class BiosuitEffect extends MobEffect {
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
 
         Level level = entity.level();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
 
             if (entity instanceof ServerPlayer player) {
                 ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.BIOSUIT.getId(), PowerupSoundEventType.EXPIRING), player);

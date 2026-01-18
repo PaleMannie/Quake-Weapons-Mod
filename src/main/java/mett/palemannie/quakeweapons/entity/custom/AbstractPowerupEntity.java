@@ -46,7 +46,7 @@ public abstract class AbstractPowerupEntity extends Entity implements GeoEntity 
         super.tick();
 
         /// Extract entity lifetime from config
-        if(!level().isClientSide) { durationOnPickup = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(); }
+        if(!level().isClientSide()) { durationOnPickup = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(); }
 
         /// Lifetime check
         if (this.tickCount > QuakeWeaponsConfig.SERVER.powerupLifetime.get()) {
@@ -55,7 +55,7 @@ public abstract class AbstractPowerupEntity extends Entity implements GeoEntity 
         }
 
         /// Entity Hitbox
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             for (Player player : level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(0.5))) {
                 onPickup(player);
                 discard();
@@ -74,7 +74,7 @@ public abstract class AbstractPowerupEntity extends Entity implements GeoEntity 
         ItemStack stack = player.getItemInHand(hand);
 
         /// Rightclicking the entity with totem of undying will drop it
-        if (!level().isClientSide && stack.is(Items.TOTEM_OF_UNDYING)) {
+        if (!level().isClientSide() && stack.is(Items.TOTEM_OF_UNDYING)) {
 
             this.spawnAtLocation(player.level().getServer().getLevel(player.level().dimension()), getPowerupItem());
             level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.get(), SoundSource.PLAYERS, 1.0F, 2.0F);

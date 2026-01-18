@@ -17,7 +17,7 @@ public class QWPlayer {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent e) {
-        if (e.phase != TickEvent.Phase.END) return;
+        //if (e.phase != TickEvent.Phase.END) return;
 
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;

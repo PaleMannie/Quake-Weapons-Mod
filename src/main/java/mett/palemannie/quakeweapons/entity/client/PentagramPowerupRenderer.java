@@ -14,4 +14,7 @@ public class PentagramPowerupRenderer<R extends LivingEntityRenderState & GeoRen
         this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
         this.withScale(2f);
     }
+
+    private void addRenderLayer(AutoGlowingGeoLayer<PentagramPowerupEntity, Void,R> biosuitPowerupEntityVoidRAutoGlowingGeoLayer) {
+    }
 }

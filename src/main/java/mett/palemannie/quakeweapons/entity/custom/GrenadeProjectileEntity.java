@@ -4,10 +4,12 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
+import net.minecraft.core.particles.ExplosionParticleInfo;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -40,9 +42,11 @@ public class GrenadeProjectileEntity extends Projectile {
         }
     }
 
+    private WeightedList<ExplosionParticleInfo> blockParticles;
+
     /// Vanilla minecraft explosion with custom particle effects
     private void quakeExplosion(Level level) {
-        if (this.level().isClientSide) return;
+        if (this.level().isClientSide()) return;
 
         Vec3 center = this.position();
 
@@ -57,7 +61,7 @@ public class GrenadeProjectileEntity extends Projectile {
 
         level().explode(null, source, null, center.x, center.y, center.z,
                 computeRadiusFromDamage(QWConfigStats.GrenadelauncherDamage, (Player)this.getOwner()),
-                false, Level.ExplosionInteraction.NONE, ParticleTypes.FLAME, ParticleTypes.FLAME,
+                false, Level.ExplosionInteraction.NONE, ParticleTypes.FLAME, ParticleTypes.FLAME, blockParticles,
                 ModSounds.EXPLOSION.getHolder().get());
 
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
@@ -94,7 +98,7 @@ public class GrenadeProjectileEntity extends Projectile {
 
         Vec3 motion = this.getDeltaMovement();
 
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
 
             Vec3 motion1 = this.getDeltaMovement().normalize().scale(-0.25);
             double px = this.getX() + motion1.x;

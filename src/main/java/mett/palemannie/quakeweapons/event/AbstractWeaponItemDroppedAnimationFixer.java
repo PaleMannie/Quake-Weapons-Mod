@@ -40,8 +40,8 @@ public class AbstractWeaponItemDroppedAnimationFixer {
 
         ///This event fixes the weapon being stuck in the shooting animation when dropping while shooting a Quake-Weapon
 
-        if (event.phase != TickEvent.Phase.START || event.level.isClientSide) return;
-        ServerLevel serverLevel = (ServerLevel) event.level;
+        //if (event.phase != TickEvent.Phase.START || event.level().isClientSide()) return;
+        ServerLevel serverLevel = (ServerLevel) event.level();
 
         tickCounter++;
         if (tickCounter % scanInterval != 0) return;

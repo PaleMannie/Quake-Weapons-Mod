@@ -75,7 +75,7 @@ public class MuzzleflashEntity extends Projectile {
 
     void muzzleFlashHandler(){
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             if (this.tickCount == 1) {
                 this.tryPlaceLight();
             }

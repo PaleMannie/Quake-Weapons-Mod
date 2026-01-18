@@ -72,7 +72,7 @@ public class ModEvents {
 
         if(event.getEffectInstance().getEffect().equals(ModEffects.QW_INVIS.get())){
 
-            if (!entity.level().isClientSide) {
+            if (!entity.level().isClientSide()) {
 
                 ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), event.getEntity());
             }
@@ -85,7 +85,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onQuadDamageAttack1(PlayerInteractEvent.LeftClickEmpty event){
 
-        if(event.getEntity().hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) && event.getLevel().isClientSide){
+        if(event.getEntity().hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) && event.getLevel().isClientSide()){
 
             event.getEntity().playSound(ModSounds.QUAD_DAMAGE_USE.get(), 1f, 1f);
         }
@@ -94,7 +94,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onQuadDamageAttack2(PlayerInteractEvent.LeftClickBlock event){
 
-        if(event.getEntity().hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) && event.getLevel().isClientSide){
+        if(event.getEntity().hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) && event.getLevel().isClientSide()){
 
             event.getEntity().playSound(ModSounds.QUAD_DAMAGE_USE.get(), 1f, 1f);
         }
@@ -110,7 +110,7 @@ public class ModEvents {
     @SubscribeEvent
     public static void onQuadDamageAttack3(PlayerInteractEvent.EntityInteract event){
 
-        if(event.getEntity().hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) && event.getLevel().isClientSide){
+        if(event.getEntity().hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) && event.getLevel().isClientSide()){
 
             event.getEntity().playSound(ModSounds.QUAD_DAMAGE_USE.get(), 1f, 1f);
         }

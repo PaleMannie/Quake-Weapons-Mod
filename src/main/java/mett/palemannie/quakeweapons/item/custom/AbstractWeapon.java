@@ -332,7 +332,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, @Nullable EquipmentSlot slot, int slotIndex) {
 
         if (!(entity instanceof Player player)) return;
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
 
         if (slot != EquipmentSlot.MAINHAND) {
             stopAmmoEmptyAnimation(player, (ServerLevel) level, stack);

@@ -25,7 +25,7 @@ import software.bernie.geckolib.GeckoLib;
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
 
-    /// TODO: gedroppte Waffen sind unsichtbar und Hotbar spinnt displaymäßig rum mit den Waffen beim aufheben
+    /// TODO: Hotbar spinnt displaymäßig rum mit den Waffen beim aufheben
 
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();

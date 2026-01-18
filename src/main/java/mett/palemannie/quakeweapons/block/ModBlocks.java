@@ -34,9 +34,16 @@ public class ModBlocks {
             DeferredRegister.create(ForgeRegistries.BLOCKS, QuakeWeapons.MODID);
 
 
-    public static final RegistryObject<Block> LIGHT_WATER = BLOCKS.register("light_water", () ->
+    /*public static final RegistryObject<Block> LIGHT_WATER = BLOCKS.register("light_water", () ->
             new LightWaterBlock(Fluids.WATER, BlockBehaviour.Properties.of().setId(BLOCKS.key("light_water"))
                     .mapColor(MapColor.WATER).replaceable().noCollission().strength(100.0F)
+                    .pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)
+                    .lightLevel((x)
+                            -> x.getValue(BlockStateProperties.POWER))));*/
+
+    public static final RegistryObject<Block> LIGHT_WATER = BLOCKS.register("light_water", () ->
+            new LightWaterBlock(Fluids.WATER, BlockBehaviour.Properties.of().setId(BLOCKS.key("light_water"))
+                    .mapColor(MapColor.WATER).replaceable().noCollision().strength(100.0F)
                     .pushReaction(PushReaction.DESTROY).noLootTable().liquid().sound(SoundType.EMPTY)
                     .lightLevel((x)
                             -> x.getValue(BlockStateProperties.POWER))));

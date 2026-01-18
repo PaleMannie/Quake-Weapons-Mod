@@ -108,7 +108,7 @@ public class NailProjectileEntity extends Projectile {
 
         var soundEvent = ModSounds.NAILGUN_HIT.get();
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }

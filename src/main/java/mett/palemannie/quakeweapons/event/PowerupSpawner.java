@@ -79,11 +79,11 @@ public class PowerupSpawner {
             return;
         }
 
-        if (event.phase != TickEvent.Phase.END || event.level.isClientSide) return;
+        if (/*event.phase != TickEvent.Phase.END || */event.level().isClientSide()) return;
 
         int interval = spawnInterval;
         int attempts = spawnAttempts;
-        ServerLevel level = (ServerLevel) event.level;
+        ServerLevel level = (ServerLevel) event.level();
         long gameTime = level.getGameTime();
 
 

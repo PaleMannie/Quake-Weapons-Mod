@@ -14,4 +14,7 @@ public class RingPowerupRenderer<R extends LivingEntityRenderState & GeoRenderSt
         this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
         this.withScale(2f);
     }
+
+    private void addRenderLayer(AutoGlowingGeoLayer<RingofshadowsPowerupEntity, Void,R> biosuitPowerupEntityVoidRAutoGlowingGeoLayer) {
+    }
 }

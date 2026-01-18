@@ -21,7 +21,7 @@ public class QuadDamageEffect extends MobEffect {
     public void onEffectAdded(LivingEntity entity, int pAmplifier) {
 
         Level level = entity.level();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
 
             if (entity instanceof ServerPlayer player) {
                 ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QUAD_DAMAGE.getId(), PowerupSoundEventType.ADD), player);
@@ -33,7 +33,7 @@ public class QuadDamageEffect extends MobEffect {
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
 
         Level level = entity.level();
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
 
             if (entity instanceof ServerPlayer player) {
                 ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QUAD_DAMAGE.getId(), PowerupSoundEventType.EXPIRING), player);

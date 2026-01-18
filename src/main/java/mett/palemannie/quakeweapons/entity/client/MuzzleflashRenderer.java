@@ -4,9 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.MuzzleflashEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.resources.ResourceLocation;
 
 public class MuzzleflashRenderer extends EntityRenderer<MuzzleflashEntity, EntityRenderState> {
@@ -24,6 +26,8 @@ public class MuzzleflashRenderer extends EntityRenderer<MuzzleflashEntity, Entit
         return new EntityRenderState();
     }
 
-    public void render(MuzzleflashEntity nailEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    @Override
+    public void submit(EntityRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
+        super.submit(state, poseStack, nodeCollector, cameraRenderState);
     }
 }

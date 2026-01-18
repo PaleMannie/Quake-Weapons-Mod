@@ -89,7 +89,7 @@ public class ServerPlayHandler {
     public static void handleAxeShoot(Player player) {
 
         Level level = player.level();
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
 
         ServerLevel sLevel = (ServerLevel) level;
 
@@ -160,7 +160,7 @@ public class ServerPlayHandler {
     public static void handleThunderboltShoot(ServerPlayer player, int useTime){
 
         Level lvl = player.level();
-        ServerLevel sevel = player.getServer().overworld();
+        ServerLevel sevel = player.level().getLevel();
 
         ///Entity
         double forwardOffset = 0.2;
@@ -205,7 +205,7 @@ public class ServerPlayHandler {
                 }
             }
 
-            if(QuakeWeaponsConfig.COMMON.enableThunderboltTracer.get()) player.getServer().overworld().sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y-0.25f, point.z, 1, 0.02f, 0.02f, 0.02f, 0f);
+            if(QuakeWeaponsConfig.COMMON.enableThunderboltTracer.get()) sevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y-0.25f, point.z, 1, 0.02f, 0.02f, 0.02f, 0f);
         }
 
         ///Sound
@@ -219,7 +219,7 @@ public class ServerPlayHandler {
 
     public static void handleRocketLauncherShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.getServer().overworld();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ///Entity
@@ -254,7 +254,7 @@ public class ServerPlayHandler {
 
     public static void handleGrenadeLauncherShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.getServer().overworld();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ///Entity
@@ -272,7 +272,7 @@ public class ServerPlayHandler {
 
     public static void handleSuperShotgunShoot(ServerPlayer player) {
 
-        ServerLevel sevel = player.getServer().overworld();
+        ServerLevel sevel = player.level().getLevel();
         Vec3 eyePos = player.getEyePosition();
         Vec3 look = player.getLookAngle();
 
@@ -344,7 +344,7 @@ public class ServerPlayHandler {
 
     public static void handleShotgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.getServer().overworld();
+        ServerLevel sevel = player.level().getLevel();
         Level level = player.level();
 
 
@@ -421,7 +421,7 @@ public class ServerPlayHandler {
 
     public static void handleSuperNailgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.getServer().overworld();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ///Entity
@@ -469,7 +469,7 @@ public class ServerPlayHandler {
 
     public static void handleNailgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.getServer().overworld();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ItemStack stack = player.getUseItem();

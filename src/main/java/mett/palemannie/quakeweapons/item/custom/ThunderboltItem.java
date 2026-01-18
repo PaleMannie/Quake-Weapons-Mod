@@ -101,7 +101,7 @@ public class ThunderboltItem extends AbstractWeapon{
 
     private void triggerWaterDischarge(ServerLevel level, Player player) {
 
-        if(level.isClientSide) return;
+        if(level.isClientSide()) return;
 
         int cellCount = countAmmoCells(player);
         double radius = cellCount/2d;

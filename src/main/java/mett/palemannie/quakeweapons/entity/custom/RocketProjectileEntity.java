@@ -7,11 +7,13 @@ import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ExplosionParticleInfo;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -46,8 +48,10 @@ public class RocketProjectileEntity extends Projectile {
             return player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;}
     }
 
+    private WeightedList<ExplosionParticleInfo> blockParticles;
+
     private void quakeExplosion(Level level) {
-        if (this.level().isClientSide) return;
+        if (this.level().isClientSide()) return;
 
         Vec3 center = this.position();
 
@@ -60,7 +64,10 @@ public class RocketProjectileEntity extends Projectile {
             }
         }
 
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, ParticleTypes.FLAME, ParticleTypes.FLAME, ModSounds.EXPLOSION.getHolder().get());
+        level().explode(null, source, null, center.x, center.y, center.z,
+                computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()),
+                false, Level.ExplosionInteraction.NONE, ParticleTypes.FLAME, ParticleTypes.FLAME, blockParticles,
+                ModSounds.EXPLOSION.getHolder().get());
 
         ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
@@ -130,7 +137,7 @@ public class RocketProjectileEntity extends Projectile {
 
     void projectileFlyStraight(){
 
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             Vec3 motion = this.getDeltaMovement().normalize().scale(-0.25);
             double px = this.getX() + motion.x;
             double py = this.getY() + motion.y;
@@ -156,7 +163,7 @@ public class RocketProjectileEntity extends Projectile {
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide && QuakeWeaponsConfig.COMMON.enableRocketTrailLight.get()) {
+        if (!this.level().isClientSide() && QuakeWeaponsConfig.COMMON.enableRocketTrailLight.get()) {
             if (this.tickCount % 2 == 0) {
                 this.cleanupLight();
                 this.tryPlaceLight();
@@ -177,7 +184,7 @@ public class RocketProjectileEntity extends Projectile {
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }

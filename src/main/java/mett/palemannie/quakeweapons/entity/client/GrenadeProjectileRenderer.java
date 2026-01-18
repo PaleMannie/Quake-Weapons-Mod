@@ -7,9 +7,12 @@ import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.GrenadeProjectileEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -42,6 +45,29 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
 
         VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(GRENADE_EMISSIVE_LOCATION));
         this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY);
+
+        poseStack.popPose();
+    }
+
+    @Override
+    public void submit(GrenadeRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState pCameraRenderState) {
+
+        poseStack.pushPose();
+        poseStack.scale(0.2F, 0.2F, 0.2F);
+        poseStack.translate(0.0F, 0.1f, 0.0F);
+
+        poseStack.mulPose(Axis.XP.rotationDegrees(state.tumbleX));
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.tumbleY));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(state.tumbleZ));
+
+        /*VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(GRENADE_LOCATION));
+        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY);*/
+
+        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(GRENADE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderType.eyes(GRENADE_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
+
+        /*VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(GRENADE_EMISSIVE_LOCATION));
+        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY);*/
 
         poseStack.popPose();
     }

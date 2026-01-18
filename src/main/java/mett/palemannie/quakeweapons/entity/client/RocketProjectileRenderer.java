@@ -1,21 +1,19 @@
 package mett.palemannie.quakeweapons.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.RocketProjectileEntity;
-import mett.palemannie.quakeweapons.entity.custom.SuperNailProjectileEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
+import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
 
 public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEntity, LlamaSpitRenderState> {
 
@@ -28,25 +26,29 @@ public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEnt
         this.model = new RocketProjectileModel(context.bakeLayer(RocketProjectileModel.ROCKET_LAYER));
     }
 
-    public void render(LlamaSpitRenderState rocketEntity, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    @Override
+    public void submit(LlamaSpitRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
 
         poseStack.pushPose();
 
         poseStack.scale(0.25F, 0.25F, 0.25F);
         poseStack.translate(0.0F, 0.25f, 0.0F);
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(rocketEntity.yRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(-rocketEntity.xRot + 180f));
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-state.xRot + 180f));
 
-        VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(ROCKET_LOCATION));
+        /*VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(ROCKET_LOCATION));
         this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY);
 
         VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(ROCKET_EMISSIVE_LOCATION));
-        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY);
+        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY);*/
+
+        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(ROCKET_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderType.eyes(ROCKET_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
 
         poseStack.popPose();
 
-        super.render(rocketEntity, poseStack, bufferSource, packedLight);
+        super.submit(state, poseStack, nodeCollector, cameraRenderState);
     }
 
     @Override

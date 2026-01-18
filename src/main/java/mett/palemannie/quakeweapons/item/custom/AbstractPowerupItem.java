@@ -26,7 +26,7 @@ public abstract class AbstractPowerupItem extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
 
             int duration = getPowerupDuration();
             applyPowerupTo(player, duration);
@@ -45,7 +45,7 @@ public abstract class AbstractPowerupItem extends Item {
 
         Level level = player.level();
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
 
             int duration = getPowerupDuration();
             applyPowerupTo(target, duration);

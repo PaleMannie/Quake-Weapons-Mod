@@ -14,4 +14,7 @@ public class BiosuitPowerupRenderer<R extends LivingEntityRenderState & GeoRende
         this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
         this.shadowRadius = 0.5f;
     }
+
+    private void addRenderLayer(AutoGlowingGeoLayer<BiosuitPowerupEntity, Void,R> biosuitPowerupEntityVoidRAutoGlowingGeoLayer) {
+    }
 }
