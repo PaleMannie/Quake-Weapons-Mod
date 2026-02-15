@@ -27,8 +27,15 @@ import software.bernie.geckolib.GeckoLib;
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
 
+    /// TODO: Axt Neues Modell + Code
+    /// TODO: (Super)Nailgun Neues Modell + Code
+    /// TODO: (Super)Shotgun Neues Modell + Code
+    /// TODO: Raketenwerfer Neues Modell + Code
+    /// TODO: Granatenwerfer Neues Modell
+    /// TODO: Thunderbolt Neues Modell + Code
+
     public static final String MODID = "quakeweapons";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public QuakeWeapons(FMLJavaModLoadingContext context){
 

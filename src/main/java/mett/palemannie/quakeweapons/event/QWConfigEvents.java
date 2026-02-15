@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
+import mett.palemannie.quakeweapons.item.custom.AbstractWeapon;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -20,6 +21,13 @@ public class QWConfigEvents {
             PowerupSpawner.reloadConfigValues();
             AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
         }
+
+        if(event.getConfig().getSpec() == QuakeWeaponsConfig.COMMON_SPEC){
+
+            QuakeWeapons.LOGGER.trace("[QW] COMMON config loaded — loading animation switches");
+
+            AbstractWeapon.reloadAltModelConfig();
+        }
     }
 
     @SubscribeEvent
@@ -30,6 +38,13 @@ public class QWConfigEvents {
 
             PowerupSpawner.reloadConfigValues();
             AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
+        }
+
+        if(event.getConfig().getSpec() == QuakeWeaponsConfig.COMMON_SPEC){
+
+            QuakeWeapons.LOGGER.trace("[QW] COMMON config reloaded — reloading animation switches");
+
+            AbstractWeapon.reloadAltModelConfig();
         }
     }
 }

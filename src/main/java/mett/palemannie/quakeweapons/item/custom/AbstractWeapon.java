@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -37,6 +38,26 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
+
+    private static boolean enableAltModels = false;
+
+    public static void reloadAltModelConfig() {
+
+        try {
+            enableAltModels = QuakeWeaponsConfig.COMMON.enableAltModels.get();
+
+            System.out.println("[QuakeWeapons] Grenade Launcher alternative model config reloaded:");
+            System.out.println(" enableAltModel=" + enableAltModels);
+
+        } catch (Exception e) {
+
+            System.err.println("[QuakeWeapons] Failed to load config values, using defaults!");
+            enableAltModels = false;
+        }
+
+        System.out.println("[QuakeWeapons] Config values after load: enableAltModel:"
+                + QuakeWeaponsConfig.COMMON.enableAltModels.get());
+    }
 
     public void setCurrentHand(InteractionHand hand, LivingEntity player) {
         ItemStack itemStack = player.getItemInHand(hand);
