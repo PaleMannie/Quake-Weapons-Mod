@@ -7,11 +7,11 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class MuzzleflashModel extends EntityModel<EntityRenderState> {
 
-    public static final ModelLayerLocation FLASH_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "muzzleflash"), "main");
+    public static final ModelLayerLocation FLASH_LAYER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "muzzleflash"), "main");
     private static final String MAIN = "main";
     private final ModelPart root;
 

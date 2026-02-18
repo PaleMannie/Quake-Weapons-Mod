@@ -47,9 +47,6 @@ public class QuakeWeapons {
         QuakeWeaponsConfig.registerConfigs();
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-    }
-
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
 
@@ -68,11 +65,6 @@ public class QuakeWeapons {
 
             PowerupSoundRegistry.init();
         }
-    }
-
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public void clientSetup(FMLClientSetupEvent e) {
     }
 
     private static void commonSetup(final FMLCommonSetupEvent event) {

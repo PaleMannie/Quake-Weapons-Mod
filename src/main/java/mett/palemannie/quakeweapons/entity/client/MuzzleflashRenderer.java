@@ -3,17 +3,16 @@ package mett.palemannie.quakeweapons.entity.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.MuzzleflashEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.state.CameraRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class MuzzleflashRenderer extends EntityRenderer<MuzzleflashEntity, EntityRenderState> {
 
-    private static final ResourceLocation FLASH_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/muzzleflash/muzzleflash.png");
+    private static final Identifier FLASH_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/muzzleflash/muzzleflash.png");
     private final MuzzleflashModel model;
 
     public MuzzleflashRenderer(EntityRendererProvider.Context context) {

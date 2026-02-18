@@ -12,11 +12,11 @@ import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity, LlamaSpitRenderState> {
 
-    private static final ResourceLocation NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/nail_projectile/nail_projectile.png");
+    private static final Identifier NAIL_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/nail_projectile/nail_projectile.png");
     private final NailProjectileModel model;
 
     public NailProjectileRenderer(EntityRendererProvider.Context context) {
@@ -36,9 +36,6 @@ public class NailProjectileRenderer extends EntityRenderer<NailProjectileEntity,
         poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
 
         this.model.setupAnim(state);
-
-        /*VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(NAIL_LOCATION));
-        this.model.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);*/
 
         nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(NAIL_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
 

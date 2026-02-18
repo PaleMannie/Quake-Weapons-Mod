@@ -5,7 +5,7 @@ import mett.palemannie.quakeweapons.net.packets.C2SDiagonalMovementPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SSquakeEnabledPacket;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.net.packets.S2CPowerupSoundPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.network.ChannelBuilder;
@@ -21,7 +21,7 @@ public class ModMessages {
     }
     final static int version = 1;
 
-    public static final SimpleChannel INSTANCE = ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "messages"))
+    public static final SimpleChannel INSTANCE = ChannelBuilder.named(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "messages"))
             .networkProtocolVersion(version)
             .clientAcceptedVersions(((status, version1) -> true))
             .serverAcceptedVersions(((status, version1) -> true))

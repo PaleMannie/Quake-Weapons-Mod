@@ -7,11 +7,11 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class RocketProjectileModel extends EntityModel<LlamaSpitRenderState> {
 
-	public static final ModelLayerLocation ROCKET_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "rocket_projectile"), "main");
+	public static final ModelLayerLocation ROCKET_LAYER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "rocket_projectile"), "main");
 	private final ModelPart rocket;
 
 	public RocketProjectileModel(ModelPart root) {

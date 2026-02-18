@@ -5,7 +5,7 @@ import mett.palemannie.quakeweapons.block.custom.LightWaterBlock;
 import mett.palemannie.quakeweapons.item.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -57,7 +57,7 @@ public class ModBlocks {
 
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block) {
         ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()
-                .setId(ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, name)))));
+                .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, name)))));
     }
 
     public static void register(BusGroup eventBus) {

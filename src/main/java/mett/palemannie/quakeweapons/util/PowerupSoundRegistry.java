@@ -2,7 +2,7 @@ package mett.palemannie.quakeweapons.util;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -15,7 +15,7 @@ import java.util.Map;
 @OnlyIn(Dist.CLIENT)
 public final class PowerupSoundRegistry {
 
-    private static final Map<ResourceLocation, Map<PowerupSoundEventType, SoundEvent>> SOUNDS = new HashMap<>();
+    private static final Map<Identifier, Map<PowerupSoundEventType, SoundEvent>> SOUNDS = new HashMap<>();
 
     public static void init() {
 
@@ -25,7 +25,7 @@ public final class PowerupSoundRegistry {
         register(ModEffects.QW_INVIS.getId(), ModSounds.RING_PICKUP.get(), ModSounds.RING_EXPIRE.get());
     }
 
-    private static void register(ResourceLocation effect, SoundEvent add, SoundEvent expire) {
+    private static void register(Identifier effect, SoundEvent add, SoundEvent expire) {
 
         Map<PowerupSoundEventType, SoundEvent> map = new EnumMap<>(PowerupSoundEventType.class);
         map.put(PowerupSoundEventType.ADD, add);
@@ -34,7 +34,7 @@ public final class PowerupSoundRegistry {
     }
 
     @Nullable
-    public static SoundEvent getSound(ResourceLocation effect, PowerupSoundEventType type) {
+    public static SoundEvent getSound(Identifier effect, PowerupSoundEventType type) {
 
         Map<PowerupSoundEventType, SoundEvent> map = SOUNDS.get(effect);
         return map != null ? map.get(type) : null;

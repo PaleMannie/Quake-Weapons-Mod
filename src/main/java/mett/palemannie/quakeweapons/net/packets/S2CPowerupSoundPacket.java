@@ -5,7 +5,7 @@ import mett.palemannie.quakeweapons.util.PowerupSoundRegistry;
 import mett.palemannie.quakeweapons.util.QWPowerupSoundInstance;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,10 +17,10 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 public class S2CPowerupSoundPacket {
 
     private final int entityId;
-    private final ResourceLocation effectId;
+    private final Identifier effectId;
     private final PowerupSoundEventType type;
 
-    public S2CPowerupSoundPacket(int entityId, ResourceLocation effectId, PowerupSoundEventType type) {
+    public S2CPowerupSoundPacket(int entityId, Identifier effectId, PowerupSoundEventType type) {
         this.entityId = entityId;
         this.effectId = effectId;
         this.type = type;
@@ -28,14 +28,14 @@ public class S2CPowerupSoundPacket {
 
     public static void encode(S2CPowerupSoundPacket packet, FriendlyByteBuf buf) {
         buf.writeVarInt(packet.entityId);
-        buf.writeResourceLocation(packet.effectId);
+        buf.writeIdentifier(packet.effectId);
         buf.writeEnum(packet.type);
     }
 
     public static S2CPowerupSoundPacket decode(FriendlyByteBuf buf) {
         return new S2CPowerupSoundPacket(
                 buf.readVarInt(),
-                buf.readResourceLocation(),
+                buf.readIdentifier(),
                 buf.readEnum(PowerupSoundEventType.class)
         );
     }

@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.base.GeoRenderState;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import software.bernie.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 
 public class BiosuitPowerupRenderer<R extends LivingEntityRenderState & GeoRenderState> extends GeoEntityRenderer<BiosuitPowerupEntity, R>{
     public BiosuitPowerupRenderer(EntityRendererProvider.Context context) {
@@ -15,6 +15,6 @@ public class BiosuitPowerupRenderer<R extends LivingEntityRenderState & GeoRende
         this.shadowRadius = 0.5f;
     }
 
-    private void addRenderLayer(AutoGlowingGeoLayer<BiosuitPowerupEntity, Void,R> biosuitPowerupEntityVoidRAutoGlowingGeoLayer) {
+    private void addRenderLayer(software.bernie.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer<BiosuitPowerupEntity, Void,R> biosuitPowerupEntityVoidRAutoGlowingGeoLayer) {
     }
 }

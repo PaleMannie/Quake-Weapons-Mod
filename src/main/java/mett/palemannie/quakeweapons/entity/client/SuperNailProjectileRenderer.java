@@ -12,11 +12,11 @@ import net.minecraft.client.renderer.entity.state.LlamaSpitRenderState;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProjectileEntity, LlamaSpitRenderState> {
 
-    private static final ResourceLocation SUPER_NAIL_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/super_nail_projectile/super_nail_projectile.png");
+    private static final Identifier SUPER_NAIL_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/super_nail_projectile/super_nail_projectile.png");
     private final SuperNailProjectileModel model;
 
     public SuperNailProjectileRenderer(EntityRendererProvider.Context context) {
@@ -35,11 +35,7 @@ public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProject
         poseStack.mulPose(Axis.XP.rotationDegrees(-state.xRot + 180f));
         poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
 
-        /*VertexConsumer vertexconsumer = pBufferSource.getBuffer(this.model.renderType(SUPER_NAIL_LOCATION));
-        this.model.renderToBuffer(poseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY);*/
-
         nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(SUPER_NAIL_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
-
 
         poseStack.popPose();
 

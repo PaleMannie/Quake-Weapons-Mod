@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.base.GeoRenderState;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
+import software.bernie.geckolib.renderer.layer.builtin.AutoGlowingGeoLayer;
 
 public class PentagramPowerupRenderer<R extends LivingEntityRenderState & GeoRenderState> extends GeoEntityRenderer<PentagramPowerupEntity, R> {
     public PentagramPowerupRenderer(EntityRendererProvider.Context context) {

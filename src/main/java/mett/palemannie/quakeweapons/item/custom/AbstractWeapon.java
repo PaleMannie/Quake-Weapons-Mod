@@ -26,10 +26,10 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animatable.processing.AnimationController;
-import software.bernie.geckolib.animation.Animation;
-import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.AnimationController;
 import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.object.LoopType;
+import software.bernie.geckolib.animation.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 /*
@@ -50,15 +50,9 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
-
-
-
     private static boolean enableAltModels = false;
 
-    /**
-     * Optional: Call once after config load / on reload.
-     * Benutzt Reflection, damit AbstractWeapon keine harte Abhängigkeit auf die Config-Klasse braucht.
-     */
+    /// Alt model config check
     public static void reloadAltModelConfig() {
 
         try {
@@ -77,15 +71,12 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
                 + QuakeWeaponsConfig.COMMON.enableAltModels.get());
     }
 
-    /** Override in subclasses if you want custom behavior per weapon. */
     protected boolean isAltModelEnabled() {
         return enableAltModels;
     }
 
-    /** Must be provided by each weapon. Example: "nailgun.animations" */
     protected abstract String baseAnimPrefix();
 
-    /** Optional. Example: "nailgun_alt.animations". Return null/"" if no alt. */
     protected String altAnimPrefix() { return null; }
 
     protected final String animPrefix() {
@@ -97,15 +88,15 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     protected final RawAnimation animShoot() {
-        return RawAnimation.begin().then(animPrefix() + ".shooting", Animation.LoopType.LOOP);
+        return RawAnimation.begin().then(animPrefix() + ".shooting", LoopType.LOOP);
     }
 
     protected final RawAnimation animAmmoEmpty() {
-        return RawAnimation.begin().then(animPrefix() + ".ammoempty", Animation.LoopType.LOOP);
+        return RawAnimation.begin().then(animPrefix() + ".ammoempty", LoopType.LOOP);
     }
 
     protected final RawAnimation animIdle() {
-        return RawAnimation.begin().then(animPrefix() + ".idle", Animation.LoopType.LOOP);
+        return RawAnimation.begin().then(animPrefix() + ".idle", LoopType.LOOP);
     }
 
     @Override
@@ -124,19 +115,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("idle", animIdle()));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     int cooldown;
 

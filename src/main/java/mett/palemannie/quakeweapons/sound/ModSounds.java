@@ -1,7 +1,7 @@
 package mett.palemannie.quakeweapons.sound;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.eventbus.api.bus.BusGroup;
 import net.minecraftforge.registries.DeferredRegister;
@@ -42,7 +42,7 @@ public class ModSounds {
 
 
     private static RegistryObject<SoundEvent> registerSoundEvents(String name) {
-        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, name)));
+        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, name)));
     }
 
     public static void register(BusGroup eventBus) {

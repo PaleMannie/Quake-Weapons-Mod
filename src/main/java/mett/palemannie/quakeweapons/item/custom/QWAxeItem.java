@@ -1,6 +1,5 @@
 package mett.palemannie.quakeweapons.item.custom;
 
-import mett.palemannie.quakeweapons.item.client.GrenadelauncherRenderer;
 import mett.palemannie.quakeweapons.item.client.QWAxeRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
@@ -14,10 +13,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animatable.processing.AnimationController;
-import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import javax.annotation.Nullable;

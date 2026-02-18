@@ -2,7 +2,6 @@ package mett.palemannie.quakeweapons.item.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
-import mett.palemannie.quakeweapons.item.client.SuperShotgunRenderer;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
@@ -14,7 +13,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,10 +25,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animatable.processing.AnimationController;
-import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import javax.annotation.Nullable;

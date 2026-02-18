@@ -126,10 +126,10 @@ public class GrenadeProjectileEntity extends Projectile {
 
             if (bounced.lengthSqr() < 0.04) {
                 this.setDeltaMovement(Vec3.ZERO);
-                this.hasImpulse = false;
+                this.firstTick = false;
             } else {
                 this.setDeltaMovement(bounced);
-                this.hasImpulse = true;
+                this.firstTick = true;
             }
 
             this.setPos(blockHit.getLocation());
