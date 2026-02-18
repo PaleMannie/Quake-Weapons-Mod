@@ -126,6 +126,8 @@ public class GrenadeProjectileEntity extends Projectile {
 
             if (bounced.lengthSqr() < 0.04) {
                 this.setDeltaMovement(Vec3.ZERO);
+
+                /// TODO: davor war es hasImpulse. Überwachen
                 this.firstTick = false;
             } else {
                 this.setDeltaMovement(bounced);

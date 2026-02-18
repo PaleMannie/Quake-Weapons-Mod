@@ -12,8 +12,6 @@ import mett.palemannie.quakeweapons.util.ModCreativeModeTabs;
 import mett.palemannie.quakeweapons.util.PowerupSoundRegistry;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -26,6 +24,7 @@ import software.bernie.geckolib.GeckoLib;
 public class QuakeWeapons {
 
     /// TODO: Hotbar spinnt displaymäßig rum mit den Waffen beim aufheben
+    /// TODO: Beim schießen (Linksklick) bricht man manchmal Blöcke
 
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();
