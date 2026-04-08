@@ -25,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.object.LoopType;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import javax.annotation.Nullable;
@@ -37,6 +38,16 @@ public class ThunderboltItem extends AbstractWeapon{
 
         super(pProperties);
         this.cooldown = 1;
+    }
+
+    @Override
+    protected boolean shouldInterruptShootAnimationOnRelease() {
+        return true;
+    }
+
+    @Override
+    protected LoopType shootLoopType() {
+        return LoopType.LOOP;
     }
 
     @Override
@@ -168,6 +179,21 @@ public class ThunderboltItem extends AbstractWeapon{
 
         if(user instanceof ServerPlayer serverPlayer){
 
+            if(pRemainingUseDuration % 8 == 0) {
+
+                if (consumeAmmo((Player)user)) {
+
+                    if (level instanceof ServerLevel serverLevel) {
+
+                        startShootingAnimation(user, serverLevel, stack);
+                    }
+                } else {
+
+                    ServerPlayHandler.playAmmoEmptySound(serverPlayer);
+                    startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);
+                }
+            }
+
             if(pRemainingUseDuration % 2 == 0){
 
                 if (consumeAmmo((Player)user)) {
@@ -178,21 +204,11 @@ public class ThunderboltItem extends AbstractWeapon{
 
                             triggerWaterDischarge(serverLevel, (Player) user);
                         }
-                        stopAmmoEmptyAnimation(user, serverLevel, stack);
-                        stopIdleAnimation(user, serverLevel, stack);
-                        startShootingAnimation(user, serverLevel, stack); }
+                    }
 
-                        ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack, user)-pRemainingUseDuration);
-                } else {
-
-                    ServerPlayHandler.playAmmoEmptySound(serverPlayer);
-                    stopShootingAnimation(user, level.getServer().overworld(), stack);
-                    stopIdleAnimation(user, level.getServer().overworld(), stack);
-                    startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);
+                    ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack, user)-pRemainingUseDuration);
                 }
             }
         }
     }
-
-
 }

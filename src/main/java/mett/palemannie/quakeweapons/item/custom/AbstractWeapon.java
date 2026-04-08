@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.fml.ModList;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -42,7 +39,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     protected final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     /// Squake check
-    private static final boolean HAS_SQUAKE = ModList.get().isLoaded("squakeport_1_21_6");
+    private static final boolean HAS_SQUAKE = ModList.get().isLoaded("squakeported");
 
     public AbstractWeapon(Properties pProperties) {
         super(pProperties);
@@ -88,11 +85,11 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     protected final RawAnimation animShoot() {
-        return RawAnimation.begin().then(animPrefix() + ".shooting", LoopType.LOOP);
+        return RawAnimation.begin().then(animPrefix() + ".shooting", shootLoopType());
     }
 
     protected final RawAnimation animAmmoEmpty() {
-        return RawAnimation.begin().then(animPrefix() + ".ammoempty", LoopType.LOOP);
+        return RawAnimation.begin().then(animPrefix() + ".ammoempty", shootLoopType());
     }
 
     protected final RawAnimation animIdle() {
@@ -106,13 +103,9 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", animShoot()));
-
-        controllerRegistrar.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("ammoempty", animAmmoEmpty()));
-
-        controllerRegistrar.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
+        controllerRegistrar.add(new AnimationController<>("main_controller", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("shooting", animShoot())
+                .triggerableAnim("ammoempty", animAmmoEmpty())
                 .triggerableAnim("idle", animIdle()));
     }
 
@@ -192,6 +185,14 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         return true;
     }
 
+    protected boolean shouldInterruptShootAnimationOnRelease() {
+        return false;
+    }
+
+    protected LoopType shootLoopType() {
+        return LoopType.PLAY_ONCE;
+    }
+
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
         return InteractionResult.PASS;
@@ -225,10 +226,10 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     protected abstract void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration);
 
     @Override
-    public void onUseTick(Level level, LivingEntity ent, ItemStack stack, int remaining) {
-        super.onUseTick(level, ent, stack, remaining);
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remaining) {
+        super.onUseTick(level, entity, stack, remaining);
 
-        if (!level.isClientSide() && ent instanceof Player player) {
+        if (!level.isClientSide() && entity instanceof Player player) {
             if (doAntiSlow(player)) {
                 boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
                 applyAntiSlowSpeed(player, diagonal);
@@ -239,7 +240,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
             }
         }
 
-        executeWeaponFire(level, ent, stack, remaining);
+        executeWeaponFire(level, entity, stack, remaining);
     }
 
     @Override
@@ -249,11 +250,15 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         /// apply cooldown
         if(entity instanceof Player) ((Player) entity).getCooldowns().addCooldown(stack, cooldown);
 
-        /// animations
+        /// animations for automatic weapons
         if (level instanceof ServerLevel serverLevel){
-            stopShootingAnimation(entity, serverLevel, stack);
-            stopAmmoEmptyAnimation(entity, serverLevel, stack);
-            startIdleAnimation(entity, serverLevel, stack);
+
+            if (shouldInterruptShootAnimationOnRelease()) {
+
+                stopShootingAnimation(entity, serverLevel, stack);
+                stopAmmoEmptyAnimation(entity, serverLevel, stack);
+                startIdleAnimation(entity, serverLevel, stack);
+            }
         }
 
         /// resets the anti-use-slowdown
@@ -274,24 +279,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     @Override
-    public boolean onDroppedByPlayer(ItemStack stack, Player player) {
-
-        if (!player.level().isClientSide()) {
-
-            resetMovement(player);
-
-            if (player.level() instanceof ServerLevel sl) {
-
-                stopShootingAnimation(player, sl, stack);
-                stopAmmoEmptyAnimation(player, sl, stack);
-                stopIdleAnimation(player, sl, stack);
-            }
-        }
-
-        return super.onDroppedByPlayer(stack, player);
-    }
-
-    @Override
     public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
         super.onStopUsing(stack, entity, count);
 
@@ -306,50 +293,28 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         return super.finishUsingItem(pStack, pLevel, entity);
     }
 
-    @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, @Nullable EquipmentSlot slot, int slotIndex) {
-
-        if (!(entity instanceof Player player)) return;
-        if (level.isClientSide()) return;
-
-        if (slot != EquipmentSlot.MAINHAND) {
-            stopAmmoEmptyAnimation(player, (ServerLevel) level, stack);
-            stopShootingAnimation(player, (ServerLevel) level, stack);
-            startIdleAnimation(player, (ServerLevel) level, stack);
-            return;
-        }
-
-        if (!player.getAbilities().mayBuild) return;
-    }
-
     /// Animation starters and stoppers
-    public void startShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
-
-        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller", "shooting");
+    public void startShootingAnimation(LivingEntity livingEntity, ServerLevel serverLevel, ItemStack stack) {
+        triggerAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "main_controller", "shooting");
     }
 
-    public void stopShootingAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
-
-        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller", "shooting");
+    public void stopShootingAnimation(LivingEntity livingEntity, ServerLevel serverLevel, ItemStack stack) {
+        stopTriggeredAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "main_controller", "shooting");
     }
 
-    public void startAmmoEmptyAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
-
-        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller2", "ammoempty");
+    public void startAmmoEmptyAnimation(LivingEntity livingEntity, ServerLevel serverLevel, ItemStack stack) {
+        triggerAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "main_controller", "ammoempty");
     }
 
-    public void stopAmmoEmptyAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
-
-        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller2", "ammoempty");
+    public void stopAmmoEmptyAnimation(LivingEntity livingEntity, ServerLevel serverLevel, ItemStack stack) {
+        stopTriggeredAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "main_controller", "ammoempty");
     }
 
-    public void startIdleAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
-
-        triggerAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller3", "idle");
+    public void startIdleAnimation(LivingEntity livingEntity, ServerLevel serverLevel, ItemStack stack) {
+        triggerAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "main_controller", "idle");
     }
 
-    public void stopIdleAnimation(LivingEntity pLivingEntity, ServerLevel serverLevel, ItemStack stack){
-
-        stopTriggeredAnim(pLivingEntity, GeoItem.getOrAssignId(stack, serverLevel), "controller3", "idle");
+    public void stopIdleAnimation(LivingEntity livingEntity, ServerLevel serverLevel, ItemStack stack) {
+        stopTriggeredAnim(livingEntity, GeoItem.getOrAssignId(stack, serverLevel), "main_controller", "idle");
     }
 }

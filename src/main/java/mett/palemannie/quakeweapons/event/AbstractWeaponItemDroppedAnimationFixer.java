@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
@@ -36,12 +37,14 @@ public class AbstractWeaponItemDroppedAnimationFixer {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.LevelTickEvent event) {
+    public static void onWorldTick(TickEvent.LevelTickEvent.Post event) {
 
         ///This event fixes the weapon being stuck in the shooting animation when dropping while shooting a Quake-Weapon
 
         //if (event.phase != TickEvent.Phase.START || event.level().isClientSide()) return;
-        ServerLevel serverLevel = (ServerLevel) event.level();
+        /*Level level = event.level();
+
+        if(level instanceof ServerLevel serverLevel){
 
         tickCounter++;
         if (tickCounter % scanInterval != 0) return;
@@ -63,5 +66,6 @@ public class AbstractWeaponItemDroppedAnimationFixer {
                 }
             }
         }
+    }*/
     }
 }

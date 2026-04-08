@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ClientModidEvents {
 
     @SubscribeEvent
-    public static void onRenderStage(CustomizeGuiOverlayEvent event) {
+    public static void onRenderStage(CustomizeGuiOverlayEvent.Chat event) {
 
         PowerupOverlay.render(event.getGuiGraphics(), event.getPartialTick(),
                 event.getWindow().getGuiScaledWidth(),

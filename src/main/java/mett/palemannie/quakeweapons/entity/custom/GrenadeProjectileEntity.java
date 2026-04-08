@@ -42,7 +42,8 @@ public class GrenadeProjectileEntity extends Projectile {
         }
     }
 
-    private WeightedList<ExplosionParticleInfo> blockParticles;
+    private final WeightedList<ExplosionParticleInfo> blockParticles =
+            WeightedList.<ExplosionParticleInfo>builder().build();
 
     /// Vanilla minecraft explosion with custom particle effects
     private void quakeExplosion(Level level) {

@@ -48,7 +48,8 @@ public class RocketProjectileEntity extends Projectile {
             return player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;}
     }
 
-    private WeightedList<ExplosionParticleInfo> blockParticles;
+    private final WeightedList<ExplosionParticleInfo> blockParticles =
+            WeightedList.<ExplosionParticleInfo>builder().build();
 
     private void quakeExplosion(Level level) {
         if (this.level().isClientSide()) return;

@@ -16,7 +16,7 @@ public class QWPlayer {
     private static boolean lastDiagonal = false;
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent e) {
+    public static void onClientTick(TickEvent.ClientTickEvent.Post e) {
         //if (e.phase != TickEvent.Phase.END) return;
 
         LocalPlayer player = Minecraft.getInstance().player;

@@ -15,7 +15,7 @@ public class SquakeEnabledSync {
     private static boolean last = false;
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent e) {
+    public static void onClientTick(TickEvent.ClientTickEvent.Post e) {
         //if (e.phase != TickEvent.Phase.END) return;
 
         Minecraft mc = Minecraft.getInstance();

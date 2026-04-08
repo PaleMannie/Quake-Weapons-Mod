@@ -20,7 +20,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 import java.util.function.Consumer;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID)
 public class PowerupSpawner {
 
     private static int spawnInterval = 600;
@@ -70,7 +70,7 @@ public class PowerupSpawner {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.LevelTickEvent event) {
+    public static void onWorldTick(TickEvent.LevelTickEvent.Post event) {
 
         if (!powerupSpawningEnabled) {
             if (debugEnabled) {

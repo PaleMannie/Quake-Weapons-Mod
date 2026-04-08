@@ -2,7 +2,7 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"rocketlauncher.animations.shooting": {
-			"loop": true,
+			"loop": false,
 			"animation_length": 0.79,
 			"bones": {
 				"theoriginal": {
@@ -132,7 +132,7 @@
 			}
 		},
 		"rocketlauncher.animations.ammoempty": {
-			"loop": true,
+			"loop": false,
 			"animation_length": 0.79,
 			"bones": {
 				"theoriginal": {

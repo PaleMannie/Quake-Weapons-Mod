@@ -8,8 +8,8 @@ public final class SquakeCompat {
     private SquakeCompat() {}
 
     /// Achieving compatibility with Squake Ported
-    private static final String SQUAKE_MODID = "squakeport_1_21_6";
-    private static final String CONFIG_CLASS = "mett.palemannie.squakeport_1_21_6.ModConfig";
+    private static final String SQUAKE_MODID = "squakeported";
+    private static final String CONFIG_CLASS = "mett.palemannie.squakeported.ModConfig";
 
     public static boolean isSquakeMovementEnabledClient() {
 
