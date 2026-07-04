@@ -21,35 +21,4 @@ public class ClientModidEvents {
                 event.getWindow().getGuiScaledWidth(),
                 event.getWindow().getGuiScaledHeight());
     }
-
-    /// the anti use-slowdown unfortunately changes FOV massively. This event turns the FOV change to normal depending on the usual movement speed
-    @SubscribeEvent
-    public static void onComputeFov(ComputeFovModifierEvent event) {
-
-        LocalPlayer player = (LocalPlayer) event.getPlayer();
-        ItemStack stack = player.getMainHandItem();
-
-        if (!(stack.getItem() instanceof AbstractWeapon)) { return; }
-
-        float fov = 1.0F;
-        double speedMultiplier = 1.0;
-
-        var speed = player.getEffect(MobEffects.SPEED);
-        if (speed != null) {
-            speedMultiplier += 0.2 * (speed.getAmplifier() + 1);
-        }
-
-        var slow = player.getEffect(MobEffects.SLOWNESS);
-        if (slow != null) {
-            speedMultiplier -= 0.15 * (slow.getAmplifier() + 1);
-        }
-
-        if (player.isSprinting()) {
-            speedMultiplier *= 1.3;
-        }
-
-        fov *= (float)((speedMultiplier + 1.0) / 2.0);
-
-        event.setNewFovModifier(fov);
-    }
 }
