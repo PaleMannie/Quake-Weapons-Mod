@@ -1,7 +1,6 @@
 package mett.palemannie.quakeweapons.net;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.net.packets.C2SDiagonalMovementPacket;
 import mett.palemannie.quakeweapons.net.packets.C2SSquakeEnabledPacket;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.net.packets.S2CPowerupSoundPacket;
@@ -39,12 +38,6 @@ public class ModMessages {
                 .decoder(S2CPowerupSoundPacket::decode)
                 .encoder(S2CPowerupSoundPacket::encode)
                 .consumerMainThread(S2CPowerupSoundPacket::handle)
-                .add();
-
-        INSTANCE.messageBuilder(C2SDiagonalMovementPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
-                .decoder(C2SDiagonalMovementPacket::new)
-                .encoder(C2SDiagonalMovementPacket::toBytes)
-                .consumerMainThread(C2SDiagonalMovementPacket::handle)
                 .add();
 
         INSTANCE.messageBuilder(C2SSquakeEnabledPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)

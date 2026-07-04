@@ -25,7 +25,6 @@ public class QuakeWeapons {
 
     /// TODO: Hotbar spinnt displaymäßig rum mit den Waffen beim aufheben
     /// TODO: Beim schießen (Linksklick) bricht man manchmal Blöcke
-    /// TODO: Beim Sprungsprint ist man langsamer während des schießens in der Luft
 
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();

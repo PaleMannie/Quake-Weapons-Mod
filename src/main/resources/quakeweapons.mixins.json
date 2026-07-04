@@ -12,6 +12,7 @@
     "MinecraftMixin"
   ],
   "client": [
+    "LocalPlayerMixin"
   ],
   "server": [
   ]

@@ -100,8 +100,6 @@ public class QuakeWeaponsConfig
 
     public static class Server {
 
-        public final ForgeConfigSpec.DoubleValue animationDroppedFixerSearchRadius;
-        public final ForgeConfigSpec.IntValue animationDroppedFixerSearchInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
         public final ForgeConfigSpec.IntValue powerupSpawnSearchRadius;
@@ -141,18 +139,6 @@ public class QuakeWeaponsConfig
             powerupSpawnSearchRadius = builder
                     .comment("\nSearch radius for a suitable spawning place at each spawning attempt")
                     .defineInRange("powerupSpawnSearchRadius", 5, 1, 512);
-
-            builder.pop();
-
-            builder.push("Dropped Weapon animation fixer values");
-
-            animationDroppedFixerSearchRadius = builder
-                    .comment("\nRadius around players where dropped Quake weapons are checked for active animations to stop them")
-                    .defineInRange("animationDroppedFixerSearchRadius", 20d, 1d, 32d);
-
-            animationDroppedFixerSearchInterval = builder
-                    .comment("\nTick interval between nearby dropped weapon animation checks")
-                    .defineInRange("animationDroppedFixerSearchInterval", 5, 1, Integer.MAX_VALUE-1);
 
             builder.pop();
         }

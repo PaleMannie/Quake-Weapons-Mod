@@ -19,7 +19,6 @@ public class QWConfigEvents {
             System.out.println("[QW] SERVER config loaded — reloading spawner values");
 
             PowerupSpawner.reloadConfigValues();
-            AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
         }
 
         if(event.getConfig().getSpec() == QuakeWeaponsConfig.COMMON_SPEC){
@@ -37,7 +36,6 @@ public class QWConfigEvents {
             System.out.println("[QW] SERVER config reloaded — reloading spawner values");
 
             PowerupSpawner.reloadConfigValues();
-            AbstractWeaponItemDroppedAnimationFixer.reloadConfigValues();
         }
 
         if(event.getConfig().getSpec() == QuakeWeaponsConfig.COMMON_SPEC){

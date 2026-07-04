@@ -127,45 +127,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         }
     }
 
-    /// Anti-slowdown methods
-    private boolean doAntiSlow(Player player) {
-
-        boolean squakeEnabled = player.getPersistentData().getBoolean("QWSquakeEnabled").orElse(false);
-        return (!HAS_SQUAKE) || (!squakeEnabled);
-    }
-
-    private void applyAntiFirstTickDash(Player player, boolean diagonal) {
-
-        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
-        if (ms != null) ms.setBaseValue(diagonal ? 0.707106781186d : 0.1);
-        if (we != null) we.setBaseValue(0.25d);
-    }
-
-    private void applyAntiSlowSpeed(Player player, boolean diagonal) {
-
-        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
-        if (ms != null) ms.setBaseValue(diagonal ? 0.353553390593d : 0.5d);
-        if (we != null) we.setBaseValue(0.25d);
-    }
-
-    private void applySquakeAntiSlowSpeed(Player player, boolean diagonal) {
-
-        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
-        if (ms != null) ms.setBaseValue(diagonal ? 0.353553390593d/2d : 0.25d);
-        if (we != null) we.setBaseValue(0.25d);
-    }
-
-    private void resetMovement(Player player) {
-
-        var ms = player.getAttribute(Attributes.MOVEMENT_SPEED);
-        var we = player.getAttribute(Attributes.WATER_MOVEMENT_EFFICIENCY);
-        if (ms != null) ms.setBaseValue(0.1d);
-        if (we != null) we.setBaseValue(0.0d);
-    }
-
     /// Item Properties
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) { return false; }
@@ -202,23 +163,10 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public InteractionResult use(Level level, Player player, InteractionHand usedHand) {
 
         player.removeEffect(ModEffects.QW_INVIS.getHolder().get());
-        boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
-        applyAntiFirstTickDash(player, diagonal);
 
         if (usedHand != InteractionHand.MAIN_HAND) return InteractionResult.FAIL;
 
         setCurrentHand(usedHand, player);
-
-        if (!level.isClientSide()) {
-
-            if (doAntiSlow(player)) {
-
-                applyAntiSlowSpeed(player, diagonal);
-            } else {
-
-                applySquakeAntiSlowSpeed(player, diagonal);
-            }
-        }
 
         return InteractionResult.PASS;
     }
@@ -228,17 +176,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remaining) {
         super.onUseTick(level, entity, stack, remaining);
-
-        if (!level.isClientSide() && entity instanceof Player player) {
-            if (doAntiSlow(player)) {
-                boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
-                applyAntiSlowSpeed(player, diagonal);
-            } else {
-
-                boolean diagonal = player.getPersistentData().getBoolean("QWDiagonal").orElse(false);
-                applySquakeAntiSlowSpeed(player, diagonal);
-            }
-        }
 
         executeWeaponFire(level, entity, stack, remaining);
     }
@@ -261,11 +198,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
             }
         }
 
-        /// resets the anti-use-slowdown
-        if (entity instanceof Player player && !level.isClientSide()) {
-            resetMovement(player);
-        }
-
         /// this ensures, that the Nailgun always starts shooting from the right barrel
         if (stack.getItem() instanceof NailgunItem) {
             stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, oldCd -> {
@@ -281,14 +213,10 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     @Override
     public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
         super.onStopUsing(stack, entity, count);
-
-        resetMovement((Player) entity);
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity entity) {
-
-        resetMovement((Player) entity);
 
         return super.finishUsingItem(pStack, pLevel, entity);
     }
