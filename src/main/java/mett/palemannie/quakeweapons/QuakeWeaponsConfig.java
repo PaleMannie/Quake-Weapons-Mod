@@ -34,6 +34,10 @@ public class QuakeWeaponsConfig
         public Common(ForgeConfigSpec.Builder builder) {
             builder.push("Effects");
 
+            enableEnhancedModels = builder
+                    .comment("\n[UNFINISHED] Enable/disable enhanced models for weapons")
+                    .define("enableEnhancedModels", false);
+
             enableMuzzleFlash = builder.comment("\n[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables muzzle flash when shooting")
                     .define("enableMuzzleFlash", false);
 
@@ -45,10 +49,6 @@ public class QuakeWeaponsConfig
 
             enableGore = builder.comment("\nEnables/Disables Gore particles when hitting a mob with Quake weapons")
                     .define("enableThunderboltTracer", false);
-
-            enableEnhancedModels = builder
-                    .comment("\nEnable/disable enhanced models for weapons")
-                    .define("enableEnhancedModels", false);
 
             builder.pop();
             builder.push("Weapon damage");
