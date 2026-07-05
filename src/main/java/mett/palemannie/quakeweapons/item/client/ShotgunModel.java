@@ -20,18 +20,18 @@ public class ShotgunModel extends GeoModel<ShotgunItem> {
     @Override
     public ResourceLocation getModelResource(ShotgunItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_MODEL : DEFAULT_MODEL;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_MODEL : DEFAULT_MODEL;
     }
 
     @Override
     public ResourceLocation getTextureResource(ShotgunItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
     }
 
     @Override
     public ResourceLocation getAnimationResource(ShotgunItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_ANIM : DEFAULT_ANIM;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_ANIM : DEFAULT_ANIM;
     }
 }

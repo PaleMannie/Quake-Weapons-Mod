@@ -20,18 +20,18 @@ public class ThunderboltModel extends GeoModel<ThunderboltItem> {
     @Override
     public ResourceLocation getModelResource(ThunderboltItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_MODEL : DEFAULT_MODEL;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_MODEL : DEFAULT_MODEL;
     }
 
     @Override
     public ResourceLocation getTextureResource(ThunderboltItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
     }
 
     @Override
     public ResourceLocation getAnimationResource(ThunderboltItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_ANIM : DEFAULT_ANIM;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_ANIM : DEFAULT_ANIM;
     }
 }

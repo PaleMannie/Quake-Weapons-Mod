@@ -20,18 +20,18 @@ public class GrenadelauncherModel extends GeoModel<GrenadelauncherItem> {
     @Override
     public ResourceLocation getModelResource(GrenadelauncherItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_MODEL : DEFAULT_MODEL;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_MODEL : DEFAULT_MODEL;
     }
 
     @Override
     public ResourceLocation getTextureResource(GrenadelauncherItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
     }
 
     @Override
     public ResourceLocation getAnimationResource(GrenadelauncherItem animatable) {
 
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_ANIM : DEFAULT_ANIM;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_ANIM : DEFAULT_ANIM;
     }
 }

@@ -20,7 +20,7 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.BooleanValue enableRocketTrailLight;
         public final ForgeConfigSpec.BooleanValue enableThunderboltTracer;
         public final ForgeConfigSpec.BooleanValue enableGore;
-        public final ForgeConfigSpec.BooleanValue enableAltModels;
+        public final ForgeConfigSpec.BooleanValue enableEnhancedModels;
         public final ForgeConfigSpec.DoubleValue axeDamage;
         public final ForgeConfigSpec.DoubleValue shotgunDamage;
         public final ForgeConfigSpec.DoubleValue superShotgunDamage;
@@ -46,9 +46,9 @@ public class QuakeWeaponsConfig
             enableGore = builder.comment("\nEnables/Disables Gore particles when hitting a mob with Quake weapons")
                     .define("enableThunderboltTracer", false);
 
-            enableAltModels = builder
-                    .comment("\nAlternative model for weapons")
-                    .define("enableAltModels", false);
+            enableEnhancedModels = builder
+                    .comment("\nEnable/disable enhanced models for weapons")
+                    .define("enableEnhancedModels", false);
 
             builder.pop();
             builder.push("Weapon damage");

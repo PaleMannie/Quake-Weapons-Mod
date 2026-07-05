@@ -39,24 +39,24 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() { return this.cache; }
 
-    private static boolean enableAltModels = false;
+    private static boolean enableEnhancedModels = false;
 
     public static void reloadAltModelConfig() {
 
         try {
-            enableAltModels = QuakeWeaponsConfig.COMMON.enableAltModels.get();
+            enableEnhancedModels = QuakeWeaponsConfig.COMMON.enableEnhancedModels.get();
 
             System.out.println("[QuakeWeapons] Grenade Launcher alternative model config reloaded:");
-            System.out.println(" enableAltModel=" + enableAltModels);
+            System.out.println(" enableEnhancedModels=" + enableEnhancedModels);
 
         } catch (Exception e) {
 
             System.err.println("[QuakeWeapons] Failed to load config values, using defaults!");
-            enableAltModels = false;
+            enableEnhancedModels = false;
         }
 
-        System.out.println("[QuakeWeapons] Config values after load: enableAltModel:"
-                + QuakeWeaponsConfig.COMMON.enableAltModels.get());
+        System.out.println("[QuakeWeapons] Config values after load: enableEnhancedModels:"
+                + QuakeWeaponsConfig.COMMON.enableEnhancedModels.get());
     }
 
     public void setCurrentHand(InteractionHand hand, LivingEntity player) {
