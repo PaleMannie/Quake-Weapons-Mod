@@ -20,16 +20,16 @@ public class RocketlauncherModel extends GeoModel<RocketlauncherItem> {
 
     @Override
     public Identifier getModelResource(GeoRenderState geoRenderState) {
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_MODEL : DEFAULT_MODEL;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_MODEL : DEFAULT_MODEL;
     }
 
     @Override
     public Identifier getTextureResource(GeoRenderState geoRenderState) {
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_TEXTURE : DEFAULT_TEXTURE;
     }
 
     @Override
     public Identifier getAnimationResource(RocketlauncherItem animatable) {
-        return QuakeWeaponsConfig.COMMON.enableAltModels.get() ? ALT_ANIM : DEFAULT_ANIM;
+        return QuakeWeaponsConfig.COMMON.enableEnhancedModels.get() ? ALT_ANIM : DEFAULT_ANIM;
     }
 }

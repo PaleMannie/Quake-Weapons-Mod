@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -53,7 +52,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public static void reloadAltModelConfig() {
 
         try {
-            enableAltModels = QuakeWeaponsConfig.COMMON.enableAltModels.get();
+            enableAltModels = QuakeWeaponsConfig.COMMON.enableEnhancedModels.get();
 
             System.out.println("[QuakeWeapons] Grenade Launcher alternative model config reloaded:");
             System.out.println(" enableAltModel=" + enableAltModels);
@@ -65,7 +64,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         }
 
         System.out.println("[QuakeWeapons] Config values after load: enableAltModel:"
-                + QuakeWeaponsConfig.COMMON.enableAltModels.get());
+                + QuakeWeaponsConfig.COMMON.enableEnhancedModels.get());
     }
 
     protected boolean isAltModelEnabled() {

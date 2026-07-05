@@ -3,7 +3,7 @@
 	"animations": {
 		"grenadelauncher_alt.animations.shooting": {
 			"loop": true,
-			"animation_length": 1.00,
+			"animation_length": 0.59,
 			"bones": {
 				"gun": {
 					"rotation": {
@@ -28,7 +28,7 @@
 						"0.15": {
 							"vector": [-20, 0, 0]
 						},
-						"1.0": {
+						"0.4": {
 							"vector": [0, 0, 0],
 							"easing": "easeInBack"
 						}
@@ -56,7 +56,7 @@
 						"0.15": {
 							"vector": [0, 0, 2]
 						},
-						"1.0": {
+						"0.4": {
 							"vector": [0, 0, 0],
 							"easing": "easeInBack"
 						}
@@ -66,7 +66,7 @@
 		},
 		"grenadelauncher_alt.animations.ammoempty": {
 			"loop": true,
-			"animation_length": 1.00,
+			"animation_length": 0.63,
 			"bones": {
 				"gun": {
 					"rotation": {
@@ -91,7 +91,7 @@
 						"0.15": {
 							"vector": [-20, 0, 0]
 						},
-						"1.0": {
+						"0.3": {
 							"vector": [0, 0, 0],
 							"easing": "linear"
 						}
@@ -120,7 +120,7 @@
 							"vector": [0, 0, 2],
 							"easing": "linear"
 						},
-						"1.0": {
+						"0.3": {
 							"vector": [0, 0, 0],
 							"easing": "linear"
 						}
