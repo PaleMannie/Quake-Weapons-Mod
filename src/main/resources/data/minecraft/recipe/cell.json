@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RIL",
+    "GCG",
+    "CGC"
+  ],
+  "key": {
+    "R": [
+      "minecraft:redstone_torch"
+    ],
+    "G": [
+      "minecraft:gold_ingot"
+    ],
+    "C": [
+      "minecraft:copper_ingot"
+    ],
+    "I": [
+      "minecraft:iron_ingot"
+    ],
+    "L": [
+      "minecraft:lapis_lazuli"
+    ]
+  },
+  "result": {
+    "id": "quakeweapons:cell",
+    "count": 16
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " Di",
+    "DCI",
+    "iIS"
+  ],
+  "key": {
+    "I": [
+      "minecraft:iron_block"
+    ],
+    "S": [
+      "minecraft:stick"
+    ],
+    "C": [
+      "minecraft:comparator"
+    ],
+    "i": [
+      "minecraft:iron_ingot"
+    ],
+    "D": [
+      "minecraft:dispenser"
+    ]
+  },
+  "result": {
+    "id": "quakeweapons:nailgun",
+    "count": 1
+  }
+}

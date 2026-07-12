@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      "minecraft:iron_nugget"
+    ],
+    [
+      "minecraft:gold_nugget"
+    ]
+  ],
+  "result": {
+    "id": "quakeweapons:nail",
+    "count": 4
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "IL",
+    " L"
+  ],
+  "key": {
+    "I": [
+      "minecraft:iron_block"
+    ],
+    "L": "#minecraft:logs"
+
+  },
+  "result": {
+    "id": "quakeweapons:qwaxe",
+    "count": 1
+  }
+}

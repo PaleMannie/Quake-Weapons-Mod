@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DB ",
+    "BRI",
+    " IS"
+  ],
+  "key": {
+    "D": [
+      "minecraft:diamond"
+    ],
+    "B": [
+      "minecraft:blaze_rod"
+    ],
+    "I": [
+      "minecraft:iron_ingot"
+    ],
+    "R": [
+      "minecraft:redstone_block"
+    ],
+    "S": [
+      "minecraft:stick"
+    ]
+  },
+  "result": {
+    "id": "quakeweapons:thunderbolt",
+    "count": 1
+  }
+}

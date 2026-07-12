@@ -6,7 +6,7 @@ modId="${mod_id}" #mandatory
 version="${mod_version}" #mandatory
 displayName="${mod_name}" #mandatory
 logoFile="quakeweapons.png" #optional
-credits="id Software" #optional
+credits="id Software, Skidmark for the enhanced models" #optional
 authors="${mod_authors}" #optional
 description='''${mod_description}'''
 
