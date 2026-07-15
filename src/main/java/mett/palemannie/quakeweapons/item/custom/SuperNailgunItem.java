@@ -80,12 +80,12 @@ public class SuperNailgunItem extends AbstractWeapon{
         });
     }
 
-    private boolean consumeAmmo(Player player) {
+    private boolean consumeAmmo(Player player, boolean confirmConsumption) {
         if (player.isCreative()) return true;
 
         for (ItemStack stack : player.getInventory().getNonEquipmentItems()) {
             if (stack.is(ModItems.NAIL.get()) && stack.getCount() >= 2) {
-                stack.shrink(2);
+                if(confirmConsumption) { stack.shrink(2); }
                 return true;
             }
         }
@@ -99,7 +99,7 @@ public class SuperNailgunItem extends AbstractWeapon{
 
             if(pRemainingUseDuration % 16 == 0) {
 
-                if (consumeAmmo((Player)user)) {
+                if (consumeAmmo((Player)user, false)) {
 
                     if (level instanceof ServerLevel serverLevel) {
 
@@ -114,7 +114,7 @@ public class SuperNailgunItem extends AbstractWeapon{
 
             if(pRemainingUseDuration % 2 == 0){
 
-                if (consumeAmmo((Player)user)) {
+                if (consumeAmmo((Player)user, true)) {
 
                     ServerPlayHandler.handleSuperNailgunShoot(serverPlayer);
 
