@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.net;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
+import mett.palemannie.quakeweapons.net.packets.WeaponRecoilS2CPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -28,6 +29,11 @@ public class ModMessages {
                 .encoder(S2CInvisPacket::encode)
                 .decoder(S2CInvisPacket::decode)
                 .consumerMainThread(S2CInvisPacket::handle)
+                .add();
+        net.messageBuilder(WeaponRecoilS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(WeaponRecoilS2CPacket::encode)
+                .decoder(WeaponRecoilS2CPacket::decode)
+                .consumerMainThread(WeaponRecoilS2CPacket::handle)
                 .add();
     }
 

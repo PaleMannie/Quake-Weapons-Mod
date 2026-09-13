@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class MuzzleflashEntity extends Projectile {
@@ -46,8 +45,8 @@ public class MuzzleflashEntity extends Projectile {
                     BlockPos candidate = origin.offset(dx, dy, dz);
                     BlockState state = level.getBlockState(candidate);
 
-                    if (state.isAir()) {
-                        level.setBlock(candidate, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 15), 3);
+                    if (state.is(Blocks.AIR)) {
+                        level.setBlock(candidate, ModBlocks.LIGHT_AIR.get().defaultBlockState(), 3);
                         this.lightPos = candidate;
                         return;
                     } else if (state.getBlock() == Blocks.WATER) {
@@ -64,8 +63,8 @@ public class MuzzleflashEntity extends Projectile {
 
         if (this.lightPos != null) {
             BlockState state = this.level().getBlockState(this.lightPos);
-            if (state.getBlock() == Blocks.LIGHT) {
-                this.level().removeBlock(this.lightPos, false);
+            if (state.getBlock() == ModBlocks.LIGHT_AIR.get()) {
+                this.level().setBlock(this.lightPos, Blocks.AIR.defaultBlockState(), 3);
             } else if (state.getBlock() == ModBlocks.LIGHT_WATER.get()) {
                 this.level().setBlock(this.lightPos, Blocks.WATER.defaultBlockState(), 3);
             }

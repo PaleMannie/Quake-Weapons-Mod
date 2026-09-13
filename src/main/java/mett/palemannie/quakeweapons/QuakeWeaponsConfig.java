@@ -28,61 +28,71 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.DoubleValue superNailgunDamage;
         public final ForgeConfigSpec.DoubleValue thunderboltDamage;
         public final ForgeConfigSpec.DoubleValue rocketlauncherDamage;
+        public final ForgeConfigSpec.DoubleValue rocketlauncherRadius;
         public final ForgeConfigSpec.DoubleValue grenadelauncherDamage;
+        public final ForgeConfigSpec.DoubleValue grenadelauncherRadius;
 
 
         public Common(ForgeConfigSpec.Builder builder) {
             builder.push("Effects");
 
             enableEnhancedModels = builder
-                    .comment("\n[UNFINISHED] Enable/disable enhanced models for weapons")
+                    .comment("Use alternate weapon models, textures, and animations where available. Some alternate assets are unfinished.")
                     .define("enableEnhancedModels", false);
 
-            enableMuzzleFlash = builder.comment("\n[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables muzzle flash when shooting")
+            enableMuzzleFlash = builder.comment("Show muzzle flashes and brief dynamic light when firing supported weapons. Experimental: flashing light may affect photosensitive players.")
                     .define("enableMuzzleFlash", false);
 
-            enableRocketTrailLight = builder.comment("\n[EXPERIMENTAL: EPILEPSY WARNING] Enables/Disables rocket trail lighting")
+            enableRocketTrailLight = builder.comment("Place short-lived light blocks along flying rockets. Experimental: repeated light changes may affect photosensitive players.")
                     .define("enableRocketTrailLight", false);
 
-            enableThunderboltTracer = builder.comment("\nEnables/Disables Thunderbolt hitscan tracers")
+            enableThunderboltTracer = builder.comment("Show electric-spark tracer particles along Thunderbolt shots.")
                     .define("enableThunderboltTracer", false);
 
-            enableGore = builder.comment("\nEnables/Disables Gore particles when hitting a mob with Quake weapons")
+            enableGore = builder.comment("Show additional gore particles when Quake weapons hit living entities.")
                     .define("enableThunderboltTracer", false);
 
             builder.pop();
             builder.push("Weapon damage");
 
             axeDamage = builder
-                    .comment("\nHow much damage the Quake axe deals")
+                    .comment("Base damage dealt by one Axe hit. Two damage points equal one heart.")
                     .defineInRange("axeDamage", 10.0, 0.0, Float.MAX_VALUE);
 
             shotgunDamage = builder
-                    .comment("\nHow much damage the Shotgun deals per pellet (6 pellets per shot)")
+                    .comment("Base damage per Shotgun pellet; each shot fires 6 pellets. Two damage points equal one heart.")
                     .defineInRange("shotgunDamage", 2.0, 0.0, Float.MAX_VALUE);
 
             superShotgunDamage = builder
-                    .comment("\nHow much damage the Double Barreled Shotgun deals per pellet (14 pellets per shot)")
+                    .comment("Base damage per Super Shotgun pellet; each shot fires 14 pellets. Two damage points equal one heart.")
                     .defineInRange("superShotgunDamage", 2.0, 0.0, Float.MAX_VALUE);
 
             nailgunDamage = builder
-                    .comment("\nHow much damage the Nailgun deals per shot")
+                    .comment("Base damage dealt by one Nailgun projectile. Two damage points equal one heart.")
                     .defineInRange("nailgunDamage", 2.0, 0.0, Float.MAX_VALUE);
 
             superNailgunDamage = builder
-                    .comment("\nHow much damage the Super Nailgun deals per shot")
+                    .comment("Base damage dealt by one Super Nailgun projectile. Two damage points equal one heart.")
                     .defineInRange("superNailgunDamage", 4.0, 0.0, Float.MAX_VALUE);
 
             rocketlauncherDamage = builder
-                    .comment("\nHow much damage the Rocket Launcher deals per shot. WARNING: Damage increases blast radius")
+                    .comment("Maximum base splash damage of a Rocket Launcher explosion. Damage decreases with distance. Two damage points equal one heart.")
                     .defineInRange("rocketlauncherDamage", 28, 0.0, Float.MAX_VALUE);
 
+            rocketlauncherRadius = builder
+                    .comment("Rocket Launcher explosion radius, in blocks.")
+                    .defineInRange("rocketlauncherRadius", 4.0, 0.0, Float.MAX_VALUE);
+
             grenadelauncherDamage = builder
-                    .comment("\nHow much damage the Grenade Launcher deals per shot. WARNING: Damage increases blast radius")
+                    .comment("Maximum base splash damage of a Grenade Launcher explosion. Damage decreases with distance. Two damage points equal one heart.")
                     .defineInRange("grenadelauncherDamage", 28, 0.0, Float.MAX_VALUE);
 
+            grenadelauncherRadius = builder
+                    .comment("Grenade Launcher explosion radius, in blocks.")
+                    .defineInRange("grenadelauncherRadius", 5.0, 0.0, Float.MAX_VALUE);
+
             thunderboltDamage = builder
-                    .comment("\nHow much damage the Thunderbolt deals per shot")
+                    .comment("Base damage dealt by one Thunderbolt shot. Two damage points equal one heart.")
                     .defineInRange("thunderboltDamage", 6.0, 0.0, Float.MAX_VALUE);
 
             builder.pop();
@@ -104,6 +114,7 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.IntValue animationDroppedFixerSearchInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
+        public final ForgeConfigSpec.IntValue maxNearbyPowerups;
         public final ForgeConfigSpec.IntValue powerupSpawnSearchRadius;
         public final ForgeConfigSpec.IntValue powerupEffectDuration;
         public final ForgeConfigSpec.IntValue powerupLifetime;
@@ -115,43 +126,47 @@ public class QuakeWeaponsConfig
             builder.push("Powerup Spawner values");
 
             enablePowerups = builder
-                    .comment("\nEnables/Disables the spawning of powerups in your world")
+                    .comment("Automatically spawn Quake powerups and ammo pickups near players. Manually placed pickups are unaffected.")
                     .define("enablePowerups", true);
 
             powerupDebug = builder
-                    .comment("\nPowerup spawn attempts are visible in chat")
+                    .comment("Send powerup spawn results and nearby-limit messages to players in the affected dimension.")
                     .define("powerupDebug", false);
 
             powerupEffectDuration = builder
-                    .comment("\nDuration of powerups effects upon picking up in ticks")
+                    .comment("Duration of a collected powerup effect, in ticks (20 ticks = 1 second). Does not affect ammo pickups.")
                     .defineInRange("powerupEffectDuration", 600, 1, Integer.MAX_VALUE-1);
 
             powerupLifetime = builder
-                    .comment("\nDuration of powerups in the world in ticks until despawning")
+                    .comment("Time before uncollected powerups and ammo pickups despawn, in ticks (20 ticks = 1 second).")
                     .defineInRange("powerupLifetime", 6000, 1, Integer.MAX_VALUE-1);
 
             powerupSpawnInterval = builder
-                    .comment("\nSpawns a powerup every x ticks in the world randomly")
+                    .comment("Ticks between automatic spawn rounds in each dimension (20 ticks = 1 second). Each round makes the configured number of attempts per player.")
                     .defineInRange("powerupSpawnInterval", 600, 20, Integer.MAX_VALUE-1);
 
             powerupSpawnAttempts = builder
-                    .comment("\nAttemts of spawning a powerup at each interval")
+                    .comment("Spawn attempts per player in each spawn round. Higher values can create more pickups and increase server work.")
                     .defineInRange("powerupSpawnAttempts", 5, 1, 512);
 
             powerupSpawnSearchRadius = builder
-                    .comment("\nSearch radius for a suitable spawning place at each spawning attempt")
+                    .comment("Search radius around each candidate position for a suitable spawn block. Higher values increase server work.")
                     .defineInRange("powerupSpawnSearchRadius", 5, 1, 512);
+
+            maxNearbyPowerups = builder
+                    .comment("Maximum automatically spawned Quake powerups and ammo pickups within 128 blocks of a player. Manually placed pickups do not count.")
+                    .defineInRange("maxNearbyPowerups", 4, 1, Integer.MAX_VALUE);
 
             builder.pop();
 
             builder.push("Dropped Weapon animation fixer values");
 
             animationDroppedFixerSearchRadius = builder
-                    .comment("\nRadius around players where dropped Quake weapons are checked for active animations to stop them")
+                    .comment("Legacy setting with no effect. Dropped weapon animations now stop immediately when the item is tossed.")
                     .defineInRange("animationDroppedFixerSearchRadius", 20d, 1d, 32d);
 
             animationDroppedFixerSearchInterval = builder
-                    .comment("\nTick interval between nearby dropped weapon animation checks")
+                    .comment("Legacy setting with no effect. Dropped weapon animations no longer require periodic checks.")
                     .defineInRange("animationDroppedFixerSearchInterval", 5, 1, Integer.MAX_VALUE-1);
 
             builder.pop();

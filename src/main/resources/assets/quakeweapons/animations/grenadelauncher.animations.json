@@ -3,7 +3,7 @@
 	"animations": {
 		"grenadelauncher.animations.shooting": {
 			"loop": true,
-			"animation_length": 0.59,
+			"animation_length": 0.55,
 			"bones": {
 				"gun": {
 					"rotation": {
@@ -66,7 +66,7 @@
 		},
 		"grenadelauncher.animations.ammoempty": {
 			"loop": true,
-			"animation_length": 0.63,
+			"animation_length": 0.55,
 			"bones": {
 				"gun": {
 					"rotation": {

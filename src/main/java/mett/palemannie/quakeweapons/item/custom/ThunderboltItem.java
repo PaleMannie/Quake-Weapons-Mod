@@ -1,5 +1,6 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
@@ -8,12 +9,15 @@ import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
+import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -35,29 +38,24 @@ import software.bernie.geckolib.core.object.PlayState;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ThunderboltItem extends AbstractWeapon{
-
-    public ThunderboltItem(Properties pProperties) {
-        super(pProperties);
-        this.cooldown = 1;
-    }
-
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
+public class ThunderboltItem extends AbstractWeapon {
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("thunderbolt.animations.shooting", Animation.LoopType.LOOP);
     private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("thunderbolt.animations.ammoempty", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("thunderbolt.animations.idle", Animation.LoopType.LOOP);
 
+    public ThunderboltItem(Properties properties) {
+        super(properties, 2, 1, 1, "thunderbolt.animations");
+    }
+
+    @Override public net.minecraft.world.item.Item getAmmoItem() { return ModItems.CELL.get(); }
+
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
-        controllerRegistrar.add(new AnimationController<>(this, "controller", 0, state -> PlayState.CONTINUE)
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("shooting", SHOOT_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>(this, "controller2", 0, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>(this, "controller2", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>(this, "controller3", 0, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>(this, "controller3", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("idle", IDLE_ANIM));
     }
 
@@ -85,19 +83,21 @@ public class ThunderboltItem extends AbstractWeapon{
                 }
                 return HumanoidModel.ArmPose.EMPTY;
             }
-        });
-    }
 
-    private boolean consumeAmmo(Player player) {
-        if (player.isCreative()) return true;
+            @Override
+            public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
 
-        for (ItemStack stack : player.getInventory().items) {
-            if (stack.is(ModItems.CELL.get())) {
-                stack.shrink(1);
-                return true;
+                if (itemInHand.getItem() instanceof AbstractWeapon) {
+
+                    int side = arm == HumanoidArm.RIGHT ? 1 : -1;
+                    poseStack.translate(side * 0.56f, -0.52f, -0.72f);
+
+                    return true;
+                }
+
+                return false;
             }
-        }
-        return false;
+        });
     }
 
     private void triggerWaterDischarge(ServerLevel level, Player player) {
@@ -171,35 +171,48 @@ public class ThunderboltItem extends AbstractWeapon{
     }
 
     @Override
-    protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
+    protected void onSuccessfulFire(ServerLevel level, ServerPlayer player, ItemStack stack) {
+        if (player.isInWaterOrBubble()) triggerWaterDischarge(level, player);
+        long id = GeoItem.getOrAssignId(stack, level);
+        stopTriggeredAnim(player, id, "controller2", "ammoempty");
+        stopTriggeredAnim(player, id, "controller3", "idle");
+        triggerAnim(player, id, "controller", "shooting");
+    }
 
-        if(user instanceof ServerPlayer serverPlayer){
+    @Override
+    protected void onAmmoEmpty(ServerLevel level, ServerPlayer player, ItemStack stack) {
+        ServerPlayHandler.playAmmoEmptySound(player);
+        long id = GeoItem.getOrAssignId(stack, level);
+        stopTriggeredAnim(player, id, "controller", "shooting");
+        stopTriggeredAnim(player, id, "controller3", "idle");
+        triggerAnim(player, id, "controller2", "ammoempty");
+    }
 
-            if(pRemainingUseDuration % 2 == 0){
+    @Override
+    protected void afterShooting(ItemStack stack, Level level, LivingEntity user, int timeCharged) {
+        if (level instanceof ServerLevel serverLevel) hardStopTriggeredAnimations(user, serverLevel, stack);
+    }
 
-                if (consumeAmmo((Player)user)) {
-
-                    if (level instanceof ServerLevel serverLevel) {
-
-                        if(user.isInWaterOrBubble()){
-
-                            triggerWaterDischarge(serverLevel, (Player) user);
-                        }
-                        stopAmmoEmptyAnimation(user, serverLevel, stack);
-                        stopIdleAnimation(user, serverLevel, stack);
-                        startShootingAnimation(user, serverLevel, stack); }
-
-                        ServerPlayHandler.handleThunderboltShoot(serverPlayer, this.getUseDuration(stack)-pRemainingUseDuration);
-                } else {
-
-                    ServerPlayHandler.playAmmoEmptySound(serverPlayer);
-                    stopShootingAnimation(user, level.getServer().overworld(), stack);
-                    stopIdleAnimation(user, level.getServer().overworld(), stack);
-                    startAmmoEmptyAnimation(user, level.getServer().overworld(), stack);
-                }
-            }
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        super.inventoryTick(stack, level, entity, slot, selected);
+        if (selected && level instanceof ServerLevel serverLevel && entity instanceof Player player
+                && !player.isUsingItem()) {
+            triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller3", "idle");
         }
     }
 
+    @Override
+    public void hardStopTriggeredAnimations(LivingEntity user, ServerLevel level, ItemStack stack) {
+        long id = GeoItem.getOrAssignId(stack, level);
+        stopTriggeredAnim(user, id, "controller", "shooting");
+        stopTriggeredAnim(user, id, "controller2", "ammoempty");
+        triggerAnim(user, id, "controller3", "idle");
+    }
 
+    @Override
+    protected void fireWeapon(ServerLevel level, ServerPlayer player, ItemStack stack, int useTicks) {
+        ServerPlayHandler.handleThunderboltShoot(player, useTicks);
+        sendRecoil(player, 0.25f, 0f, player.getRandom().nextBoolean() ? 0.25f : -0.25f);
+    }
 }

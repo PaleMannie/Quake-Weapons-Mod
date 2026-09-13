@@ -3,7 +3,7 @@
 	"animations": {
 		"rocketlauncher.animations.shooting": {
 			"loop": true,
-			"animation_length": 0.79,
+			"animation_length": 0.75,
 			"bones": {
 				"theoriginal": {
 					"rotation": {
@@ -133,7 +133,7 @@
 		},
 		"rocketlauncher.animations.ammoempty": {
 			"loop": true,
-			"animation_length": 0.79,
+			"animation_length": 0.75,
 			"bones": {
 				"theoriginal": {
 					"rotation": {

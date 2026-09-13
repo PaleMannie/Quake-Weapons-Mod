@@ -32,6 +32,8 @@ public class ServerPlayHandler {
 
     /// All in one class handling all the weapons shooting which should happen on server side
 
+    ///TODO: Nailgun links/rechts edgecase wenn man ganz oben/unten schaut (dort schießen die Nägel nur mittig statt links/rechts)
+
     private static boolean isMuzzleFlashEnabled(){
         return QuakeWeaponsConfig.COMMON.enableMuzzleFlash.get();
     }

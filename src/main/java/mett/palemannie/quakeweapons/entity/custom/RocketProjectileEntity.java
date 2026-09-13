@@ -2,25 +2,21 @@ package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.block.ModBlocks;
-import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
+import mett.palemannie.quakeweapons.util.QWExplosionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LightBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -39,35 +35,22 @@ public class RocketProjectileEntity extends Projectile {
         return true;
     }
 
-    public static float computeRadiusFromDamage(float configDamage, Player player) {
-
-        if(player == null){ return ((configDamage - 1) / 7.0F)/2;} else{
-            return player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (((configDamage * 4) - 1) / 7.0F)/2 : ((configDamage - 1) / 7.0F)/2;}
-    }
+    private boolean exploded;
 
     private void quakeExplosion(Level level) {
-        if (this.level().isClientSide) return;
+        if (!(level instanceof ServerLevel serverLevel) || exploded) return;
+        exploded = true;
 
         Vec3 center = this.position();
+        QWExplosionHelper.rocketExplosion(serverLevel, this, this.getOwner(), center);
 
-        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, null, null);
-
-        AABB area = new AABB(this.blockPosition()).inflate(computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()));
-        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, area)) {
-            if (entity != this.getOwner()) {
-                entity.hurt(this.damageSources().source(DamageTypes.PLAYER_ATTACK, this, this.getOwner()), Float.MIN_VALUE);
-            }
-        }
-
-        level().explode(null, source, null, center.x, center.y, center.z, computeRadiusFromDamage(QWConfigStats.RocketlauncherDamage, (Player)this.getOwner()), false, Level.ExplosionInteraction.NONE, false);
-
-        ((ServerLevel) this.level()).sendParticles(ParticleTypes.FLAME,
+        serverLevel.sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
                 40, // Menge
                 0.0, 0.0, 0.0,
                 0.2); // Geschwindigkeit
 
-        ((ServerLevel) this.level()).sendParticles(ParticleTypes.LARGE_SMOKE,
+        serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE,
                 center.x, center.y, center.z,
                 20,
                 0.0, 0.0, 0.0,
@@ -94,8 +77,8 @@ public class RocketProjectileEntity extends Projectile {
                     BlockPos candidate = origin.offset(dx, dy, dz);
                     BlockState state = level.getBlockState(candidate);
 
-                    if (state.isAir()) {
-                        level.setBlock(candidate, Blocks.LIGHT.defaultBlockState().setValue(LightBlock.LEVEL, 15), 3);
+                    if (state.is(Blocks.AIR)) {
+                        level.setBlock(candidate, ModBlocks.LIGHT_AIR.get().defaultBlockState(), 3);
                         this.lightPos = candidate;
                         return;
                     } else if (state.getBlock() == Blocks.WATER) {
@@ -111,8 +94,8 @@ public class RocketProjectileEntity extends Projectile {
     private void cleanupLight() {
         if (this.lightPos != null) {
             BlockState state = this.level().getBlockState(this.lightPos);
-            if (state.getBlock() == Blocks.LIGHT) {
-                this.level().removeBlock(this.lightPos, false);
+            if (state.getBlock() == ModBlocks.LIGHT_AIR.get()) {
+                this.level().setBlock(this.lightPos, Blocks.AIR.defaultBlockState(), 3);
             } else if (state.getBlock() == ModBlocks.LIGHT_WATER.get()) {
                 this.level().setBlock(this.lightPos, Blocks.WATER.defaultBlockState(), 3);
             }
@@ -190,12 +173,11 @@ public class RocketProjectileEntity extends Projectile {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
-
-        Player player = (Player) this.getOwner();
-
-        pResult.getEntity().hurt(level().damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner()), Float.MIN_VALUE);
-        pResult.getEntity().hurt(level().damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, null, null),
-                player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? (QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat()/4) * 4 : (QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat()/4));
+        if (this.level() instanceof ServerLevel) {
+            Entity owner = this.getOwner();
+            pResult.getEntity().hurt(level().damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, this, owner),
+                    QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat() / 4);
+        }
 
         quakeExplosion(this.level());
 

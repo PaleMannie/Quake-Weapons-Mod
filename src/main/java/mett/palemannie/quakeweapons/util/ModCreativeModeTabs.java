@@ -22,7 +22,7 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable("quakeweapons.creativetab.quakeweapons_tab"))
                     .displayItems((pParameters, pOutput) -> {
 
-                        /// Weapons ordered in chronological gameplay order
+                        /// Weapons ordered in gameplay order
 
                         pOutput.accept(ModItems.QWAXE.get());
                         pOutput.accept(ModItems.SHOTGUN.get());

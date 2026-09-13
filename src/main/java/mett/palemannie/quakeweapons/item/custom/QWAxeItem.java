@@ -1,47 +1,26 @@
 package mett.palemannie.quakeweapons.item.custom;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import mett.palemannie.quakeweapons.item.client.QWAxeRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.function.Consumer;
 
-public class QWAxeItem extends AbstractWeapon{
-
-    public QWAxeItem(Properties pProperties) {
-        super(pProperties);
-        this.cooldown = 8;
-    }
-
-    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("qwaxe.animations.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("qwaxe.animations.idle", Animation.LoopType.LOOP);
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
-        controllerRegistrar.add(new AnimationController<>(this, "controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", SHOOT_ANIM));
-
-        controllerRegistrar.add(new AnimationController<>(this, "controller3", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("idle", IDLE_ANIM));
+public class QWAxeItem extends AbstractWeapon {
+    public QWAxeItem(Properties properties) {
+        super(properties, 10, 8, 0, "qwaxe.animations");
     }
 
     @Override
@@ -68,39 +47,25 @@ public class QWAxeItem extends AbstractWeapon{
                 }
                 return HumanoidModel.ArmPose.EMPTY;
             }
+
+            @Override
+            public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
+
+                if (itemInHand.getItem() instanceof AbstractWeapon) {
+
+                    int side = arm == HumanoidArm.RIGHT ? 1 : -1;
+                    poseStack.translate(side * 0.56f, -0.52f, -0.72f);
+
+                    return true;
+                }
+
+                return false;
+            }
         });
     }
 
-    private boolean consumeAmmo(Player player) {
-
-        return player.isUsingItem();
-    }
-
     @Override
-    protected void executeWeaponFire(Level level, LivingEntity user, ItemStack stack, int pRemainingUseDuration) {
-
-        if(user instanceof ServerPlayer serverPlayer){
-
-            if(pRemainingUseDuration % 10 == 0){
-
-                if (consumeAmmo((Player)user)) {
-
-                    if (level instanceof ServerLevel serverLevel) {
-
-                        stopIdleAnimation(user, serverLevel, stack);
-                        startShootingAnimation(user, serverLevel, stack); }
-
-                        ServerPlayHandler.handleAxeShoot(serverPlayer);
-
-                } else {
-
-                    if (level instanceof ServerLevel serverLevel) {
-
-                        startIdleAnimation(user, serverLevel, stack);
-                        stopShootingAnimation(user, serverLevel, stack);
-                    }
-                }
-            }
-        }
+    protected void fireWeapon(ServerLevel level, ServerPlayer player, ItemStack stack, int useTicks) {
+        ServerPlayHandler.handleAxeShoot(player);
     }
 }

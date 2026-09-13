@@ -11,5 +11,7 @@ public class QWConfigStats {
     public static float SuperNailgunDamage = QuakeWeaponsConfig.COMMON.superNailgunDamage.get().floatValue();
     public static float ThunderboltDamage = QuakeWeaponsConfig.COMMON.thunderboltDamage.get().floatValue();
     public static float RocketlauncherDamage = QuakeWeaponsConfig.COMMON.rocketlauncherDamage.get().floatValue();
+    public static float RocketlauncherRadius = QuakeWeaponsConfig.COMMON.rocketlauncherRadius.get().floatValue();
     public static float GrenadelauncherDamage = QuakeWeaponsConfig.COMMON.grenadelauncherDamage.get().floatValue();
+    public static float GrenadelauncherRadius = QuakeWeaponsConfig.COMMON.grenadelauncherRadius.get().floatValue();
 }

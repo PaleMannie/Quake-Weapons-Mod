@@ -3,7 +3,7 @@
 	"animations": {
 		"shotgun.animations.shooting": {
 			"loop": true,
-			"animation_length": 0.5,
+			"animation_length": 0.45,
 			"bones": {
 				"flash": {
 					"rotation": {

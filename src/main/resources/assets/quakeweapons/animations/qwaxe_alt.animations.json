@@ -3,7 +3,7 @@
 	"animations": {
 		"qwaxe.animations.shooting": {
 			"loop": true,
-			"animation_length": 0.49,
+			"animation_length": 0.45,
 			"bones": {
 				"axe": {
 					"rotation": {

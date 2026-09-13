@@ -2,10 +2,12 @@ package mett.palemannie.quakeweapons.block;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.block.custom.LightWaterBlock;
+import mett.palemannie.quakeweapons.block.custom.LightAirBlock;
 import mett.palemannie.quakeweapons.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -29,6 +31,10 @@ public class ModBlocks {
             new LightWaterBlock(Fluids.WATER, BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable()
                     .noCollission().strength(100.0F).pushReaction(PushReaction.DESTROY).noLootTable()
                     .liquid().sound(SoundType.EMPTY).lightLevel((x) -> x.getValue(BlockStateProperties.POWER))));
+
+    public static final RegistryObject<Block> LIGHT_AIR = BLOCKS.register("light_air", () ->
+            new LightAirBlock(BlockBehaviour.Properties.copy(Blocks.AIR)
+                    .lightLevel(state -> 15).noCollission().noOcclusion().air()));
 
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

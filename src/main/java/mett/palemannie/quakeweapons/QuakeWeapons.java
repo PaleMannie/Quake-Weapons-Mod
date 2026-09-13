@@ -27,12 +27,12 @@ import software.bernie.geckolib.GeckoLib;
 @Mod(QuakeWeapons.MODID)
 public class QuakeWeapons {
 
-    /// TODO: Axt Neues Modell
-    /// TODO: (Super)Nailgun Neues Modell
-    /// TODO: (Super)Shotgun Neues Modell
-    /// TODO: Raketenwerfer Neues Modell
-    /// TODO: Granatenwerfer Neues Modell
-    /// TODO: Thunderbolt Neues Modell
+    /// TODO: Axt Neues Modell (irgendwann wenn Skidmark wieder Lust hat)
+    /// TODO: (Super)Nailgun Neues Modell (irgendwann wenn Skidmark wieder Lust hat)
+    /// TODO: (Super)Shotgun Neues Modell (irgendwann wenn Skidmark wieder Lust hat)
+    /// TODO: Raketenwerfer Neues Modell (irgendwann wenn Skidmark wieder Lust hat)
+    /// TODO: Granatenwerfer Neues Modell (irgendwann wenn Skidmark wieder Lust hat)
+    /// TODO: Thunderbolt Neues Modell (irgendwann wenn Skidmark wieder Lust hat)
 
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();
@@ -77,6 +77,13 @@ public class QuakeWeapons {
             EntityRenderers.register(ModEntities.PENTAGRAM_POWERUP.get(), PentagramPowerupRenderer::new);
             EntityRenderers.register(ModEntities.RING_POWERUP.get(), RingPowerupRenderer::new);
             EntityRenderers.register(ModEntities.BIOSUIT_POWERUP.get(), BiosuitPowerupRenderer::new);
+
+            /// TODO: Ammopickup Modelle
+            EntityRenderers.register(ModEntities.SHELLS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
+            EntityRenderers.register(ModEntities.NAILS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
+            EntityRenderers.register(ModEntities.CELLS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
+            EntityRenderers.register(ModEntities.GRENADES_AMMOPICKUP.get(), AmmoPickupRenderer::new);
+            EntityRenderers.register(ModEntities.ROCKETS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
         }
     }
 
