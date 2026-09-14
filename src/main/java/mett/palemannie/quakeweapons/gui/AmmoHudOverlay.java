@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public final class AmmoHudOverlay {
+
     private AmmoHudOverlay() {}
 
     public static final IGuiOverlay HUD = (gui, graphics, partialTick, width, height) -> {

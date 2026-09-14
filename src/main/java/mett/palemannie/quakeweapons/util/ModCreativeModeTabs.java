@@ -18,7 +18,7 @@ public class ModCreativeModeTabs {
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, QuakeWeapons.MODID);
 
     public static final RegistryObject<CreativeModeTab> QUAKEWEAPONS_TAB = CREATIVE_MODE_TABS.register("quakeweapons_tab",
-            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.NAILGUN.get()))
+            () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.QUAD_DAMAGE_POWERUP.get()))
                     .title(Component.translatable("quakeweapons.creativetab.quakeweapons_tab"))
                     .displayItems((pParameters, pOutput) -> {
 

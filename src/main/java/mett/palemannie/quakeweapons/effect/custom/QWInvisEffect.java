@@ -37,9 +37,8 @@ public class QWInvisEffect extends MobEffect {
         if (inst != null) {
             int remaining = inst.getDuration();
 
-            if(remaining % 60 == 0 && remaining > 50){
-
-                entity.level().playLocalSound(entity.getX(), entity.getY(), entity.getZ(), ModSounds.RING_USE.get(), SoundSource.PLAYERS, 1f, 1f, false);
+            if (remaining % 60 == 0 && remaining > 50 && !entity.level().isClientSide) {
+                entity.level().playSound(null, entity, ModSounds.RING_USE.get(), SoundSource.PLAYERS, 1f, 1f);
             }
 
             if (remaining == 60) {
