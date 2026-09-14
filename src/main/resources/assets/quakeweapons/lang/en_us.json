@@ -81,6 +81,7 @@
   "sounds.quakeweapons.ring_expire": "Ring of Shadows expiring",
   "sounds.quakeweapons.biosuit_pickup": "Biosuit picked up",
   "sounds.quakeweapons.biosuit_expire": "Biosuit expiring",
+
   "command.quakeweapons.testkit.success": "Test kit ready: All weapons present and ammunition replenished.",
   "command.quakeweapons.refill.success": "Ammo replenished: 256 nails, 256 cells, 128 shells, and 64 each of grenades and rockets.",
   "command.quakeweapons.supply.full": "Inventory full: %s items could not be added."

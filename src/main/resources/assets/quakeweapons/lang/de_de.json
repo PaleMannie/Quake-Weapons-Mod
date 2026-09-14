@@ -81,6 +81,7 @@
   "sounds.quakeweapons.ring_expire": "Ring der Schatten läuft ab",
   "sounds.quakeweapons.biosuit_pickup": "Bioanzug aufgehoben",
   "sounds.quakeweapons.biosuit_expire": "Bioanzug läuft ab",
+
   "command.quakeweapons.testkit.success": "Testkit bereit: Alle Waffen vorhanden und Munition aufgefüllt.",
   "command.quakeweapons.refill.success": "Munition aufgefüllt: 256 Nägel, 256 Zellen, 128 Schrotpatronen und je 64 Granaten und Raketen.",
   "command.quakeweapons.supply.full": "Inventar voll: %s Gegenstände konnten nicht hinzugefügt werden."

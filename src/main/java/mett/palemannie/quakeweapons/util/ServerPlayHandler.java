@@ -32,8 +32,6 @@ public class ServerPlayHandler {
 
     /// All in one class handling all the weapons shooting which should happen on server side
 
-    ///TODO: Nailgun links/rechts edgecase wenn man ganz oben/unten schaut (dort schießen die Nägel nur mittig statt links/rechts)
-
     private static boolean isMuzzleFlashEnabled(){
         return QuakeWeaponsConfig.COMMON.enableMuzzleFlash.get();
     }
@@ -237,7 +235,7 @@ public class ServerPlayHandler {
 
         RocketProjectileEntity rocket = new RocketProjectileEntity(ModEntities.ROCKET_PROJECTILE.get(), sevel);
 
-        shootFromRotationNoMomentum(rocket, player, player.getXRot(), player.getYRot(), 1f, 0.0f);
+        shootFromRotationNoMomentum(rocket, player, player.getXRot(), player.getYRot(), 1.5f, 0.0f);
         sevel.addFreshEntity(rocket);
 
         if(isMuzzleFlashEnabled()){
@@ -468,7 +466,9 @@ public class ServerPlayHandler {
         double forwardOffset = 0.4;
 
         Vec3 look = player.getLookAngle();
-        Vec3 right = look.cross(new Vec3(0, 1, 0)).normalize();
+        // Use yaw for the lateral offset: look.cross(up) becomes zero when looking straight up or down.
+        float yaw = (float) Math.toRadians(player.getYRot());
+        Vec3 right = new Vec3(-Mth.cos(yaw), 0, -Mth.sin(yaw));
 
         double spawnX = player.getX() + right.x * offset + look.x * forwardOffset;
         double spawnY = player.getEyeY() - 0.1 + right.y * offset + look.y * forwardOffset;
