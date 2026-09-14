@@ -176,6 +176,19 @@
     "sounds": [
       "quakeweapons:biosuit_expire"
     ]
-  }
+  },
 
+  "megahealth_sound": {
+    "subtitle": "sounds.quakeweapons.megahealth_sound",
+    "sounds": [
+      "quakeweapons:megahealth_sound"
+    ]
+  },
+
+  "ammo_pickup_sound": {
+    "subtitle": "sounds.quakeweapons.ammo_pickup_sound",
+    "sounds": [
+      "quakeweapons:ammo_pickup_sound"
+    ]
+  }
 }

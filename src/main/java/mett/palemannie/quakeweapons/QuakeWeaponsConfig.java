@@ -110,8 +110,6 @@ public class QuakeWeaponsConfig
 
     public static class Server {
 
-        public final ForgeConfigSpec.DoubleValue animationDroppedFixerSearchRadius;
-        public final ForgeConfigSpec.IntValue animationDroppedFixerSearchInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
         public final ForgeConfigSpec.IntValue maxNearbyPowerups;
@@ -156,18 +154,6 @@ public class QuakeWeaponsConfig
             maxNearbyPowerups = builder
                     .comment("Maximum automatically spawned Quake powerups and ammo pickups within 128 blocks of a player. Manually placed pickups do not count.")
                     .defineInRange("maxNearbyPowerups", 4, 1, Integer.MAX_VALUE);
-
-            builder.pop();
-
-            builder.push("Dropped Weapon animation fixer values");
-
-            animationDroppedFixerSearchRadius = builder
-                    .comment("Legacy setting with no effect. Dropped weapon animations now stop immediately when the item is tossed.")
-                    .defineInRange("animationDroppedFixerSearchRadius", 20d, 1d, 32d);
-
-            animationDroppedFixerSearchInterval = builder
-                    .comment("Legacy setting with no effect. Dropped weapon animations no longer require periodic checks.")
-                    .defineInRange("animationDroppedFixerSearchInterval", 5, 1, Integer.MAX_VALUE-1);
 
             builder.pop();
         }

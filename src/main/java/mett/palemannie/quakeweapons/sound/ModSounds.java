@@ -38,6 +38,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> RING_EXPIRE = registerSoundEvents("ring_expire");
     public static final RegistryObject<SoundEvent> BIOSUIT_PICKUP = registerSoundEvents("biosuit_pickup");
     public static final RegistryObject<SoundEvent> BIOSUIT_EXPIRE = registerSoundEvents("biosuit_expire");
+    public static final RegistryObject<SoundEvent> MEGAHEALTH_SOUND = registerSoundEvents("megahealth_sound");
+    public static final RegistryObject<SoundEvent> AMMO_PICKUP_SOUND = registerSoundEvents("ammo_pickup_sound");
 
 
 

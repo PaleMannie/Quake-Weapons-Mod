@@ -5,9 +5,9 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
-public class RocketsAmmoPickupEntity extends AbstractAmmoPickupEntity {
+public class RocketsAmmopickupEntity extends AbstractAmmoPickupEntity {
 
-    public RocketsAmmoPickupEntity(EntityType<?> type, Level level) { super(type, level); }
+    public RocketsAmmopickupEntity(EntityType<?> type, Level level) { super(type, level); }
     @Override protected Item ammoItem() { return ModItems.ROCKET.get(); }
-    @Override protected int amount() { return 5; }
+    @Override protected int amount() { return 10; }
 }

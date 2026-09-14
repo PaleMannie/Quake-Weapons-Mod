@@ -14,28 +14,33 @@ public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, QuakeWeapons.MODID);
 
-    public static final RegistryObject<EntityType<ShellsAmmoPickupEntity>> SHELLS_AMMOPICKUP =
-            ENTITY_TYPES.register("shells_ammopickup", () -> EntityType.Builder.<ShellsAmmoPickupEntity>of(ShellsAmmoPickupEntity::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<MegahealthPickupEntity>> MEGAHEALTH_PICKUP =
+            ENTITY_TYPES.register("megahealth_pickup", () -> EntityType.Builder.<MegahealthPickupEntity>of(MegahealthPickupEntity::new, MobCategory.MISC)
+                    .sized(1.0f, 1.0f).fireImmune().clientTrackingRange(256).updateInterval(1)
+                    .build("megahealth_pickup"));
+
+    public static final RegistryObject<EntityType<ShellsAmmopickupEntity>> SHELLS_AMMOPICKUP =
+            ENTITY_TYPES.register("shells_ammopickup", () -> EntityType.Builder.<ShellsAmmopickupEntity>of(ShellsAmmopickupEntity::new, MobCategory.MISC)
                     .sized(1.0f, 1.0f).fireImmune().clientTrackingRange(256).updateInterval(1)
                     .build("shells_ammopickup"));
-    
-    public static final RegistryObject<EntityType<NailsAmmoPickupEntity>> NAILS_AMMOPICKUP =
-            ENTITY_TYPES.register("nails_ammopickup", () -> EntityType.Builder.<NailsAmmoPickupEntity>of(NailsAmmoPickupEntity::new, MobCategory.MISC)
+
+    public static final RegistryObject<EntityType<NailsAmmopickupEntity>> NAILS_AMMOPICKUP =
+            ENTITY_TYPES.register("nails_ammopickup", () -> EntityType.Builder.<NailsAmmopickupEntity>of(NailsAmmopickupEntity::new, MobCategory.MISC)
                     .sized(1.0f, 1.0f).fireImmune().clientTrackingRange(256).updateInterval(1)
                     .build("nails_ammopickup"));
     
-    public static final RegistryObject<EntityType<CellsAmmoPickupEntity>> CELLS_AMMOPICKUP =
-            ENTITY_TYPES.register("cells_ammopickup", () -> EntityType.Builder.<CellsAmmoPickupEntity>of(CellsAmmoPickupEntity::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<CellsAmmopickupEntity>> CELLS_AMMOPICKUP =
+            ENTITY_TYPES.register("cells_ammopickup", () -> EntityType.Builder.<CellsAmmopickupEntity>of(CellsAmmopickupEntity::new, MobCategory.MISC)
                     .sized(1.0f, 1.0f).fireImmune().clientTrackingRange(256).updateInterval(1)
                     .build("cells_ammopickup"));
     
-    public static final RegistryObject<EntityType<GrenadesAmmoPickupEntity>> GRENADES_AMMOPICKUP =
-            ENTITY_TYPES.register("grenades_ammopickup", () -> EntityType.Builder.<GrenadesAmmoPickupEntity>of(GrenadesAmmoPickupEntity::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<GrenadesAmmopickupEntity>> GRENADES_AMMOPICKUP =
+            ENTITY_TYPES.register("grenades_ammopickup", () -> EntityType.Builder.<GrenadesAmmopickupEntity>of(GrenadesAmmopickupEntity::new, MobCategory.MISC)
                     .sized(1.0f, 1.0f).fireImmune().clientTrackingRange(256).updateInterval(1)
                     .build("grenades_ammopickup"));
     
-    public static final RegistryObject<EntityType<RocketsAmmoPickupEntity>> ROCKETS_AMMOPICKUP =
-            ENTITY_TYPES.register("rockets_ammopickup", () -> EntityType.Builder.<RocketsAmmoPickupEntity>of(RocketsAmmoPickupEntity::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<RocketsAmmopickupEntity>> ROCKETS_AMMOPICKUP =
+            ENTITY_TYPES.register("rockets_ammopickup", () -> EntityType.Builder.<RocketsAmmopickupEntity>of(RocketsAmmopickupEntity::new, MobCategory.MISC)
                     .sized(1.0f, 1.0f).fireImmune().clientTrackingRange(256).updateInterval(1).
                     build("rockets_ammopickup"));
 

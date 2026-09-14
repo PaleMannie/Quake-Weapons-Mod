@@ -1,6 +1,7 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
+import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -41,7 +42,7 @@ public abstract class AbstractAmmoPickupEntity extends Entity {
                 dropped.setDefaultPickUpDelay();
                 level().addFreshEntity(dropped);
             }
-            level().playSound(null, blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 1, 1);
+            level().playSound(null, blockPosition(), ModSounds.AMMO_PICKUP_SOUND.get(), SoundSource.PLAYERS, 1, 1);
             discard();
             break;
         }

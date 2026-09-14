@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.codehaus.plexus.util.cli.shell.Shell;
 import org.slf4j.Logger;
 import software.bernie.geckolib.GeckoLib;
 
@@ -73,17 +74,19 @@ public class QuakeWeapons {
             EntityRenderers.register(ModEntities.MUZZLE_FLASH.get(), MuzzleflashRenderer::new);
             EntityRenderers.register(ModEntities.ROCKET_PROJECTILE.get(), RocketProjectileRenderer::new);
             EntityRenderers.register(ModEntities.GRENADE_PROJECTILE.get(), GrenadeProjectileRenderer::new);
+
             EntityRenderers.register(ModEntities.QUAD_DAMAGE_POWERUP.get(), QuaddamagePowerupRenderer::new);
             EntityRenderers.register(ModEntities.PENTAGRAM_POWERUP.get(), PentagramPowerupRenderer::new);
             EntityRenderers.register(ModEntities.RING_POWERUP.get(), RingPowerupRenderer::new);
             EntityRenderers.register(ModEntities.BIOSUIT_POWERUP.get(), BiosuitPowerupRenderer::new);
 
-            /// TODO: Ammopickup Modelle
-            EntityRenderers.register(ModEntities.SHELLS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
-            EntityRenderers.register(ModEntities.NAILS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
-            EntityRenderers.register(ModEntities.CELLS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
-            EntityRenderers.register(ModEntities.GRENADES_AMMOPICKUP.get(), AmmoPickupRenderer::new);
-            EntityRenderers.register(ModEntities.ROCKETS_AMMOPICKUP.get(), AmmoPickupRenderer::new);
+            EntityRenderers.register(ModEntities.SHELLS_AMMOPICKUP.get(), ShellsAmmopickupRenderer::new);
+            EntityRenderers.register(ModEntities.NAILS_AMMOPICKUP.get(), NailsAmmopickupRenderer::new);
+            EntityRenderers.register(ModEntities.CELLS_AMMOPICKUP.get(), CellsAmmopickupRenderer::new);
+            EntityRenderers.register(ModEntities.GRENADES_AMMOPICKUP.get(), GrenadesAmmopickupRenderer::new);
+            EntityRenderers.register(ModEntities.ROCKETS_AMMOPICKUP.get(), RocketsAmmopickupRenderer::new);
+
+            EntityRenderers.register(ModEntities.MEGAHEALTH_PICKUP.get(), MegahealthPickupRenderer::new);
         }
     }
 

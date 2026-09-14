@@ -10,8 +10,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModelLayerRegistry {
 
-    /// TODO: Ammopickup Modelle
-
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 
@@ -20,9 +18,18 @@ public class ModelLayerRegistry {
         event.registerLayerDefinition(MuzzleflashModel.FLASH_LAYER, MuzzleflashModel::createBodyLayer);
         event.registerLayerDefinition(RocketProjectileModel.ROCKET_LAYER, RocketProjectileModel::createBodyLayer);
         event.registerLayerDefinition(GrenadeProjectileModel.GRENADE_LAYER, GrenadeProjectileModel::createBodyLayer);
+
         event.registerLayerDefinition(QuadDamagePowerupModel.QUAD_LAYER, QuadDamagePowerupModel::createBodyLayer);
         event.registerLayerDefinition(PentagramPowerupModel.PENTAGRAM_LAYER, PentagramPowerupModel::createBodyLayer);
         event.registerLayerDefinition(RingPowerupModel.RING_LAYER, RingPowerupModel::createBodyLayer);
         event.registerLayerDefinition(BiosuitPowerupModel.BIOSUIT_LAYER, BiosuitPowerupModel::createBodyLayer);
+
+        event.registerLayerDefinition(NailsAmmopickupModel.NAILS_AMMOPICKUP_LAYER, NailsAmmopickupModel::createBodyLayer);
+        event.registerLayerDefinition(ShellsAmmopickupModel.SHELLS_AMMOPICKUP_LAYER, ShellsAmmopickupModel::createBodyLayer);
+        event.registerLayerDefinition(RocketsAmmopickupModel.ROCKETS_AMMOPICKUP_LAYER, RocketsAmmopickupModel::createBodyLayer);
+        event.registerLayerDefinition(CellsAmmopickupModel.CELLS_AMMOPICKUP_LAYER, CellsAmmopickupModel::createBodyLayer);
+        event.registerLayerDefinition(GrenadesAmmopickupModel.GRENADES_AMMOPICKUP_LAYER, GrenadesAmmopickupModel::createBodyLayer);
+
+        event.registerLayerDefinition(MegahealthPickupModel.MEGAHEALTH_PICKUP_LAYER, MegahealthPickupModel::createBodyLayer);
     }
 }
