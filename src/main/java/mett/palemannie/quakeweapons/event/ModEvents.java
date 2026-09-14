@@ -6,6 +6,8 @@ import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -22,9 +24,16 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
+
+    private static final Set<String> Q2W_WEAPONS = Set.of(
+            "blaster", "shotgun", "super_shotgun", "machinegun", "chaingun",
+            "grenadelauncher", "rocketlauncher", "hyperblaster", "railgun", "bfg10k", "grenade");
 
     @SubscribeEvent
     public static void onQuadDamageHurt(LivingHurtEvent event) {
@@ -175,6 +184,17 @@ public class ModEvents {
         if(event.getEntity().hasEffect(ModEffects.QUAD_DAMAGE.get()) && event.getLevel().isClientSide()){
 
             event.getEntity().playSound(ModSounds.QUAD_DAMAGE_USE.get(), 1f, 1f);
+        }
+
+        ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(event.getItemStack().getItem());
+        if (event.getHand() == InteractionHand.MAIN_HAND
+                && itemId != null && itemId.getNamespace().equals("q2w")
+                && Q2W_WEAPONS.contains(itemId.getPath())
+                && !event.getEntity().getCooldowns().isOnCooldown(event.getItemStack().getItem())
+                && event.getEntity().hasEffect(ModEffects.QW_INVIS.get())) {
+            event.getEntity().removeEffect(ModEffects.QW_INVIS.get());
+            event.getEntity().removeEffect(MobEffects.INVISIBILITY);
+            event.getEntity().setInvisible(false);
         }
     }
 
