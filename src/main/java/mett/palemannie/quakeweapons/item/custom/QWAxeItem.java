@@ -65,6 +65,9 @@ public class QWAxeItem extends AbstractWeapon {
     }
 
     @Override
+    protected boolean causesShotAggro() { return false; }
+
+    @Override
     protected void fireWeapon(ServerLevel level, ServerPlayer player, ItemStack stack, int useTicks) {
         ServerPlayHandler.handleAxeShoot(player);
     }

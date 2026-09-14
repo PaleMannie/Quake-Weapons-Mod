@@ -110,6 +110,7 @@ public class QuakeWeaponsConfig
 
     public static class Server {
 
+        public final ForgeConfigSpec.IntValue weaponAggroRange;
         public final ForgeConfigSpec.IntValue powerupSpawnInterval;
         public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
         public final ForgeConfigSpec.IntValue maxNearbyPowerups;
@@ -120,6 +121,12 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.BooleanValue enablePowerups;
 
         public Server(ForgeConfigSpec.Builder builder) {
+
+            builder.push("Weapon aggro values");
+            weaponAggroRange = builder
+                    .comment("Range in blocks within which firing a Quake weapon alerts monsters. Set to 0 to disable.")
+                    .defineInRange("weaponAggroRange", 24, 0, 256);
+            builder.pop();
 
             builder.push("Powerup Spawner values");
 

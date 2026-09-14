@@ -4,6 +4,7 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.WeaponRecoilS2CPacket;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
+import mett.palemannie.quakeweapons.util.WeaponAggroHandler;
 import mett.palemannie.quakeweapons.util.WeaponRefireClock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -113,7 +114,10 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         }
         onSuccessfulFire(serverLevel, player, stack);
         fireWeapon(serverLevel, player, stack, useTicks);
+        if (causesShotAggro()) WeaponAggroHandler.onWeaponShot(player);
     }
+
+    protected boolean causesShotAggro() { return true; }
 
     protected abstract void fireWeapon(ServerLevel level, ServerPlayer player, ItemStack stack, int useTicks);
 
