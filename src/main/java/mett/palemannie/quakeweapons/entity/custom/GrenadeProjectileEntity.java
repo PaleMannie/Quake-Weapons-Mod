@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.entity.custom;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.QWExplosionHelper;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
@@ -17,9 +18,6 @@ public class GrenadeProjectileEntity extends Projectile {
     public GrenadeProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
-
-    @Override
-    protected void defineSynchedData() {}
 
     @Override
     public boolean isNoGravity() {
@@ -59,13 +57,16 @@ public class GrenadeProjectileEntity extends Projectile {
     public float lastTumbleZ = 0;
 
     @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
+
+    @Override
     public void tick() {
 
         super.tick();
 
         Vec3 motion = this.getDeltaMovement();
 
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
 
             Vec3 motion1 = this.getDeltaMovement().normalize().scale(-0.25);
             double px = this.getX() + motion1.x;
@@ -85,6 +86,7 @@ public class GrenadeProjectileEntity extends Projectile {
         if (blockHit.getType() != HitResult.Type.MISS) {
             this.onHitBlock(blockHit);
 
+            /// TODO: fix diese
             Vec3 normal = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal());
             Vec3 bounced = motion.subtract(normal.scale(2 * motion.dot(normal)));
 

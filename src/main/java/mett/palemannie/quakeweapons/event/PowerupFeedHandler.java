@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID)
@@ -25,7 +25,7 @@ public class PowerupFeedHandler {
         ItemStack held = event.getItemStack();
         Entity target = event.getTarget();
 
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
         if (!(target instanceof LivingEntity living)) return;
         if (!(held.getItem() instanceof AbstractPowerupItem powerupItem)) return;
 
@@ -39,7 +39,7 @@ public class PowerupFeedHandler {
                 held.shrink(1);
             }
 
-            event.setCanceled(true);
+            //event.setCanceled(true);
         }
     }
 }

@@ -87,21 +87,18 @@ public class ServerPlayHandler {
     public static void handleAxeShoot(Player player) {
 
         Level level = player.level();
-        if (level.isClientSide) return;
+        if (level.isClientSide()) return;
 
         ServerLevel sLevel = (ServerLevel) level;
 
-        double reach = 3.0D;
-        if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
-            reach = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).getValue();
-        }
+        double reach = 5d;
 
-        // Ray setup
+        /// Ray setup
         Vec3 eye = player.getEyePosition(1.0F);
         Vec3 look = player.getViewVector(1.0F);
         Vec3 end = eye.add(look.scale(reach));
 
-        // Block raycast
+        /// Block raycast
         BlockHitResult blockHit = level.clip(new ClipContext(
                 eye, end,
                 ClipContext.Block.OUTLINE,
@@ -113,16 +110,16 @@ public class ServerPlayHandler {
             maxEnd = blockHit.getLocation();
         }
 
-        // Entity raycast
-        AABB pathBB = new AABB(eye, maxEnd).inflate(0.25D);
+        /// Entity raycast
+        AABB pathBB = new AABB(eye, maxEnd).inflate(0.25d);
         Predicate<Entity> canHit = e ->
                 e.isAlive() &&
                         e.isPickable() &&
                         e instanceof LivingEntity &&
                         e != player;
+        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(player, eye, end, pathBB, canHit, reach+reach-1);
 
-        EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(level, player, eye, maxEnd, pathBB, canHit);
-
+        /// Sounds and particles for blockhits, entityhits and airhits
         if (entityHit != null) {
             LivingEntity target = (LivingEntity) entityHit.getEntity();
 
@@ -133,7 +130,7 @@ public class ServerPlayHandler {
             sLevel.sendParticles(ParticleTypes.CRIT, p.x, p.y, p.z, 3, 0.0, 0.2, 0.2, 0.2);
 
             if(QuakeWeaponsConfig.COMMON.enableGore.get()){
-            sLevel.sendParticles(ParticleTypes.LANDING_LAVA, p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.0);}
+                sLevel.sendParticles(ParticleTypes.LANDING_LAVA, p.x, p.y, p.z, 4, 0.5, 0.5, 0.5, 0.0);}
 
             level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_ENTITY.get(), SoundSource.PLAYERS, 1f, 1.0F);
             level.playSound(null, p.x, p.y, p.z, ModSounds.AXE_HIT_AIR.get(), SoundSource.PLAYERS, 1f, 1.0F);
@@ -141,7 +138,7 @@ public class ServerPlayHandler {
         } else if (blockHit.getType() != HitResult.Type.MISS) {
 
             Vec3 hitP = blockHit.getLocation();
-            Vec3 n = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal()).normalize();
+            Vec3 n = Vec3.atLowerCornerOf(blockHit.getDirection().getUnitVec3i());
             Vec3 spawn = hitP.add(n.scale(0.01));
 
             sLevel.sendParticles(ParticleTypes.SMOKE,
@@ -161,7 +158,7 @@ public class ServerPlayHandler {
     public static void handleThunderboltShoot(ServerPlayer player, int useTime){
 
         Level lvl = player.level();
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.level().getLevel();
 
         ///Entity
         double forwardOffset = 0.2;
@@ -206,7 +203,7 @@ public class ServerPlayHandler {
                 }
             }
 
-            if(QuakeWeaponsConfig.COMMON.enableThunderboltTracer.get()) player.getServer().overworld().sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y-0.25f, point.z, 1, 0.02f, 0.02f, 0.02f, 0f);
+            if(QuakeWeaponsConfig.COMMON.enableThunderboltTracer.get()) sevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, point.x, point.y-0.25f, point.z, 1, 0.02f, 0.02f, 0.02f, 0f);
         }
 
         ///Sound
@@ -220,7 +217,7 @@ public class ServerPlayHandler {
 
     public static void handleRocketLauncherShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ///Entity
@@ -255,7 +252,7 @@ public class ServerPlayHandler {
 
     public static void handleGrenadeLauncherShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ///Entity
@@ -273,7 +270,7 @@ public class ServerPlayHandler {
 
     public static void handleSuperShotgunShoot(ServerPlayer player) {
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.level().getLevel();
         Vec3 eyePos = player.getEyePosition();
         Vec3 look = player.getLookAngle();
 
@@ -295,10 +292,10 @@ public class ServerPlayHandler {
             ));
 
             EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
-                    sevel, player, eyePos, endPos,
+                    player, eyePos, endPos,
                     new AABB(eyePos, endPos).inflate(1.0),
                     e -> e instanceof LivingEntity && e != player
-            );
+                    , RANGE);
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
                 LivingEntity target = (LivingEntity) entityHit.getEntity();
@@ -307,9 +304,9 @@ public class ServerPlayHandler {
                 Vec3 hitPos = entityHit.getLocation();
 
                 if(QuakeWeaponsConfig.COMMON.enableGore.get()){
-                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d); }
 
-                sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+                    sevel.sendParticles(ParticleTypes.LANDING_LAVA, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d); }
+                sevel.sendParticles(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
             }
             else if (blockHit != null && blockHit.getType() != HitResult.Type.MISS) {
                 Vec3 hitPos = blockHit.getLocation();
@@ -345,7 +342,7 @@ public class ServerPlayHandler {
 
     public static void handleShotgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.level().getLevel();
         Level level = player.level();
 
 
@@ -371,9 +368,9 @@ public class ServerPlayHandler {
             ));
 
             EntityHitResult entityHit = ProjectileUtil.getEntityHitResult(
-                    level, player, eyePos, endPos,
+                    player, eyePos, endPos,
                     new AABB(eyePos, endPos).inflate(1.0),
-                    e -> e instanceof LivingEntity && e != player
+                    e -> e instanceof LivingEntity && e != player, RANGE
             );
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
@@ -383,15 +380,15 @@ public class ServerPlayHandler {
                 Vec3 hitPos = entityHit.getLocation();
 
                 if(QuakeWeaponsConfig.COMMON.enableGore.get()){
-                sevel.sendParticles(player, ParticleTypes.LANDING_LAVA, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);}
+                    sevel.sendParticles(ParticleTypes.LANDING_LAVA, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);}
 
-                sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
+                sevel.sendParticles(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 1, 0.5d, 0.5d, 0.5d, 0d);
             }
 
             else if (blockHit != null && blockHit.getType() != HitResult.Type.MISS) {
 
                 Vec3 hitPos = blockHit.getLocation();
-                sevel.sendParticles(player, ParticleTypes.SMOKE, true, hitPos.x, hitPos.y, hitPos.z, 1, 0.1d, 0.1d, 0.1d, 0d);
+                sevel.sendParticles(ParticleTypes.SMOKE, hitPos.x, hitPos.y, hitPos.z, 1, 0.1d, 0.1d, 0.1d, 0d);
             }
         }
 
@@ -422,7 +419,7 @@ public class ServerPlayHandler {
 
     public static void handleSuperNailgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ///Entity
@@ -457,7 +454,7 @@ public class ServerPlayHandler {
 
     public static void handleNailgunShoot(ServerPlayer player){
 
-        ServerLevel sevel = player.serverLevel();
+        ServerLevel sevel = player.level().getLevel();
         Level lvl = player.level();
 
         ///Entity

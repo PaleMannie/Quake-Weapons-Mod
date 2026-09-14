@@ -55,14 +55,14 @@ public final class QWExplosionHelper {
     }
 
     private static boolean hasLooseLineOfSight(ServerLevel level, Vec3 center, LivingEntity target) {
-        return clearPath(level, center, target.getBoundingBox().getCenter())
-                || clearPath(level, center, target.getEyePosition())
-                || clearPath(level, center, target.position().add(0, 0.15, 0));
+        return clearPath(level, center, target.getBoundingBox().getCenter(), target)
+                || clearPath(level, center, target.getEyePosition(), target)
+                || clearPath(level, center, target.position().add(0, 0.15, 0), target);
     }
 
-    private static boolean clearPath(ServerLevel level, Vec3 from, Vec3 to) {
+    private static boolean clearPath(ServerLevel level, Vec3 from, Vec3 to, Entity entity) {
         BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE, null));
+                ClipContext.Fluid.NONE, entity));
         return hit.getType() == HitResult.Type.MISS;
     }
 

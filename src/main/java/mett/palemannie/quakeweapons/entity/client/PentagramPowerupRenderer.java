@@ -1,57 +1,55 @@
 package mett.palemannie.quakeweapons.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.PentagramPowerupEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.resources.Identifier;
 
-public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEntity> {
+public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEntity, EntityRenderState> {
 
-    private static final ResourceLocation PENTAGRAM_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/pentagram_powerup/pentagram_powerup.png");
-    private final PentagramPowerupModel<PentagramPowerupEntity> model;
+    private static final Identifier PENTAGRAM_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/pentagram_powerup/pentagram_powerup.png");
+    private final PentagramPowerupModel model;
 
     public PentagramPowerupRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new PentagramPowerupModel<>(context.bakeLayer(PentagramPowerupModel.PENTAGRAM_LAYER));
+        this.model = new PentagramPowerupModel(context.bakeLayer(PentagramPowerupModel.PENTAGRAM_LAYER));
     }
 
     float bobbingSpeed = 0.05f;
     float bobbingHeight = 0.1f;
     float rotationSpeed = 5f;
 
-    public void render(PentagramPowerupEntity rocketEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    @Override
+    public void submit(EntityRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraState) {
 
         poseStack.pushPose();
 
-        poseStack.translate(0.0F, 0.0f, 0.0F);
-        poseStack.scale(2f, 2f, 2f);
+        poseStack.translate(0f, 0.75f, 0f);
+        poseStack.scale(0.75f, 0.75f, 0.75f);
 
-        float ageInTicks = rocketEntity.tickCount + partialTicks;
+        float ageInTicks = state.ageInTicks;
 
         double bob = Math.sin(ageInTicks * bobbingSpeed) * bobbingHeight;
-        poseStack.translate(0.0D, 0.25D + bob, 0.0D);
+        poseStack.translate(0d, 0.25d + bob, 0d);
 
         float rotation = (ageInTicks * rotationSpeed) % 360;
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
-        VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(PENTAGRAM_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-
-        VertexConsumer $$5 = bufferSource.getBuffer(RenderType.eyes(PENTAGRAM_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(PENTAGRAM_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(PENTAGRAM_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
 
         poseStack.popPose();
 
-        super.render(rocketEntity, v1, partialTicks, poseStack, bufferSource, packedLight);
+        super.submit(state, poseStack, nodeCollector, cameraState);
     }
 
     @Override
@@ -60,6 +58,7 @@ public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEnt
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull PentagramPowerupEntity spit) { return PENTAGRAM_LOCATION; }
-
+    public EntityRenderState createRenderState() {
+        return new EntityRenderState();
+    }
 }

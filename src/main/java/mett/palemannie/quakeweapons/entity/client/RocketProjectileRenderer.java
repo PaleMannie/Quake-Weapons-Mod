@@ -1,51 +1,47 @@
 package mett.palemannie.quakeweapons.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.RocketProjectileEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
 
-public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEntity> {
+public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEntity, ProjectileRenderState> {
 
-    private static final ResourceLocation ROCKET_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/rocket_projectile/rocket_projectile.png");
-    private static final ResourceLocation ROCKET_EMISSIVE_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/rocket_projectile/rocket_projectile_glow.png");
-    private final RocketProjectileModel<RocketProjectileEntity> model;
+    private static final Identifier ROCKET_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/rocket_projectile/rocket_projectile.png");
+    private static final Identifier ROCKET_EMISSIVE_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/rocket_projectile/rocket_projectile_glow.png");
+    private final RocketProjectileModel model;
 
     public RocketProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new RocketProjectileModel<>(context.bakeLayer(RocketProjectileModel.ROCKET_LAYER));
+        this.model = new RocketProjectileModel(context.bakeLayer(RocketProjectileModel.ROCKET_LAYER));
     }
 
-    public void render(RocketProjectileEntity rocketEntity, float v1, float v2, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    @Override
+    public void submit(ProjectileRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraState) {
 
         poseStack.pushPose();
 
-        poseStack.translate(0.0F, 0.05f, 0.0F);
+        poseStack.translate(0.0F, 0.0f, 0.0F);
+        poseStack.scale(0.75f, 0.75f, 0.75f);
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(v2, rocketEntity.yRotO, rocketEntity.getYRot()) + 180f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(v2, rocketEntity.xRotO, rocketEntity.getXRot()) ));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(45f));
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot + 180f));
+        poseStack.mulPose(Axis.XP.rotationDegrees(state.xRot ));
 
-        poseStack.scale(0.25F, 0.25F, 0.25F);
-
-        VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(ROCKET_LOCATION));
-        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
-
-        VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(ROCKET_EMISSIVE_LOCATION));
-        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(ROCKET_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(ROCKET_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
         poseStack.popPose();
 
-        super.render(rocketEntity, v1, v2, poseStack, bufferSource, packedLight);
+        super.submit(state, poseStack, nodeCollector, cameraState);
     }
 
     @Override
@@ -54,6 +50,14 @@ public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEnt
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull RocketProjectileEntity spit) { return ROCKET_LOCATION; }
+    public ProjectileRenderState createRenderState() {
+        return new ProjectileRenderState();
+    }
 
+    @Override
+    public void extractRenderState(RocketProjectileEntity entity, ProjectileRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.xRot = Mth.lerp(partialTick, entity.xRotO, entity.getXRot());
+        state.yRot = Mth.lerp(partialTick, entity.yRotO, entity.getYRot());
+    }
 }

@@ -2,6 +2,7 @@ package mett.palemannie.quakeweapons.effect.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -10,33 +11,19 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class BiosuitEffect extends MobEffect {
 
-    public BiosuitEffect(MobEffectCategory pCategory, int pColor) {
-        super(pCategory, pColor);
-    }
-
-    /// Effect done through Events
-    /// Only Expiring sounds here
-
-    @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
-
-        entity.setAirSupply(entity.getMaxAirSupply());
-
-        MobEffectInstance inst = entity.getEffect(ModEffects.BIOSUIT.get());
-        if (inst != null) {
-            int remaining = inst.getDuration();
-
-            if (remaining == 60) {
-                if (entity.level().isClientSide) {
-
-                    entity.level().playLocalSound(entity.getX(), entity.getY(), entity.getZ(), ModSounds.BIOSUIT_EXPIRE.get(), SoundSource.PLAYERS, 3f, 1f, false);
-                }
-            }
-        }
+    public BiosuitEffect(MobEffectCategory category, int color) {
+        super(category, color);
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier) {
+        level.playSound(null, entity, ModSounds.BIOSUIT_EXPIRE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         return true;
+    }
+
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
+        // Quake's expiration warning starts three seconds before the effect ends.
+        return duration == 60;
     }
 }

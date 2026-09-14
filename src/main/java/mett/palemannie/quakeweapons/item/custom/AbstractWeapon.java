@@ -10,26 +10,26 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animation.object.LoopType;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Map;
@@ -57,14 +57,14 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
     @Nullable public Item getAmmoItem() { return null; }
-    protected Animation.LoopType shootingLoopType() { return Animation.LoopType.PLAY_ONCE; }
+    protected LoopType shootingLoopType() { return LoopType.PLAY_ONCE; }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         RawAnimation shoot = RawAnimation.begin().then(animationBase + ".shooting", shootingLoopType());
-        RawAnimation empty = RawAnimation.begin().then(animationBase + ".ammoempty", Animation.LoopType.PLAY_ONCE);
-        RawAnimation idle = RawAnimation.begin().then(animationBase + ".idle", Animation.LoopType.LOOP);
-        controllers.add(new AnimationController<>(this, CONTROLLER, 0, state -> {
+        RawAnimation empty = RawAnimation.begin().then(animationBase + ".ammoempty", LoopType.PLAY_ONCE);
+        RawAnimation idle = RawAnimation.begin().then(animationBase + ".idle", LoopType.LOOP);
+        controllers.add(new AnimationController<>(CONTROLLER, 0, state -> {
             state.setAndContinue(idle);
             return PlayState.CONTINUE;
         }).triggerableAnim("shoot", shoot).triggerableAnim("ammoempty", empty));
@@ -74,8 +74,8 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         ItemStack stack = entity.getItemInHand(hand);
         if (stack.isEmpty() || entity.isUsingItem()) return;
         entity.useItem = stack;
-        entity.useItemRemaining = stack.getUseDuration();
-        if (!entity.level().isClientSide) {
+        entity.useItemRemaining = stack.getUseDuration(entity);
+        if (!entity.level().isClientSide()) {
             entity.setLivingEntityFlag(1, true);
             entity.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
             entity.gameEvent(GameEvent.ITEM_INTERACT_START);
@@ -83,31 +83,36 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     @Override public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) { return slotChanged; }
-    @Override public @NotNull UseAnim getUseAnimation(ItemStack stack) { return UseAnim.NONE; }
-    @Override public int getUseDuration(ItemStack stack) { return 2_000_000_000; }
-    @Override public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) { return false; }
+
+    @Override
+    public ItemUseAnimation getUseAnimation(ItemStack pStack) { return ItemUseAnimation.NONE; }
+    @Override
+    public int getUseDuration(ItemStack pStack, LivingEntity pEntity) { return 2_000_000_000; }
+    @Override
+    public boolean canDestroyBlock(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, LivingEntity pEntity) { return false; }
+
     @Override public boolean onEntitySwing(ItemStack stack, LivingEntity entity) { return true; }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (hand != InteractionHand.MAIN_HAND || player.getCooldowns().isOnCooldown(this)) {
-            return InteractionResultHolder.fail(player.getItemInHand(hand));
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (hand != InteractionHand.MAIN_HAND || player.getCooldowns().isOnCooldown(player.getUseItem())) {
+            return InteractionResult.FAIL;
         }
-        player.removeEffect(ModEffects.QW_INVIS.get());
+        player.removeEffect(ModEffects.QW_INVIS.getHolder().get());
         player.setInvisible(false);
         setCurrentHand(hand, player);
-        return InteractionResultHolder.consume(player.getItemInHand(hand));
+        return InteractionResult.CONSUME;
     }
 
     @Override
     public final void onUseTick(Level level, LivingEntity user, ItemStack stack, int remainingUseDuration) {
         super.onUseTick(level, user, stack, remainingUseDuration);
         if (!(level instanceof ServerLevel serverLevel) || !(user instanceof ServerPlayer player)) return;
-        if (!player.isUsingItem() || player.getUseItem() != stack || player.getCooldowns().isOnCooldown(this)) return;
+        if (!player.isUsingItem() || player.getUseItem() != stack || player.getCooldowns().isOnCooldown(stack)) return;
         if (!REFIRE_CLOCKS.computeIfAbsent(player, ignored -> new WeaponRefireClock<>())
-                .tryFire(this, player.getServer().getTickCount(), fireIntervalTicks)) return;
+                .tryFire(this, player.level().getServer().getTickCount(), fireIntervalTicks)) return;
 
-        int useTicks = getUseDuration(stack) - remainingUseDuration;
+        int useTicks = getUseDuration(stack, user) - remainingUseDuration;
         if (!consumeAmmo(player, ammoCostPerShot)) {
             onAmmoEmpty(serverLevel, player, stack);
             return;
@@ -155,17 +160,22 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level level, LivingEntity user, int timeCharged) {
+    public boolean releaseUsing(ItemStack stack, Level level, LivingEntity user, int timeCharged) {
         super.releaseUsing(stack, level, user, timeCharged);
-        if (user instanceof Player player && releaseCooldownTicks > 0) player.getCooldowns().addCooldown(this, releaseCooldownTicks);
+        if (user instanceof Player player && releaseCooldownTicks > 0) player.getCooldowns().addCooldown(stack, releaseCooldownTicks);
         afterShooting(stack, level, user, timeCharged);
+        return false;
     }
 
     protected void afterShooting(ItemStack stack, Level level, LivingEntity user, int timeCharged) {}
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, level, entity, slot, selected);
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
+        super.inventoryTick(stack, level, entity, slot);
+
+        boolean selected = slot == net.minecraft.world.entity.EquipmentSlot.MAINHAND;
+
+        /// TODO: Fixen
         if (!(level instanceof ServerLevel serverLevel) || !(entity instanceof LivingEntity living)) return;
         if (stack.hasTag() && stack.getTag().getBoolean("WasDropped")) {
             hardStopTriggeredAnimations(living, serverLevel, stack);

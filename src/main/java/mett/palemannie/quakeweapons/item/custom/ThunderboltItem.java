@@ -10,16 +10,17 @@ import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -29,49 +30,56 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.object.LoopType;
+import software.bernie.geckolib.animation.object.PlayState;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 public class ThunderboltItem extends AbstractWeapon {
-    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("thunderbolt.animations.shooting", Animation.LoopType.LOOP);
-    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("thunderbolt.animations.ammoempty", Animation.LoopType.LOOP);
-    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("thunderbolt.animations.idle", Animation.LoopType.LOOP);
+    private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("thunderbolt.animations.shooting", LoopType.LOOP);
+    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("thunderbolt.animations.ammoempty", LoopType.LOOP);
+    private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("thunderbolt.animations.idle", LoopType.LOOP);
 
     public ThunderboltItem(Properties properties) {
         super(properties, 2, 1, 1, "thunderbolt.animations");
     }
 
-    @Override public net.minecraft.world.item.Item getAmmoItem() { return ModItems.CELL.get(); }
+    @Override public Item getAmmoItem() { return ModItems.CELL.get(); }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("shooting", SHOOT_ANIM));
-        controllers.add(new AnimationController<>(this, "controller2", 0, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
-        controllers.add(new AnimationController<>(this, "controller3", 0, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("idle", IDLE_ANIM));
+    }
+
+    @Override
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
+            private ThunderboltRenderer renderer;
+
+            @Override
+            public GeoItemRenderer<ThunderboltItem> getGeoItemRenderer() {
+                if (this.renderer == null)
+                    this.renderer = new ThunderboltRenderer();
+
+                return this.renderer;
+            }
+        });
     }
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private ThunderboltRenderer renderer;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if(this.renderer == null) {
-                    this.renderer = new ThunderboltRenderer();
-                }
-
-                return this.renderer;
-            }
 
             //Keeps the item in the bow holding position when it's not used
             @Override
@@ -102,7 +110,7 @@ public class ThunderboltItem extends AbstractWeapon {
 
     private void triggerWaterDischarge(ServerLevel level, Player player) {
 
-        if(level.isClientSide) return;
+        if(level.isClientSide()) return;
 
         int cellCount = countAmmoCells(player);
         double radius = cellCount/2d;
@@ -118,7 +126,7 @@ public class ThunderboltItem extends AbstractWeapon {
         removeAllAmmoCells(player);
 
         for (LivingEntity target : targets) {
-            boolean targetInWater = target.isInWaterOrBubble();
+            boolean targetInWater = target.isInLiquid();
             boolean hasLOS = hasLineOfSight(level, dischargePos, target);
 
             if (targetInWater || hasLOS) {
@@ -127,7 +135,7 @@ public class ThunderboltItem extends AbstractWeapon {
                 target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
                 //the real damage
                 target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
-                        player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
+                        player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
                                 : ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage));
 
                 //particles and sound
@@ -148,7 +156,7 @@ public class ThunderboltItem extends AbstractWeapon {
 
     private boolean hasLineOfSight(Level level, Vec3 from, LivingEntity target) {
         Vec3 to = target.position().add(0, target.getBbHeight() / 2, 0);
-        BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+        BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, target));
         return hit.getType() == HitResult.Type.MISS;
     }
 
@@ -172,7 +180,7 @@ public class ThunderboltItem extends AbstractWeapon {
 
     @Override
     protected void onSuccessfulFire(ServerLevel level, ServerPlayer player, ItemStack stack) {
-        if (player.isInWaterOrBubble()) triggerWaterDischarge(level, player);
+        if (player.isInLiquid()) triggerWaterDischarge(level, player);
         long id = GeoItem.getOrAssignId(stack, level);
         stopTriggeredAnim(player, id, "controller2", "ammoempty");
         stopTriggeredAnim(player, id, "controller3", "idle");
@@ -194,8 +202,11 @@ public class ThunderboltItem extends AbstractWeapon {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, level, entity, slot, selected);
+    public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, EquipmentSlot slot) {
+        super.inventoryTick(stack, level, entity, slot);
+
+        boolean selected = slot == net.minecraft.world.entity.EquipmentSlot.MAINHAND;
+
         if (selected && level instanceof ServerLevel serverLevel && entity instanceof Player player
                 && !player.isUsingItem()) {
             triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller3", "idle");

@@ -23,17 +23,6 @@ public abstract class AbstractPowerupEntity extends Entity {
 
     public static int durationOnPickup = 0;
 
-    @Override
-    protected void defineSynchedData() {}
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-    }
-
     protected int getPowerupDuration() {
         return QuakeWeaponsConfig.SERVER.powerupEffectDuration.get();
     }
@@ -43,7 +32,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         super.tick();
 
         /// Extract entity lifetime from config
-        if(!level().isClientSide) { durationOnPickup = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(); }
+        if(!level().isClientSide()) { durationOnPickup = QuakeWeaponsConfig.SERVER.powerupEffectDuration.get(); }
 
         /// Lifetime check
         if (this.tickCount > QuakeWeaponsConfig.SERVER.powerupLifetime.get()) {
@@ -52,7 +41,7 @@ public abstract class AbstractPowerupEntity extends Entity {
         }
 
         /// Entity Hitbox
-        if (!level().isClientSide) {
+        if (!level().isClientSide()) {
             for (Player player : level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(0.5))) {
                 onPickup(player);
                 discard();
@@ -71,8 +60,9 @@ public abstract class AbstractPowerupEntity extends Entity {
         ItemStack stack = player.getItemInHand(hand);
 
         /// Rightclicking the entity with totem of undying will drop it
-        if (!level().isClientSide && stack.is(Items.DIAMOND)) {
+        if (!level().isClientSide() && stack.is(Items.DIAMOND)) {
 
+            /// TODO: fix diese
             this.spawnAtLocation(getPowerupItem());
             level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 2.0F);
 

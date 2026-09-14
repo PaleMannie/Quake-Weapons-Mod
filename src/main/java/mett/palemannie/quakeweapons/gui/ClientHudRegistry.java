@@ -1,19 +1,20 @@
 package mett.palemannie.quakeweapons.gui;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import net.minecraft.resources.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.client.event.AddGuiOverlayLayersEvent;
+import net.minecraftforge.client.gui.overlay.ForgeLayeredDraw;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public final class ClientHudRegistry {
-
-    private ClientHudRegistry() {}
-
+@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, value = Dist.CLIENT)
+public class ClientHudRegistry {
     @SubscribeEvent
-    public static void register(RegisterGuiOverlaysEvent event) {
-        event.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "weapon_ammo", AmmoHudOverlay.HUD);
+    public static void registerGuiOverlays(AddGuiOverlayLayersEvent event) {
+
+        event.getLayeredDraw().addAbove(ForgeLayeredDraw.PRE_SLEEP_STACK,
+                Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "weapon_ammo"),
+                ForgeLayeredDraw.HOTBAR_AND_DECOS, AmmoHudOverlay.HUD);
     }
 }

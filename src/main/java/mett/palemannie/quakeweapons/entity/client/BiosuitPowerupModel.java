@@ -8,11 +8,12 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 
-public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation BIOSUIT_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "biosuit_powerup"), "main");
+public class BiosuitPowerupModel extends EntityModel<EntityRenderState> {
+	public static final ModelLayerLocation BIOSUIT_LAYER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "biosuit_powerup"), "main");
 
 	private final ModelPart shoes;
 	private final ModelPart body;
@@ -21,6 +22,7 @@ public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
 	private final ModelPart backpack;
 
 	public BiosuitPowerupModel(ModelPart root) {
+		super(root);
 		this.shoes = root.getChild("shoes");
 		this.body = root.getChild("body");
 		this.arms = root.getChild("arms");
@@ -55,16 +57,4 @@ public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		shoes.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		arms.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		backpack.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);	}
 }

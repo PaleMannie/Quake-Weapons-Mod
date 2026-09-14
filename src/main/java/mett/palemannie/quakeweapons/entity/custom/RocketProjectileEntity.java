@@ -8,6 +8,7 @@ import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.QWExplosionHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -26,9 +27,6 @@ public class RocketProjectileEntity extends Projectile {
     public RocketProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
-
-    @Override
-    protected void defineSynchedData() {}
 
     @Override
     public boolean isNoGravity() {
@@ -112,7 +110,7 @@ public class RocketProjectileEntity extends Projectile {
 
     void projectileFlyStraight(){
 
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             Vec3 motion = this.getDeltaMovement().normalize().scale(-0.25);
             double px = this.getX() + motion.x;
             double py = this.getY() + motion.y;
@@ -135,10 +133,13 @@ public class RocketProjectileEntity extends Projectile {
     }
 
     @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
+
+    @Override
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide && QuakeWeaponsConfig.COMMON.enableRocketTrailLight.get()) {
+        if (!this.level().isClientSide() && QuakeWeaponsConfig.COMMON.enableRocketTrailLight.get()) {
             if (this.tickCount % 2 == 0) {
                 this.cleanupLight();
                 this.tryPlaceLight();
@@ -159,7 +160,7 @@ public class RocketProjectileEntity extends Projectile {
     @Override
     protected void onHitBlock(BlockHitResult pResult) {
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }

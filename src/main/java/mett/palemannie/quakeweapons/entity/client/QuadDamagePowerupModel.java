@@ -1,23 +1,21 @@
 package mett.palemannie.quakeweapons.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.resources.Identifier;
 
-public class QuadDamagePowerupModel<T extends Entity> extends HierarchicalModel<T> {
+public class QuadDamagePowerupModel extends EntityModel<EntityRenderState> {
 
-	public static final ModelLayerLocation QUAD_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "quad_damage_powerup"), "main");
+	public static final ModelLayerLocation QUAD_LAYER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "quad_damage_powerup"), "main");
 	private final ModelPart quad_damage_powerup;
 
 	public QuadDamagePowerupModel(ModelPart root) {
+		super(root);
 		this.quad_damage_powerup = root;
 	}
 
@@ -47,19 +45,5 @@ public class QuadDamagePowerupModel<T extends Entity> extends HierarchicalModel<
 		PartDefinition cube_r8 = bb_main.addOrReplaceChild("cube_r8", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.0F, -6.0F, 4.0F, 4.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.125F, 0.5F, -4.75F, 0.3927F, 0.0F, 0.0F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
-	}
-
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		quad_damage_powerup.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.quad_damage_powerup;
 	}
 }

@@ -2,22 +2,43 @@ package mett.palemannie.quakeweapons.net.packets;
 
 import mett.palemannie.quakeweapons.client.ClientWeaponRecoil;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
-import java.util.function.Supplier;
+import net.minecraftforge.event.network.CustomPayloadEvent;
 
-public record WeaponRecoilS2CPacket(float pitch, float roll, float yaw) {
-    public static void encode(WeaponRecoilS2CPacket packet, FriendlyByteBuf buffer) {
-        buffer.writeFloat(packet.pitch);
-        buffer.writeFloat(packet.roll);
-        buffer.writeFloat(packet.yaw);
+public class WeaponRecoilS2CPacket {
+
+    private static float pitchKick = 0;
+    private static float rollKick = 0;
+    private static float yawKick = 0;
+
+    public WeaponRecoilS2CPacket(float pitchKick, float rollKick, float yawKick) {
+        WeaponRecoilS2CPacket.pitchKick = pitchKick;
+        WeaponRecoilS2CPacket.rollKick = rollKick;
+        WeaponRecoilS2CPacket.yawKick = yawKick;
     }
 
-    public static WeaponRecoilS2CPacket decode(FriendlyByteBuf buffer) {
-        return new WeaponRecoilS2CPacket(buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+    public WeaponRecoilS2CPacket(FriendlyByteBuf buf) {
+        pitchKick = buf.readFloat();
+        rollKick = buf.readFloat();
+        yawKick = buf.readFloat();
     }
 
-    public static void handle(WeaponRecoilS2CPacket packet, Supplier<NetworkEvent.Context> supplier) {
-        supplier.get().enqueueWork(() -> ClientWeaponRecoil.kick(packet.pitch, packet.roll, packet.yaw));
-        supplier.get().setPacketHandled(true);
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeFloat(pitchKick);
+        buf.writeFloat(rollKick);
+        buf.writeFloat(yawKick);
+    }
+
+    public static WeaponRecoilS2CPacket decode(FriendlyByteBuf buf) {
+        return new WeaponRecoilS2CPacket(buf.readFloat(), buf.readFloat(), buf.readFloat());
+    }
+
+    public static void handle(WeaponRecoilS2CPacket packet, CustomPayloadEvent.Context ctx) {
+
+        ctx.enqueueWork(() -> handleClient(packet));
+        ctx.setPacketHandled(true);
+    }
+
+    public static void handleClient(WeaponRecoilS2CPacket packet) {
+        ClientWeaponRecoil.kick(pitchKick, rollKick, yawKick);
     }
 }

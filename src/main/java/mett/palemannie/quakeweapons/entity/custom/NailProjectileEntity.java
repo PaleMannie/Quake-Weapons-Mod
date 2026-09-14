@@ -6,6 +6,7 @@ import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,9 +34,6 @@ public class NailProjectileEntity extends Projectile {
     public NailProjectileEntity(EntityType<? extends Projectile> entityType, Level level) {
         super(entityType, level);
     }
-
-    @Override
-    protected void defineSynchedData() {}
 
     @Override
     public boolean isNoGravity() {
@@ -71,20 +69,20 @@ public class NailProjectileEntity extends Projectile {
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
+            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
         }
     }
 
     void handleProjectileBlockHitEffects(){
 
         if(level() instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.SMOKE, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
+            ((ServerLevel) level()).sendParticles(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
     }
 
     void handleGore(Level level){
 
         if(level instanceof ServerLevel)
-            ((ServerLevel) level()).sendParticles((ServerPlayer) this.getOwner(), ParticleTypes.LANDING_LAVA, true, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
+            ((ServerLevel) level()).sendParticles(ParticleTypes.LANDING_LAVA, this.getX(), this.getY(), this.getZ(), 1, 0f, 0f, 0f, 0f);
     }
 
     void handleHitSound(@Nullable EntityHitResult entityHitResult, @Nullable BlockHitResult blockHitResult, Level level, SoundEvent soundEvent, float volume, float pitch){
@@ -92,6 +90,9 @@ public class NailProjectileEntity extends Projectile {
         if(entityHitResult != null && blockHitResult == null) level.playSound(null, entityHitResult.getEntity().blockPosition(), soundEvent, SoundSource.NEUTRAL,volume, pitch);
         if(blockHitResult != null && entityHitResult == null) level.playSound(null, blockHitResult.getBlockPos(), soundEvent, SoundSource.NEUTRAL, volume, pitch);
     }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {}
 
     @Override
     public void tick() {
@@ -108,7 +109,7 @@ public class NailProjectileEntity extends Projectile {
 
         var soundEvent = ModSounds.NAILGUN_HIT.get();
 
-        if (!this.level().isClientSide) {
+        if (!this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }

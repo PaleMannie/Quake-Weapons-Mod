@@ -1,23 +1,22 @@
 package mett.palemannie.quakeweapons.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import mett.palemannie.quakeweapons.QuakeWeapons;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.resources.Identifier;
 
-public class NailProjectileModel<T extends Entity> extends HierarchicalModel<T> {
+public class NailProjectileModel extends EntityModel<EntityRenderState> {
 
-    public static final ModelLayerLocation NAIL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "nail_projectile"), "main");
+    public static final ModelLayerLocation NAIL_LAYER = new ModelLayerLocation(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "nail_projectile"), "main");
     private static final String MAIN = "main";
     private final ModelPart root;
 
     public NailProjectileModel(ModelPart root) {
+        super(root);
         this.root = root;
     }
 
@@ -33,18 +32,5 @@ public class NailProjectileModel<T extends Entity> extends HierarchicalModel<T> 
         PartDefinition cube_r4 = bb_main.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(0, 12).addBox(-1.5F, -1.5F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 3.1416F));
 
         return LayerDefinition.create(meshdefinition, 16, 16);
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-    }
-
-    @Override
-    public ModelPart root() { return this.root; }
-
-    @Override
-    public void setupAnim(T t, float v, float v1, float v2, float v3, float v4) {
-
     }
 }

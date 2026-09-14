@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, value = Dist.CLIENT)
@@ -17,12 +17,11 @@ public class RingWhisperClientEvent {
 
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
 
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.isPaused() || minecraft.player == null) return;
 
-        MobEffectInstance effect = minecraft.player.getEffect(ModEffects.QW_INVIS.get());
+        MobEffectInstance effect = minecraft.player.getEffect(ModEffects.QW_INVIS.getHolder().get());
         if (effect == null) return;
 
         int remaining = effect.getDuration();

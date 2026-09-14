@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "quakeweapons:item/nailgun",
+    "model": {
+      "type": "geckolib:geckolib"
+    }
+  }
+}

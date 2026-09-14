@@ -20,6 +20,6 @@ public class BiosuitItem extends AbstractPowerupItem{
 
     @Override
     protected void onPowerupUse(Level level, Player player, ItemStack stack, int duration) {
-        player.addEffect(new MobEffectInstance(ModEffects.BIOSUIT.get(), getPowerupDuration()));
+        player.addEffect(new MobEffectInstance(ModEffects.BIOSUIT.getHolder().get(), getPowerupDuration()));
     }
 }

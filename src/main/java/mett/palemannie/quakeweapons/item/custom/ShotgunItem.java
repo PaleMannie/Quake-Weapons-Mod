@@ -6,16 +6,16 @@ import mett.palemannie.quakeweapons.item.client.ShotgunRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import java.util.function.Consumer;
 
@@ -24,21 +24,26 @@ public class ShotgunItem extends AbstractWeapon {
         super(properties, 10, 8, 1, "shotgun.animations");
     }
 
-    @Override public net.minecraft.world.item.Item getAmmoItem() { return ModItems.SHELL.get(); }
+    @Override public Item getAmmoItem() { return ModItems.SHELL.get(); }
+
+    @Override
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
+            private ShotgunRenderer renderer;
+
+            @Override
+            public GeoItemRenderer<ShotgunItem> getGeoItemRenderer() {
+                if (this.renderer == null)
+                    this.renderer = new ShotgunRenderer();
+
+                return this.renderer;
+            }
+        });
+    }
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private ShotgunRenderer renderer;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if(this.renderer == null) {
-                    this.renderer = new ShotgunRenderer();
-                }
-
-                return this.renderer;
-            }
 
             //Keeps the item in the bow holding position when it's not used
             @Override

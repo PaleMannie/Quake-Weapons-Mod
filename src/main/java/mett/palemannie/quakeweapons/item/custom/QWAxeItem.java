@@ -5,37 +5,44 @@ import mett.palemannie.quakeweapons.item.client.QWAxeRenderer;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class QWAxeItem extends AbstractWeapon {
+
     public QWAxeItem(Properties properties) {
         super(properties, 10, 8, 0, "qwaxe.animations");
     }
 
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
             private QWAxeRenderer renderer;
 
             @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if(this.renderer == null) {
+            public GeoItemRenderer<QWAxeItem> getGeoItemRenderer() {
+                if (this.renderer == null)
                     this.renderer = new QWAxeRenderer();
-                }
 
                 return this.renderer;
             }
+        });
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
 
             //Keeps the item in the bow holding position when it's not used
             @Override

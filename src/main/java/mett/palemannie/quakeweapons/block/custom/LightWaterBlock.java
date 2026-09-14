@@ -20,7 +20,12 @@ public class LightWaterBlock extends LiquidBlock {
 
     public LightWaterBlock(FlowingFluid water, Properties properties) {
         super(water, properties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(LEVEL, 0).setValue(BlockStateProperties.POWER, 15));
+        this.registerDefaultState(
+                this.getStateDefinition()
+                        .any()
+                        .setValue(LEVEL, 0)
+                        .setValue(BlockStateProperties.POWER, 15)
+        );
     }
 
     @Override
@@ -32,7 +37,8 @@ public class LightWaterBlock extends LiquidBlock {
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         super.onPlace(state, level, pos, oldState, isMoving);
-        if (!level.isClientSide && oldState.getBlock() != this) {
+
+        if (!level.isClientSide() && oldState.getBlock() != this) {
             level.scheduleTick(pos, this, LIFETIME_TICKS);
         }
     }
@@ -46,6 +52,6 @@ public class LightWaterBlock extends LiquidBlock {
 
     @Override
     public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
-        return 15; // Leuchtet maximal
+        return 15;
     }
 }

@@ -2,8 +2,6 @@ package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.sound.ModSounds;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -22,10 +20,6 @@ public abstract class AbstractAmmoPickupEntity extends Entity {
     protected abstract Item ammoItem();
     protected abstract int amount();
 
-    @Override protected void defineSynchedData() {}
-    @Override protected void readAdditionalSaveData(CompoundTag tag) {}
-    @Override protected void addAdditionalSaveData(CompoundTag tag) {}
-
     @Override
     public void tick() {
         super.tick();
@@ -33,7 +27,7 @@ public abstract class AbstractAmmoPickupEntity extends Entity {
             discard();
             return;
         }
-        if (level().isClientSide) return;
+        if (level().isClientSide()) return;
         for (Player player : level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(0.5))) {
             ItemStack remaining = new ItemStack(ammoItem(), amount());
             player.getInventory().add(remaining);

@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 /*
-*   All credit goes to byteManiaks MCQuake3 - appropriated to Forge
-*   https://github.com/bytemaniak/mcquake3
+ *   All credit goes to byteManiaks MCQuake3 - appropriated to Forge
+ *   https://github.com/bytemaniak/mcquake3
  */
 
 @Mixin(Minecraft.class)
@@ -25,6 +25,15 @@ public class MinecraftMixin {
         }
 
         return original.call(instance);
+    }
+
+    @WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;continueAttack(Z)V"))
+    private void quakeweapons$preventMiningWhileFiring(Minecraft instance, boolean attacking, Operation<Void> original) {
+        // Held attack also drives block mining, including gaps between weapon uses.
+        // Pass false so vanilla stops mining instead of merely skipping this tick.
+        boolean holdingWeapon = instance.player != null
+                && instance.player.getMainHandItem().getItem() instanceof AbstractWeapon;
+        original.call(instance, attacking && !holdingWeapon);
     }
 
     @WrapOperation(method = "handleKeybinds", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;isDown()Z"))

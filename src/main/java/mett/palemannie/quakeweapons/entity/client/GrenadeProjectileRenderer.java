@@ -1,71 +1,48 @@
 package mett.palemannie.quakeweapons.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.GrenadeProjectileEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import org.jetbrains.annotations.NotNull;
 
-public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileEntity> {
+public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileEntity, ProjectileRenderState> {
 
-    private static final ResourceLocation GRENADE_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile.png");
-    private static final ResourceLocation GRENADE_EMISSIVE_LOCATION = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile_glow.png");
+    private static final Identifier GRENADE_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile.png");
+    private static final Identifier GRENADE_EMISSIVE_LOCATION = Identifier.fromNamespaceAndPath(QuakeWeapons.MODID,"textures/entity/grenade_projectile/grenade_projectile_glow.png");
 
-    private final GrenadeProjectileModel<GrenadeProjectileEntity> model;
+    private final GrenadeProjectileModel model;
 
     public GrenadeProjectileRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new GrenadeProjectileModel<>(context.bakeLayer(GrenadeProjectileModel.GRENADE_LAYER));
+        this.model = new GrenadeProjectileModel(context.bakeLayer(GrenadeProjectileModel.GRENADE_LAYER));
     }
 
-    public void render(GrenadeProjectileEntity grenadeEntity, float v1, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+    @Override
+    public void submit(ProjectileRenderState state, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraState) {
 
         poseStack.pushPose();
-        poseStack.scale(0.2F, 0.2F, 0.2F);
-        poseStack.translate(0.0F, 0.1f, 0.0F);
+        poseStack.scale(0.2f, 0.2f, 0.2f);
+        poseStack.translate(0f, 0.1f, 0f);
 
-        RandomSource random = RandomSource.create(grenadeEntity.getId());
+        poseStack.mulPose(Axis.XP.rotationDegrees(state.xRot));
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(state.zRot));
 
-        if (!grenadeEntity.hasStopped) {
-
-            float tumbleSpeed = -25.0F;
-            float tumbleX = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
-            float tumbleY = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
-            float tumbleZ = (grenadeEntity.tickCount + partialTicks) * (tumbleSpeed + (random.nextFloat() * (-tumbleSpeed * 2)));
-
-            grenadeEntity.lastTumbleX = tumbleX;
-            grenadeEntity.lastTumbleY = tumbleY;
-            grenadeEntity.lastTumbleZ = tumbleZ;
-
-            poseStack.mulPose(Axis.XP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.xRotO, grenadeEntity.getXRot())) + tumbleX));
-            poseStack.mulPose(Axis.YP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.yRotO, grenadeEntity.getYRot()) + 180f) + tumbleY));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(tumbleZ));
-
-        } else {
-
-            poseStack.mulPose(Axis.XP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.xRotO, grenadeEntity.getXRot())) + grenadeEntity.lastTumbleX));
-            poseStack.mulPose(Axis.YP.rotationDegrees((Mth.lerp(partialTicks, grenadeEntity.yRotO, grenadeEntity.getYRot()) + 180f) + grenadeEntity.lastTumbleY));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(grenadeEntity.lastTumbleZ));
-        }
-
-        VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(GRENADE_LOCATION));
-        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
-
-        VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(GRENADE_EMISSIVE_LOCATION));
-        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.entityCutoutNoCull(GRENADE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(GRENADE_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
         poseStack.popPose();
 
-        super.render(grenadeEntity, v1, partialTicks, poseStack, bufferSource, packedLight);
+        super.submit(state, poseStack, nodeCollector, cameraState);
     }
 
     @Override
@@ -74,6 +51,22 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
     }
 
     @Override
-    public @NotNull ResourceLocation getTextureLocation(@NotNull GrenadeProjectileEntity spit) { return GRENADE_LOCATION; }
+    public ProjectileRenderState createRenderState() {
+        return new ProjectileRenderState();
+    }
 
+    @Override
+    public void extractRenderState(GrenadeProjectileEntity entity, ProjectileRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        if (!entity.hasStopped) {
+            RandomSource random = RandomSource.create(entity.getId());
+            float tumbleSpeed = -25f;
+            entity.lastTumbleX = state.ageInTicks * (tumbleSpeed + random.nextFloat() * (-tumbleSpeed * 2));
+            entity.lastTumbleY = state.ageInTicks * (tumbleSpeed + random.nextFloat() * (-tumbleSpeed * 2));
+            entity.lastTumbleZ = state.ageInTicks * (tumbleSpeed + random.nextFloat() * (-tumbleSpeed * 2));
+        }
+        state.xRot = Mth.lerp(partialTick, entity.xRotO, entity.getXRot()) + entity.lastTumbleX;
+        state.yRot = Mth.lerp(partialTick, entity.yRotO, entity.getYRot()) + 180f + entity.lastTumbleY;
+        state.zRot = entity.lastTumbleZ;
+    }
 }

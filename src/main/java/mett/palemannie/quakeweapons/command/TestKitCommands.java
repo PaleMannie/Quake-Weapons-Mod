@@ -7,11 +7,12 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
@@ -22,8 +23,9 @@ public final class TestKitCommands {
 
     @SubscribeEvent
     public static void register(RegisterCommandsEvent event) {
+
         event.getDispatcher().register(Commands.literal("qw")
-                .requires(source -> source.hasPermission(2))
+                .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
                 .then(Commands.literal("testkit").executes(context -> supply(context.getSource(), true)))
                 .then(Commands.literal("refill").executes(context -> supply(context.getSource(), false))));
     }
@@ -59,6 +61,7 @@ public final class TestKitCommands {
     }
 
     private static int topUp(Inventory inventory, Item item, int target) {
+
         int present = 0;
         for (ItemStack stack : inventory.items) {
             if (stack.is(item)) present += stack.getCount();
@@ -66,14 +69,16 @@ public final class TestKitCommands {
 
         int remaining = Math.max(0, target - present);
         ItemStack template = item.getDefaultInstance();
+
         for (ItemStack stack : inventory.items) {
             if (remaining == 0) break;
-            if (!stack.isEmpty() && ItemStack.isSameItemSameTags(stack, template)) {
+            if (!stack.isEmpty() && ItemStack.isSameItem(stack, template)) {
                 int added = Math.min(remaining, Math.max(0, stack.getMaxStackSize() - stack.getCount()));
                 stack.grow(added);
                 remaining -= added;
             }
         }
+
         for (int slot = 0; slot < inventory.items.size() && remaining > 0; slot++) {
             if (inventory.items.get(slot).isEmpty()) {
                 int added = Math.min(remaining, template.getMaxStackSize());
@@ -81,6 +86,7 @@ public final class TestKitCommands {
                 remaining -= added;
             }
         }
+
         return remaining;
     }
 }

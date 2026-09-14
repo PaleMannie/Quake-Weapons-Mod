@@ -15,7 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public final class PowerupSpawner {
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.LevelTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || !(event.level instanceof ServerLevel level)) return;
+        if (/*event.phase != TickEvent.Phase.END ||*/ !(event.level() instanceof ServerLevel level)) return;
         if (!powerupSpawningEnabled || level.getGameTime() % spawnInterval != 0L) return;
 
         for (ServerPlayer player : level.players()) {
@@ -82,8 +82,8 @@ public final class PowerupSpawner {
         RandomSource random = level.random;
         int x = player.blockPosition().getX() + Mth.nextInt(random, -128, 128);
         int z = player.blockPosition().getZ() + Mth.nextInt(random, -128, 128);
-        int minY = Math.max(level.getMinBuildHeight() + 1, player.blockPosition().getY() - 64);
-        int maxY = Math.min(level.getMaxBuildHeight() - 1, player.blockPosition().getY() + 64);
+        int minY = player.blockPosition().getY() - 64;
+        int maxY = player.blockPosition().getY() + 64;
         int y = Mth.nextInt(random, minY, maxY);
         BlockPos candidate = new BlockPos(x, y, z);
 
@@ -96,7 +96,7 @@ public final class PowerupSpawner {
 
             Entity entity = randomPickup(level);
             entity.getPersistentData().putBoolean(AUTO_SPAWN_TAG, true);
-            entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+            entity.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
             if (level.addFreshEntity(entity)) {
                 List<Integer> bag = getBag(level);
                 bag.remove(bag.size() - 1);
@@ -109,10 +109,11 @@ public final class PowerupSpawner {
     }
 
     private static boolean nearbyLimitReached(ServerLevel level, ServerPlayer player) {
+        if (maxNearbyPowerups == 0) return true;
         return level.getEntities(player, player.getBoundingBox().inflate(NEARBY_RADIUS),
-                entity -> !entity.isRemoved()
-                        && entity.getPersistentData().getBoolean(AUTO_SPAWN_TAG)
-                        && entity.distanceToSqr(player) <= NEARBY_RADIUS * NEARBY_RADIUS)
+                        entity -> !entity.isRemoved()
+                                && entity.getPersistentData().getBooleanOr(AUTO_SPAWN_TAG, false)
+                                && entity.distanceToSqr(player) <= NEARBY_RADIUS * NEARBY_RADIUS)
                 .size() >= maxNearbyPowerups;
     }
 

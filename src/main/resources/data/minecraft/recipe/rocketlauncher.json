@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IIG",
+    "DBR",
+    "IIS"
+  ],
+  "key": {
+    "I": [
+      "minecraft:iron_block"
+    ],
+    "B": [
+      "minecraft:blaze_rod"
+    ],
+    "S": [
+      "minecraft:stick"
+    ],
+    "R": [
+      "minecraft:repeater"
+    ],
+    "G": [
+      "minecraft:gold_ingot"
+    ],
+    "D": [
+      "minecraft:dispenser"
+    ]
+  },
+  "result": {
+    "id": "quakeweapons:rocketlauncher",
+    "count": 1
+  }
+}
