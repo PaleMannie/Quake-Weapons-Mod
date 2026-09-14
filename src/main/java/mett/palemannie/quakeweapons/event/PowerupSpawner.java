@@ -62,7 +62,7 @@ public final class PowerupSpawner {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.LevelTickEvent event) {
+    public static void onWorldTick(TickEvent.LevelTickEvent.Post event) {
         if (/*event.phase != TickEvent.Phase.END ||*/ !(event.level() instanceof ServerLevel level)) return;
         if (!powerupSpawningEnabled || level.getGameTime() % spawnInterval != 0L) return;
 

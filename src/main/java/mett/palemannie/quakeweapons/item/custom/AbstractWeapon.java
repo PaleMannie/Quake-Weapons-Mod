@@ -177,10 +177,6 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
         /// TODO: Fixen
         if (!(level instanceof ServerLevel serverLevel) || !(entity instanceof LivingEntity living)) return;
-        if (stack.hasTag() && stack.getTag().getBoolean("WasDropped")) {
-            hardStopTriggeredAnimations(living, serverLevel, stack);
-            stack.getTag().remove("WasDropped");
-        }
         if (entity instanceof Player player && !selected && !(player.isUsingItem() && player.getUseItem() == stack)) {
             hardStopTriggeredAnimations(living, serverLevel, stack);
         }

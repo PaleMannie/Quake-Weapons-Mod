@@ -1,6 +1,7 @@
 package mett.palemannie.quakeweapons.gui;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
+import mett.palemannie.quakeweapons.event.EffectOverlayRenderClientEvent;
 import net.minecraft.resources.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.AddGuiOverlayLayersEvent;
@@ -16,5 +17,8 @@ public class ClientHudRegistry {
         event.getLayeredDraw().addAbove(ForgeLayeredDraw.PRE_SLEEP_STACK,
                 Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "weapon_ammo"),
                 ForgeLayeredDraw.HOTBAR_AND_DECOS, AmmoHudOverlay.HUD);
+        event.getLayeredDraw().addAbove(ForgeLayeredDraw.POST_SLEEP_STACK,
+                Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "powerup_overlay"),
+                EffectOverlayRenderClientEvent::onRenderOverlay);
     }
 }

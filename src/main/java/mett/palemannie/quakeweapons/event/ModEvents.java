@@ -36,7 +36,7 @@ public class ModEvents {
             "grenadelauncher", "rocketlauncher", "hyperblaster", "railgun", "bfg10k", "grenade");
 
     @SubscribeEvent
-    public static void onQuadDamageHurt(LivingHurtEvent event) {
+    public static boolean onQuadDamageHurt(LivingHurtEvent event) {
 
         /// Quad Damage apply damage
         if (event.getSource().getEntity() instanceof LivingEntity attacker) {
@@ -49,8 +49,8 @@ public class ModEvents {
         /// Pentagram apply invulnerability
         if (event.getEntity().hasEffect(ModEffects.INVULNERABILITY.getHolder().get())) {
 
-            event.setAmount(1f);
             event.getEntity().level().playSound(null, event.getEntity().blockPosition(), ModSounds.PENTAGRAM_USE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+            return true;
         }
 
         /// Biosuit apply poison and wither immunities & Fire resistance
@@ -71,38 +71,7 @@ public class ModEvents {
                 event.setAmount(event.getAmount() / 2f);
             }
         }
-    }
-
-    /// Effect pickup sounds
-    @SubscribeEvent
-    public static void onEffectGotten(MobEffectEvent.Added event){
-
-        LivingEntity entity = event.getEntity();
-
-        if(event.getEffectInstance().getEffect().equals(ModEffects.QUAD_DAMAGE.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.QUAD_DAMAGE_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-
-        if(event.getEffectInstance().getEffect().equals(ModEffects.INVULNERABILITY.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.PENTAGRAM_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-
-        if(event.getEffectInstance().getEffect().equals(ModEffects.QW_INVIS.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.RING_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-
-            if (!entity.level().isClientSide()) {
-
-                ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), event.getEntity());
-            }
-        }
-
-        if(event.getEffectInstance().getEffect().equals(ModEffects.BIOSUIT.get())){
-
-            entity.level().playSound(null, entity.blockPosition(), ModSounds.BIOSUIT_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
+        return false;
     }
 
     ///Quad Damage play use sound when attacking with anything or using any item
@@ -201,15 +170,22 @@ public class ModEvents {
 
         LivingEntity entity = event.getEntity();
 
-        if (event.getEffectInstance().getEffect() == ModEffects.QW_INVIS.get()) {
-
-            event.getEntity().setInvisible(false);
-
-            if(!event.getEntity().level().isClientSide()) {
-
-                ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), false), event.getEntity());
-            }
+        if (event.getEffectInstance().getEffect().value() == ModEffects.QW_INVIS.get()) {
+            restoreVisibility(entity);
         }
+    }
+
+    @SubscribeEvent
+    public static void onEffectRemovedEarly(MobEffectEvent.Remove event) {
+        if (event.getEffect() == ModEffects.QW_INVIS.get()) {
+            restoreVisibility(event.getEntity());
+        }
+    }
+
+    private static void restoreVisibility(LivingEntity entity) {
+        if (entity.level().isClientSide()) return;
+        entity.setInvisible(entity.hasEffect(MobEffects.INVISIBILITY));
+        ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), false), entity);
     }
 
     ///Mob deaggro upon and while qw-invis

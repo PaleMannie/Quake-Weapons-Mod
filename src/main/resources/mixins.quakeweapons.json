@@ -8,10 +8,11 @@
   },
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "LivingEntityRendererMixin",
-    "MinecraftMixin"
+    "LivingEntityInvisibilityMixin"
   ],
   "client": [
+    "LivingEntityRendererMixin",
+    "MinecraftMixin",
     "LocalPlayerMixin"
   ],
   "server": [

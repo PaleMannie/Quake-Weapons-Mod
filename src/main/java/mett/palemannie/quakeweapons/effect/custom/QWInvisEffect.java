@@ -27,6 +27,7 @@ public class QWInvisEffect extends MobEffect {
 
         Level level = entity.level();
         if (!level.isClientSide()) {
+            entity.setInvisible(true);
 
             ModMessages.sendToTrackingEntityAndSelf(new S2CInvisPacket(entity.getId(), true), entity);
 
@@ -39,14 +40,7 @@ public class QWInvisEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
-
-        Level level = entity.level();
-        if (!level.isClientSide()) {
-
-            if (entity instanceof ServerPlayer player) {
-                //ModMessages.sendToPlayer(new S2CPowerupSoundPacket(entity.getId(), ModEffects.QW_INVIS.getId(), PowerupSoundEventType.EXPIRING), player);
-            }
-        }
+        sevel.playSound(null, entity, ModSounds.RING_EXPIRE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
         return true;
     }
 

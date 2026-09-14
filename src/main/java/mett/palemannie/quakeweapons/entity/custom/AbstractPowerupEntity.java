@@ -60,11 +60,11 @@ public abstract class AbstractPowerupEntity extends Entity {
         ItemStack stack = player.getItemInHand(hand);
 
         /// Rightclicking the entity with totem of undying will drop it
-        if (!level().isClientSide() && stack.is(Items.DIAMOND)) {
+        if (level() instanceof net.minecraft.server.level.ServerLevel serverLevel && stack.is(Items.DIAMOND)) {
 
             /// TODO: fix diese
-            this.spawnAtLocation(getPowerupItem());
-            level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 2.0F);
+            this.spawnAtLocation(serverLevel, getPowerupItem());
+            level().playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.PLAYERS, 1.0F, 2.0F);
 
             if(!player.isCreative()){
 

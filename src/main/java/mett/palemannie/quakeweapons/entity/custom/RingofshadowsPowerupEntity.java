@@ -2,6 +2,8 @@ package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
+import mett.palemannie.quakeweapons.sound.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -22,6 +24,7 @@ public class RingofshadowsPowerupEntity extends AbstractPowerupEntity{
     @Override
     protected void onPickup(Player player) {
         player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS.getHolder().get(), getPowerupDuration(), 0, false, false, false));
+        level().playSound(null, player.blockPosition(), ModSounds.RING_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
     }
 
     @Override

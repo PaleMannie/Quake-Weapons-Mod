@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 public class RingWhisperClientEvent {
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(TickEvent.ClientTickEvent.Post event) {
 
         Minecraft minecraft = Minecraft.getInstance();
         if (minecraft.isPaused() || minecraft.player == null) return;

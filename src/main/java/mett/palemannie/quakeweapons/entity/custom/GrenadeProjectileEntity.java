@@ -87,7 +87,7 @@ public class GrenadeProjectileEntity extends Projectile {
             this.onHitBlock(blockHit);
 
             /// TODO: fix diese
-            Vec3 normal = Vec3.atLowerCornerOf(blockHit.getDirection().getNormal());
+            Vec3 normal = Vec3.atLowerCornerOf(blockHit.getDirection().getUnitVec3i());
             Vec3 bounced = motion.subtract(normal.scale(2 * motion.dot(normal)));
 
             float loss = 0.5f + this.random.nextFloat() * 0.25f;
@@ -95,10 +95,8 @@ public class GrenadeProjectileEntity extends Projectile {
 
             if (bounced.lengthSqr() < 0.04) {
                 this.setDeltaMovement(Vec3.ZERO);
-                this.hasImpulse = false;
             } else {
                 this.setDeltaMovement(bounced);
-                this.hasImpulse = true;
             }
 
             this.setPos(blockHit.getLocation());

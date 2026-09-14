@@ -4,16 +4,16 @@ import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, value = Dist.CLIENT)
 public class EffectOverlayRenderClientEvent {
-    @SubscribeEvent
-    public static void onRenderOverlay(RenderGuiOverlayEvent.Post event) {
+    public static void onRenderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
 
         /// Color added to GUI while on Quake effects
 
@@ -21,9 +21,9 @@ public class EffectOverlayRenderClientEvent {
         LocalPlayer player = mc.player;
 
         /// Quad Damage
-        if (player != null && player.hasEffect(ModEffects.QUAD_DAMAGE.get())) {
+        if (player != null && player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().orElseThrow())) {
 
-            MobEffectInstance inst = player.getEffect(ModEffects.QUAD_DAMAGE.get());
+            MobEffectInstance inst = player.getEffect(ModEffects.QUAD_DAMAGE.getHolder().orElseThrow());
             if (inst == null) return;
 
             int remaining = inst.getDuration();
@@ -49,13 +49,13 @@ public class EffectOverlayRenderClientEvent {
                     ((int)(g * 255) << 8) |
                     (int)(b * 255);
 
-            event.getGuiGraphics().fill(0, 0, screenW, screenH, color);
+            graphics.fill(0, 0, screenW, screenH, color);
         }
 
         /// Pentagram of Protection
-        if (player != null && player.hasEffect(ModEffects.INVULNERABILITY.get())) {
+        if (player != null && player.hasEffect(ModEffects.INVULNERABILITY.getHolder().orElseThrow())) {
 
-            MobEffectInstance inst = player.getEffect(ModEffects.INVULNERABILITY.get());
+            MobEffectInstance inst = player.getEffect(ModEffects.INVULNERABILITY.getHolder().orElseThrow());
             if (inst == null) return;
 
             int remaining = inst.getDuration();
@@ -82,13 +82,13 @@ public class EffectOverlayRenderClientEvent {
                     ((int)(g * 255) << 8) |
                     (int)(b * 255);
 
-            event.getGuiGraphics().fill(0, 0, screenW, screenH, color);
+            graphics.fill(0, 0, screenW, screenH, color);
         }
 
         ///Ring of Shadows
-        if (player != null && player.hasEffect(ModEffects.QW_INVIS.get())) {
+        if (player != null && player.hasEffect(ModEffects.QW_INVIS.getHolder().orElseThrow())) {
 
-            MobEffectInstance inst = player.getEffect(ModEffects.QW_INVIS.get());
+            MobEffectInstance inst = player.getEffect(ModEffects.QW_INVIS.getHolder().orElseThrow());
             if (inst == null) return;
 
             int remaining = inst.getDuration();
@@ -115,13 +115,13 @@ public class EffectOverlayRenderClientEvent {
                     ((int)(g * 255) << 8) |
                     (int)(b * 255);
 
-            event.getGuiGraphics().fill(0, 0, screenW, screenH, color);
+            graphics.fill(0, 0, screenW, screenH, color);
         }
 
         ///Biosuit
-        if (player != null && player.hasEffect(ModEffects.BIOSUIT.get())) {
+        if (player != null && player.hasEffect(ModEffects.BIOSUIT.getHolder().orElseThrow())) {
 
-            MobEffectInstance inst = player.getEffect(ModEffects.BIOSUIT.get());
+            MobEffectInstance inst = player.getEffect(ModEffects.BIOSUIT.getHolder().orElseThrow());
             if (inst == null) return;
 
             int remaining = inst.getDuration();
@@ -148,7 +148,7 @@ public class EffectOverlayRenderClientEvent {
                     ((int)(g * 255) << 8) |
                     (int)(b * 255);
 
-            event.getGuiGraphics().fill(0, 0, screenW, screenH, color);
+            graphics.fill(0, 0, screenW, screenH, color);
         }
     }
 }

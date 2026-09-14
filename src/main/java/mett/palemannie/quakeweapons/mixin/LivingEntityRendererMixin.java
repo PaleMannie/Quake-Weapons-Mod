@@ -1,6 +1,7 @@
 package mett.palemannie.quakeweapons.mixin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
@@ -27,13 +28,10 @@ public class LivingEntityRendererMixin {
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("RETURN"))
     private void onExtractRenderState(LivingEntity entity, LivingEntityRenderState state, float partialTick, CallbackInfo ci) {
 
-        if (entity.getPersistentData().getBoolean("QWInvis").orElse(false)) {
+        if (entity.hasEffect(ModEffects.QW_INVIS.getHolder().orElseThrow())) {
 
             state.isInvisibleToPlayer = true;
             state.isInvisible = true;
-        } else {
-
-            //state.isInvisibleToPlayer = false;
         }
     }
 }

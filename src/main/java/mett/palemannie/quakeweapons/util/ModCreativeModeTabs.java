@@ -11,7 +11,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModCreativeModeTabs {
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS =

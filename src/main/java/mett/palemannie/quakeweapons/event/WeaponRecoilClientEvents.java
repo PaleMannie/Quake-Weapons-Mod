@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class WeaponRecoilClientEvents {
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
+    public static void onClientTick(TickEvent.ClientTickEvent.Post event) {
         ClientWeaponRecoil.clientTick();
     }
 

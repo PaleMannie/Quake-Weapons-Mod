@@ -39,11 +39,16 @@ import software.bernie.geckolib.animation.object.PlayState;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.function.Consumer;
 
 public class ThunderboltItem extends AbstractWeapon {
+    private static final String CONTROLLER = "thunderbolt_controller";
+    private enum FiringState { SHOOTING, EMPTY }
+    private static final Map<ServerPlayer, FiringState> FIRING_STATES = new WeakHashMap<>();
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("thunderbolt.animations.shooting", LoopType.LOOP);
-    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("thunderbolt.animations.ammoempty", LoopType.LOOP);
+    private static final RawAnimation AMMOEMPTY_ANIM = RawAnimation.begin().then("thunderbolt.animations.ammoempty", LoopType.PLAY_ONCE);
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("thunderbolt.animations.idle", LoopType.LOOP);
 
     public ThunderboltItem(Properties properties) {
@@ -54,12 +59,9 @@ public class ThunderboltItem extends AbstractWeapon {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>("controller", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("shooting", SHOOT_ANIM));
-        controllers.add(new AnimationController<>("controller2", 0, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>(CONTROLLER, 0, state -> state.setAndContinue(IDLE_ANIM))
+                .triggerableAnim("shooting", SHOOT_ANIM)
                 .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
-        controllers.add(new AnimationController<>("controller3", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("idle", IDLE_ANIM));
     }
 
     @Override
@@ -181,19 +183,21 @@ public class ThunderboltItem extends AbstractWeapon {
     @Override
     protected void onSuccessfulFire(ServerLevel level, ServerPlayer player, ItemStack stack) {
         if (player.isInLiquid()) triggerWaterDischarge(level, player);
-        long id = GeoItem.getOrAssignId(stack, level);
-        stopTriggeredAnim(player, id, "controller2", "ammoempty");
-        stopTriggeredAnim(player, id, "controller3", "idle");
-        triggerAnim(player, id, "controller", "shooting");
+        if (FIRING_STATES.put(player, FiringState.SHOOTING) != FiringState.SHOOTING) {
+            long id = GeoItem.getOrAssignId(stack, level);
+            stopTriggeredAnim(player, id, CONTROLLER, "ammoempty");
+            triggerAnim(player, id, CONTROLLER, "shooting");
+        }
     }
 
     @Override
     protected void onAmmoEmpty(ServerLevel level, ServerPlayer player, ItemStack stack) {
         ServerPlayHandler.playAmmoEmptySound(player);
-        long id = GeoItem.getOrAssignId(stack, level);
-        stopTriggeredAnim(player, id, "controller", "shooting");
-        stopTriggeredAnim(player, id, "controller3", "idle");
-        triggerAnim(player, id, "controller2", "ammoempty");
+        if (FIRING_STATES.put(player, FiringState.EMPTY) != FiringState.EMPTY) {
+            long id = GeoItem.getOrAssignId(stack, level);
+            stopTriggeredAnim(player, id, CONTROLLER, "shooting");
+            triggerAnim(player, id, CONTROLLER, "ammoempty");
+        }
     }
 
     @Override
@@ -207,18 +211,18 @@ public class ThunderboltItem extends AbstractWeapon {
 
         boolean selected = slot == net.minecraft.world.entity.EquipmentSlot.MAINHAND;
 
-        if (selected && level instanceof ServerLevel serverLevel && entity instanceof Player player
-                && !player.isUsingItem()) {
-            triggerAnim(player, GeoItem.getOrAssignId(stack, serverLevel), "controller3", "idle");
+        if (selected && entity instanceof ServerPlayer player && !player.isUsingItem()
+                && FIRING_STATES.containsKey(player)) {
+            hardStopTriggeredAnimations(player, level, stack);
         }
     }
 
     @Override
     public void hardStopTriggeredAnimations(LivingEntity user, ServerLevel level, ItemStack stack) {
+        if (user instanceof ServerPlayer player) FIRING_STATES.remove(player);
         long id = GeoItem.getOrAssignId(stack, level);
-        stopTriggeredAnim(user, id, "controller", "shooting");
-        stopTriggeredAnim(user, id, "controller2", "ammoempty");
-        triggerAnim(user, id, "controller3", "idle");
+        stopTriggeredAnim(user, id, CONTROLLER, "shooting");
+        stopTriggeredAnim(user, id, CONTROLLER, "ammoempty");
     }
 
     @Override
