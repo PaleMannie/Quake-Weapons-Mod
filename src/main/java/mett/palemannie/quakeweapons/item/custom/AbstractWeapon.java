@@ -155,6 +155,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         return true;
     }
 
+    /// Camera recoil when shooting
     protected void sendRecoil(ServerPlayer player, float pitch, float roll, float yaw) {
         ModMessages.sendToPlayer(new WeaponRecoilS2CPacket(pitch, roll, yaw), player);
     }

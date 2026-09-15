@@ -5,6 +5,7 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.WeaponKnockback;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
@@ -134,10 +135,10 @@ public class ThunderboltItem extends AbstractWeapon {
             if (targetInWater || hasLOS) {
 
                 //minimal player hit so the correct death message appears
-                target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
+                WeaponKnockback.hurt(target, level.damageSources().playerAttack(player), Float.MIN_VALUE, level);
                 //the real damage
-                target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
-                        QWConfigStats.applyQuadDamage((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage, player));
+                WeaponKnockback.hurt(target, level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
+                        QWConfigStats.applyQuadDamage((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage, player), level);
 
                 //particles and sound
                 level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
@@ -148,7 +149,7 @@ public class ThunderboltItem extends AbstractWeapon {
         }
 
         //player self discharge damage and particles and sound
-        player.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, player, player), (cellCount * 0.5f) * QWConfigStats.ThunderboltDamage);
+        WeaponKnockback.hurt(player, level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, player, player), (cellCount * 0.5f) * QWConfigStats.ThunderboltDamage, level);
         level.playSound(null, player.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK,
                 player.getX(), player.getY() + player.getBbHeight() / 2, player.getZ(),

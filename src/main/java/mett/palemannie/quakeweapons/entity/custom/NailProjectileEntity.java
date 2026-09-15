@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import mett.palemannie.quakeweapons.util.WeaponKnockback;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -64,12 +65,14 @@ public class NailProjectileEntity extends Projectile {
 
     void handleDamage(EntityHitResult pResult, Level level, ResourceKey<DamageType> damageType, Player player){
 
-        DamageSource source = level.damageSources().source(damageType, null, null);
+        if (!(level instanceof ServerLevel serverLevel)) return;
+
+        DamageSource source = serverLevel.damageSources().source(damageType, null, null);
         DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
         if(pResult.getEntity() instanceof LivingEntity entity){
 
-            entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, QWConfigStats.applyQuadDamage(QWConfigStats.NailgunDamage, player));
+            WeaponKnockback.hurt(entity, source2, Float.MIN_VALUE, serverLevel);
+            WeaponKnockback.hurt(entity, source, QWConfigStats.applyQuadDamage(QWConfigStats.NailgunDamage, player), serverLevel);
         }
     }
 
