@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.entity.custom;
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.WeaponKnockback;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import net.minecraft.core.particles.ParticleTypes;
@@ -66,12 +67,14 @@ public class NailProjectileEntity extends Projectile {
 
     void handleDamage(EntityHitResult pResult, Level level, ResourceKey<DamageType> damageType, Player player){
 
+        if (!(level instanceof ServerLevel)) return;
+
         DamageSource source = level.damageSources().source(damageType, null, null);
         DamageSource source2 = level.damageSources().source(DamageTypes.PLAYER_ATTACK, this.getOwner(), this.getOwner());
         if(pResult.getEntity() instanceof LivingEntity entity){
 
-            entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
+            WeaponKnockback.hurt(entity, source2, Float.MIN_VALUE);
+            WeaponKnockback.hurt(entity, source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
         }
     }
 

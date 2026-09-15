@@ -126,7 +126,7 @@ public class ServerPlayHandler {
         if (entityHit != null) {
             LivingEntity target = (LivingEntity) entityHit.getEntity();
 
-            target.hurt(level.damageSources().source(ModDamageTypes.AXE_DAMAGE, player, player), QWConfigStats.AxeDamage);
+            WeaponKnockback.hurt(target, level.damageSources().source(ModDamageTypes.AXE_DAMAGE, player, player), QWConfigStats.AxeDamage);
 
             Vec3 p = entityHit.getLocation();
             sLevel.sendParticles(ParticleTypes.DAMAGE_INDICATOR, p.x, p.y, p.z, 6, 0.2, 0.2, 0.2, 0.1);
@@ -202,7 +202,7 @@ public class ServerPlayHandler {
                 if (target != player && target.isAlive() && !alreadyHit.contains(target)) {
                     alreadyHit.add(target);
 
-                    target.hurt(lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, player, player), QWConfigStats.ThunderboltDamage);
+                    WeaponKnockback.hurt(target, lvl.damageSources().source(ModDamageTypes.THUNDERBOLT_DAMAGE, player, player), QWConfigStats.ThunderboltDamage);
                 }
             }
 
@@ -302,7 +302,7 @@ public class ServerPlayHandler {
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
                 LivingEntity target = (LivingEntity) entityHit.getEntity();
-                target.hurt(sevel.damageSources().source(ModDamageTypes.SUPER_SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
+                WeaponKnockback.hurt(target, sevel.damageSources().source(ModDamageTypes.SUPER_SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
 
                 Vec3 hitPos = entityHit.getLocation();
 
@@ -378,7 +378,7 @@ public class ServerPlayHandler {
 
             if (entityHit != null && (blockHit == null || entityHit.getLocation().distanceTo(eyePos) < blockHit.getLocation().distanceTo(eyePos))) {
                 LivingEntity target = (LivingEntity) entityHit.getEntity();
-                target.hurt(level.damageSources().source(ModDamageTypes.SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
+                WeaponKnockback.hurt(target, level.damageSources().source(ModDamageTypes.SHOTGUN_DAMAGE, player, player), DAMAGE_PER_PELLET);
 
                 Vec3 hitPos = entityHit.getLocation();
 

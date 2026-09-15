@@ -160,6 +160,11 @@ public class RocketProjectileEntity extends Projectile {
     protected void onHitBlock(BlockHitResult pResult) {
 
         if (!this.level().isClientSide) {
+            // Use the actual impact point outside the solid face for floor/wall rocketjumps.
+            this.setPos(pResult.getLocation().add(
+                    pResult.getDirection().getStepX() * 0.01D,
+                    pResult.getDirection().getStepY() * 0.01D,
+                    pResult.getDirection().getStepZ() * 0.01D));
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }
