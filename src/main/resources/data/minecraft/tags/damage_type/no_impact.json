@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "quakeweapons:rocketlauncher_damage",
+    "quakeweapons:grenadelauncher_damage"
+  ]
+}

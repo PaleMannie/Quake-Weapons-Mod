@@ -2,7 +2,6 @@ package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.block.ModBlocks;
-import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.QWExplosionHelper;
@@ -10,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
@@ -63,9 +61,7 @@ public class RocketProjectileEntity extends Projectile {
                 0.0, 0.0, 0.0,
                 0.1);
 
-        this.level().playSound(null, center.x, center.y, center.z,
-                ModSounds.EXPLOSION.get(), SoundSource.PLAYERS,
-                2.0F, 1.0F);
+
 
         this.cleanupLight();
         this.discard();
@@ -170,6 +166,12 @@ public class RocketProjectileEntity extends Projectile {
     protected void onHitBlock(BlockHitResult pResult) {
 
         if (!this.level().isClientSide()) {
+            // Explode at the impact, just outside the solid face, so floor/wall jumps use
+            // the actual hit position and the visibility traces do not start inside a block.
+            this.setPos(pResult.getLocation().add(
+                    pResult.getDirection().getStepX() * 0.01D,
+                    pResult.getDirection().getStepY() * 0.01D,
+                    pResult.getDirection().getStepZ() * 0.01D));
             this.level().broadcastEntityEvent(this, (byte)3);
             this.discard();
         }

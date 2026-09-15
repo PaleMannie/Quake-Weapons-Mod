@@ -31,6 +31,7 @@ public class QuakeWeaponsConfig
         public final ForgeConfigSpec.DoubleValue rocketlauncherRadius;
         public final ForgeConfigSpec.DoubleValue grenadelauncherDamage;
         public final ForgeConfigSpec.DoubleValue grenadelauncherRadius;
+        public final ForgeConfigSpec.DoubleValue explosionSelfDamageMultiplier;
 
 
         public Common(ForgeConfigSpec.Builder builder) {
@@ -76,24 +77,28 @@ public class QuakeWeaponsConfig
                     .defineInRange("superNailgunDamage", 4.0, 0.0, Float.MAX_VALUE);
 
             rocketlauncherDamage = builder
-                    .comment("Maximum base splash damage of a Rocket Launcher explosion. Damage decreases with distance. Two damage points equal one heart.")
+                    .comment("Maximum base Rocket Launcher splash damage. Quake 1 linear falloff and cover checks. Independent of radius and Quake impulse. Two damage points equal one heart.")
                     .defineInRange("rocketlauncherDamage", 28, 0.0, Float.MAX_VALUE);
 
             rocketlauncherRadius = builder
-                    .comment("Rocket Launcher explosion radius, in blocks.")
+                    .comment("Rocket Launcher splash cutoff in blocks. Quake 1 falloff retains one third of maximum damage at the edge, then stops.")
                     .defineInRange("rocketlauncherRadius", 4.0, 0.0, Float.MAX_VALUE);
 
             grenadelauncherDamage = builder
-                    .comment("Maximum base splash damage of a Grenade Launcher explosion. Damage decreases with distance. Two damage points equal one heart.")
+                    .comment("Maximum base Grenade Launcher splash damage. Quake 1 linear falloff and cover checks. Independent of radius and Quake impulse. Two damage points equal one heart.")
                     .defineInRange("grenadelauncherDamage", 28, 0.0, Float.MAX_VALUE);
 
             grenadelauncherRadius = builder
-                    .comment("Grenade Launcher explosion radius, in blocks.")
+                    .comment("Grenade Launcher splash cutoff in blocks. Quake 1 falloff retains one third of maximum damage at the edge, then stops.")
                     .defineInRange("grenadelauncherRadius", 5.0, 0.0, Float.MAX_VALUE);
 
             thunderboltDamage = builder
                     .comment("Base damage dealt by one Thunderbolt shot. Two damage points equal one heart.")
                     .defineInRange("thunderboltDamage", 6.0, 0.0, Float.MAX_VALUE);
+
+            explosionSelfDamageMultiplier = builder
+                    .comment("Self splash damage multiplier for Rocket Launcher and Grenade Launcher explosions. 0 = no self damage, 0.5 = half, 1 = full damage. Does not affect Quake knockback or damage to other entities.")
+                    .defineInRange("explosionSelfDamageMultiplier", 0.5, 0.0, 1.0);
 
             builder.pop();
         }
