@@ -33,8 +33,8 @@ public class PentagramPowerupRenderer extends EntityRenderer<PentagramPowerupEnt
 
         poseStack.pushPose();
 
-        poseStack.translate(0f, 0.75f, 0f);
-        poseStack.scale(0.75f, 0.75f, 0.75f);
+        poseStack.translate(0f, 0f, 0f);
+        poseStack.scale(2.25f, 2.25f, 2.25f);
 
         float ageInTicks = state.ageInTicks;
 

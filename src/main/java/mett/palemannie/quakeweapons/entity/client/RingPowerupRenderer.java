@@ -33,8 +33,8 @@ public class RingPowerupRenderer extends EntityRenderer<RingofshadowsPowerupEnti
 
         poseStack.pushPose();
 
-        poseStack.translate(0f, 0.75f, 0f);
-        poseStack.scale(0.75f, 0.75f, 0.75f);
+        poseStack.translate(0f, -1f, 0f);
+        poseStack.scale(2f, 2f, 2f);
 
         float ageInTicks = state.ageInTicks;
 

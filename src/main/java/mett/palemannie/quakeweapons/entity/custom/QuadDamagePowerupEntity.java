@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.entity.custom;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.FollowingSoundHelper;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -24,7 +25,7 @@ public class QuadDamagePowerupEntity extends AbstractPowerupEntity{
     @Override
     protected void onPickup(Player player) {
         player.addEffect(new MobEffectInstance(ModEffects.QUAD_DAMAGE.getHolder().get(), getPowerupDuration()));
-        level().playSound(null, player.blockPosition(), ModSounds.QUAD_DAMAGE_PICKUP.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        FollowingSoundHelper.playForTrackingPlayers(player, ModSounds.QUAD_DAMAGE_PICKUP.get());
     }
 
     @Override

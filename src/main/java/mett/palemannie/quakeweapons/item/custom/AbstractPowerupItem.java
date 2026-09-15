@@ -3,6 +3,7 @@ package mett.palemannie.quakeweapons.item.custom;
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.FollowingSoundHelper;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +32,7 @@ public abstract class AbstractPowerupItem extends Item {
             onPowerupUse(level, player, stack, duration);
             SoundEvent pickupSound = getPickupSound();
             if (pickupSound != null) {
-                level.playSound(null, player.blockPosition(), pickupSound, SoundSource.PLAYERS, 1.0F, 1.0F);
+                FollowingSoundHelper.playForTrackingPlayers(player, pickupSound);
             }
 
             if (!player.getAbilities().instabuild) {

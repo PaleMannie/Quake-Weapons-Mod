@@ -20,4 +20,5 @@ public final class AbstractWeaponItemDroppedAnimationFixer {
             weapon.hardStopTriggeredAnimations(event.getPlayer(), level, stack);
         }
     }
+
 }

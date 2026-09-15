@@ -17,8 +17,9 @@ public class ClientHudRegistry {
         event.getLayeredDraw().addAbove(ForgeLayeredDraw.PRE_SLEEP_STACK,
                 Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "weapon_ammo"),
                 ForgeLayeredDraw.HOTBAR_AND_DECOS, AmmoHudOverlay.HUD);
-        event.getLayeredDraw().addAbove(ForgeLayeredDraw.POST_SLEEP_STACK,
+        event.getLayeredDraw().addAbove(ForgeLayeredDraw.PRE_SLEEP_STACK,
                 Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "powerup_overlay"),
+                ForgeLayeredDraw.CROSSHAIR,
                 EffectOverlayRenderClientEvent::onRenderOverlay);
     }
 }

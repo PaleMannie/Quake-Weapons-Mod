@@ -6,6 +6,8 @@ import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.Holder;
+import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -40,7 +42,10 @@ public class QWInvisEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(ServerLevel sevel, LivingEntity entity, int amplifier) {
-        sevel.playSound(null, entity, ModSounds.RING_EXPIRE.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
+        if (entity instanceof ServerPlayer player) {
+            player.connection.send(new ClientboundSoundEntityPacket(Holder.direct(ModSounds.RING_EXPIRE.get()),
+                    SoundSource.PLAYERS, player, 1.0F, 1.0F, player.getRandom().nextLong()));
+        }
         return true;
     }
 

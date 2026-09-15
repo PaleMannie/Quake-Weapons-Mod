@@ -69,7 +69,7 @@ public class SuperNailProjectileEntity extends Projectile {
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             entity.hurt(source2, Float.MIN_VALUE);
-            entity.hurt(source, player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? QWConfigStats.SuperNailgunDamage * 4 : QWConfigStats.SuperNailgunDamage);
+            entity.hurt(source, QWConfigStats.applyQuadDamage(QWConfigStats.SuperNailgunDamage, player));
         }
     }
 

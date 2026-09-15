@@ -17,20 +17,20 @@ import org.jetbrains.annotations.Nullable;
 public final class QWExplosionHelper {
     private QWExplosionHelper() {}
 
-    public static void grenadeExplosion(ServerLevel level, Entity projectile, @Nullable Entity owner, Vec3 center) {
+    public static void grenadeExplosion(ServerLevel level, Entity projectile, @Nullable Entity owner, Vec3 center, Entity quadapplier) {
         DamageSource source = level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, projectile, owner);
         radiusDamage(level, projectile, owner, center, QWConfigStats.GrenadelauncherDamage,
-                QWConfigStats.GrenadelauncherRadius, source);
+                QWConfigStats.GrenadelauncherRadius, source, quadapplier);
     }
 
-    public static void rocketExplosion(ServerLevel level, Entity projectile, @Nullable Entity owner, Vec3 center) {
+    public static void rocketExplosion(ServerLevel level, @Nullable Entity projectile, @Nullable Entity owner, Vec3 center, Entity quadapplier) {
         DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, projectile, owner);
         radiusDamage(level, projectile, owner, center, QWConfigStats.RocketlauncherDamage,
-                QWConfigStats.RocketlauncherRadius, source);
+                QWConfigStats.RocketlauncherRadius, source, quadapplier);
     }
 
     public static void radiusDamage(ServerLevel level, @Nullable Entity inflictor, @Nullable Entity owner,
-                                    Vec3 center, float maxDamage, double radius, DamageSource source) {
+                                    Vec3 center, float maxDamage, double radius, DamageSource source, Entity quadapplier) {
         if (radius <= 0 || maxDamage <= 0) return;
         AABB area = new AABB(center, center).inflate(radius);
         for (LivingEntity target : level.getEntitiesOfClass(LivingEntity.class, area, LivingEntity::isAlive)) {
@@ -44,7 +44,7 @@ public final class QWExplosionHelper {
             if (!hasLooseLineOfSight(level, center, target)) damage *= 0.35f;
             if (damage <= 0f) continue;
 
-            target.hurt(source, damage);
+            target.hurtServer(level, source, QWConfigStats.applyQuadDamage(damage, quadapplier));
             applyKnockback(target, center, falloff, target == owner && target instanceof Player);
         }
     }

@@ -33,8 +33,8 @@ public class BiosuitPowerupRenderer extends EntityRenderer<BiosuitPowerupEntity,
 
         poseStack.pushPose();
 
-        poseStack.translate(0f, 2.5f, 0f);
-        poseStack.scale(1.25f, 1.25f, 1.25f);
+        poseStack.translate(0f, 1.8f, 0f);
+        poseStack.scale(1f, 1f, 1f);
         poseStack.mulPose(Axis.XP.rotationDegrees(180f));
 
 

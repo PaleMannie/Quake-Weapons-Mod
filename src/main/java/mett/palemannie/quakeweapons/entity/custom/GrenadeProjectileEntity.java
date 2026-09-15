@@ -1,12 +1,15 @@
 package mett.palemannie.quakeweapons.entity.custom;
 
 import mett.palemannie.quakeweapons.sound.ModSounds;
+import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.QWExplosionHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
@@ -30,8 +33,15 @@ public class GrenadeProjectileEntity extends Projectile {
         if (!(level instanceof ServerLevel serverLevel) || exploded) return;
         exploded = true;
 
+        AABB area = new AABB(this.blockPosition()).inflate(QWConfigStats.RocketlauncherRadius);
+        for (LivingEntity entity : this.level().getEntitiesOfClass(LivingEntity.class, area)) {
+            if (entity != this.getOwner()) {
+                entity.hurt(this.damageSources().source(DamageTypes.PLAYER_ATTACK, this, this.getOwner()), Float.MIN_VALUE);
+            }
+        }
+
         Vec3 center = this.position();
-        QWExplosionHelper.grenadeExplosion(serverLevel, this, this.getOwner(), center);
+        QWExplosionHelper.grenadeExplosion(serverLevel, null, null, center, this.getOwner());
 
         serverLevel.sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,

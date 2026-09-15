@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
@@ -46,6 +47,8 @@ public class GrenadesAmmopickupRenderer extends EntityRenderer<GrenadesAmmopicku
         poseStack.mulPose(Axis.YP.rotationDegrees(-rotation));
 
         nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(GRENADES_AMMOPICKUP_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(GRENADES_AMMOPICKUP_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+
 
         poseStack.popPose();
 

@@ -137,8 +137,7 @@ public class ThunderboltItem extends AbstractWeapon {
                 target.hurt(level.damageSources().playerAttack(player), Float.MIN_VALUE);
                 //the real damage
                 target.hurt(level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
-                        player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get()) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
-                                : ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage));
+                        QWConfigStats.applyQuadDamage((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage, player));
 
                 //particles and sound
                 level.playSound(null, target.blockPosition(), ModSounds.THUNDERBOLT_LOOP.get(), SoundSource.PLAYERS, 0.5f, 0.5f);
