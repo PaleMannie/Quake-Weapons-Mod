@@ -1,154 +1,61 @@
 package mett.palemannie.quakeweapons.event;
 
-import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.effect.ModEffects;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.util.Mth;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-public class EffectOverlayRenderClientEvent {
+public final class EffectOverlayRenderClientEvent {
+    private static final int[] QUAD = {61, 102, 204, 100};
+    private static final int[] PENTAGRAM = {255, 214, 0, 100};
+    private static final int[] RING = {77, 26, 77, 100};
+    private static final int[] BIOSUIT = {0, 255, 128, 100};
+
+    private EffectOverlayRenderClientEvent() {
+    }
+
     public static void onRenderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
+        Minecraft minecraft = Minecraft.getInstance();
+        LocalPlayer player = minecraft.player;
+        if (player == null) return;
 
-        /// Color added to GUI while on Quake effects
+        float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
+        int[] mixedColor = new int[4];
 
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
+        mixEffect(mixedColor, player.getEffect(ModEffects.QUAD_DAMAGE.getHolder().orElseThrow()), QUAD, partialTick);
+        mixEffect(mixedColor, player.getEffect(ModEffects.INVULNERABILITY.getHolder().orElseThrow()), PENTAGRAM, partialTick);
+        mixEffect(mixedColor, player.getEffect(ModEffects.QW_INVIS.getHolder().orElseThrow()), RING, partialTick);
+        mixEffect(mixedColor, player.getEffect(ModEffects.BIOSUIT.getHolder().orElseThrow()), BIOSUIT, partialTick);
 
-        /// Quad Damage
-        if (player != null && player.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().orElseThrow())) {
+        int alpha = mixedColor[3];
+        if (alpha == 0) return;
 
-            MobEffectInstance inst = player.getEffect(ModEffects.QUAD_DAMAGE.getHolder().orElseThrow());
-            if (inst == null) return;
+        int color = (alpha << 24)
+                | (Math.min(255, mixedColor[0]) << 16)
+                | (Math.min(255, mixedColor[1]) << 8)
+                | Math.min(255, mixedColor[2]);
+        graphics.fill(0, 0, graphics.guiWidth(), graphics.guiHeight(), color);
+    }
 
-            int remaining = inst.getDuration();
-            long gameTime = mc.level.getGameTime();
+    private static void mixEffect(int[] mixedColor, MobEffectInstance effect, int[] effectColor, float partialTick) {
+        if (effect == null) return;
 
-            float r, g, b, alpha;
-            r = 0.24F;
-            g = 0.44F;
-            b = 0.95F;
+        int alpha = (int) (effectColor[3] * getPulseMultiplier(effect, partialTick));
+        mixedColor[0] += effectColor[0] * alpha / 255;
+        mixedColor[1] += effectColor[1] * alpha / 255;
+        mixedColor[2] += effectColor[2] * alpha / 255;
+        mixedColor[3] = Math.max(mixedColor[3], alpha);
+    }
 
-            if (remaining > 60) {
-                alpha = 0.2F;
+    private static float getPulseMultiplier(MobEffectInstance effect, float partialTick) {
+        float remaining = effect.getDuration() + partialTick;
+        if (remaining > 60.0F) return 1.0F;
 
-            } else {
-                alpha = 0.04F + 0.2F * (0.5F * (1.0F + Mth.sin((gameTime % 20) / 20.0F * Mth.TWO_PI)));
-            }
-
-            int screenW = mc.getWindow().getGuiScaledWidth();
-            int screenH = mc.getWindow().getGuiScaledHeight();
-
-            int color = ((int)(alpha * 255) << 24) |
-                    ((int)(r * 255) << 16) |
-                    ((int)(g * 255) << 8) |
-                    (int)(b * 255);
-
-            graphics.fill(0, 0, screenW, screenH, color);
-        }
-
-        /// Pentagram of Protection
-        if (player != null && player.hasEffect(ModEffects.INVULNERABILITY.getHolder().orElseThrow())) {
-
-            MobEffectInstance inst = player.getEffect(ModEffects.INVULNERABILITY.getHolder().orElseThrow());
-            if (inst == null) return;
-
-            int remaining = inst.getDuration();
-            long gameTime = mc.level.getGameTime();
-
-            float r, g, b, alpha;
-            r = 1f;
-            g = 0.84f;
-            b = 0f;
-
-            if (remaining > 60) {
-
-                alpha = 0.2F;
-            } else {
-
-                alpha = 0.04F + 0.2F * (0.5F * (1.0F + Mth.sin((gameTime % 20) / 20.0F * Mth.TWO_PI)));
-            }
-
-            int screenW = mc.getWindow().getGuiScaledWidth();
-            int screenH = mc.getWindow().getGuiScaledHeight();
-
-            int color = ((int)(alpha * 255) << 24) |
-                    ((int)(r * 255) << 16) |
-                    ((int)(g * 255) << 8) |
-                    (int)(b * 255);
-
-            graphics.fill(0, 0, screenW, screenH, color);
-        }
-
-        ///Ring of Shadows
-        if (player != null && player.hasEffect(ModEffects.QW_INVIS.getHolder().orElseThrow())) {
-
-            MobEffectInstance inst = player.getEffect(ModEffects.QW_INVIS.getHolder().orElseThrow());
-            if (inst == null) return;
-
-            int remaining = inst.getDuration();
-            long gameTime = mc.level.getGameTime();
-
-            float r, g, b, alpha;
-            r = 0.3f;
-            g = 0.1f;
-            b = 0.3f;
-
-            if (remaining > 60) {
-
-                alpha = 0.2F;
-            } else {
-
-                alpha = 0.04F + 0.2F * (0.5F * (1.0F + Mth.sin((gameTime % 20) / 20.0F * Mth.TWO_PI)));
-            }
-
-            int screenW = mc.getWindow().getGuiScaledWidth();
-            int screenH = mc.getWindow().getGuiScaledHeight();
-
-            int color = ((int)(alpha * 255) << 24) |
-                    ((int)(r * 255) << 16) |
-                    ((int)(g * 255) << 8) |
-                    (int)(b * 255);
-
-            graphics.fill(0, 0, screenW, screenH, color);
-        }
-
-        ///Biosuit
-        if (player != null && player.hasEffect(ModEffects.BIOSUIT.getHolder().orElseThrow())) {
-
-            MobEffectInstance inst = player.getEffect(ModEffects.BIOSUIT.getHolder().orElseThrow());
-            if (inst == null) return;
-
-            int remaining = inst.getDuration();
-            long gameTime = mc.level.getGameTime();
-
-            float r, g, b, alpha;
-            r = 0f;
-            g = 1f;
-            b = 0.5f;
-
-            if (remaining > 60) {
-
-                alpha = 0.2F;
-            } else {
-
-                alpha = 0.04F + 0.2F * (0.5F * (1.0F + Mth.sin((gameTime % 20) / 20.0F * Mth.TWO_PI)));
-            }
-
-            int screenW = mc.getWindow().getGuiScaledWidth();
-            int screenH = mc.getWindow().getGuiScaledHeight();
-
-            int color = ((int)(alpha * 255) << 24) |
-                    ((int)(r * 255) << 16) |
-                    ((int)(g * 255) << 8) |
-                    (int)(b * 255);
-
-            graphics.fill(0, 0, screenW, screenH, color);
-        }
+        float progress = 1.0F - remaining / 60.0F;
+        float angle = progress * (float) Math.PI * 6.0F;
+        float normalized = ((float) Math.sin(angle) + 1.0F) / 2.0F;
+        return 0.3F + 0.7F * normalized;
     }
 }
