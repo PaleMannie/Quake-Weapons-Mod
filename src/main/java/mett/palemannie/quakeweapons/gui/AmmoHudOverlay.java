@@ -1,6 +1,7 @@
 package mett.palemannie.quakeweapons.gui;
 
 import mett.palemannie.quakeweapons.item.custom.AbstractWeapon;
+import mett.palemannie.quakeweapons.item.custom.WeaponCompatibility;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -30,7 +31,7 @@ public final class AmmoHudOverlay {
         int total = 0;
         for (int slot = 0; slot < minecraft.player.getInventory().getContainerSize(); slot++) {
             ItemStack stack = minecraft.player.getInventory().getItem(slot);
-            if (stack.is(ammo)) {
+            if (WeaponCompatibility.isAmmo(stack, ammo)) {
                 total += stack.getCount();
             }
         }
