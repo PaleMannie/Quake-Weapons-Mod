@@ -9,13 +9,13 @@ import mett.palemannie.quakeweapons.item.ModItems;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.ModCreativeModeTabs;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
 import org.slf4j.Logger;
 
 @Mod(QuakeWeapons.MODID)
@@ -31,10 +31,9 @@ public class QuakeWeapons {
     public static final String MODID = "quakeweapons";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public QuakeWeapons(FMLJavaModLoadingContext context){
+    public QuakeWeapons(IEventBus modBusGroup, ModContainer container){
 
-        var modBusGroup = context.getModBusGroup();
-        FMLCommonSetupEvent.getBus(modBusGroup).addListener(QuakeWeapons::commonSetup);
+        modBusGroup.addListener(ModMessages::register);
 
         ModItems.register(modBusGroup);
         ModEffects.register(modBusGroup);
@@ -43,37 +42,34 @@ public class QuakeWeapons {
         ModBlocks.register(modBusGroup);
         ModCreativeModeTabs.register(modBusGroup);
 
-        QuakeWeaponsConfig.registerConfigs();
+        QuakeWeaponsConfig.registerConfigs(container);
     }
 
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    @EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
     public static class ClientModEvents {
 
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event){
+        public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event){
 
-            EntityRenderers.register(ModEntities.NAIL_PROJECTILE.get(), NailProjectileRenderer::new);
-            EntityRenderers.register(ModEntities.SUPER_NAIL_PROJECTILE.get(), SuperNailProjectileRenderer::new);
-            EntityRenderers.register(ModEntities.MUZZLE_FLASH.get(), MuzzleflashRenderer::new);
-            EntityRenderers.register(ModEntities.ROCKET_PROJECTILE.get(), RocketProjectileRenderer::new);
-            EntityRenderers.register(ModEntities.GRENADE_PROJECTILE.get(), GrenadeProjectileRenderer::new);
+            event.registerEntityRenderer(ModEntities.NAIL_PROJECTILE.get(), NailProjectileRenderer::new);
+            event.registerEntityRenderer(ModEntities.SUPER_NAIL_PROJECTILE.get(), SuperNailProjectileRenderer::new);
+            event.registerEntityRenderer(ModEntities.MUZZLE_FLASH.get(), MuzzleflashRenderer::new);
+            event.registerEntityRenderer(ModEntities.ROCKET_PROJECTILE.get(), RocketProjectileRenderer::new);
+            event.registerEntityRenderer(ModEntities.GRENADE_PROJECTILE.get(), GrenadeProjectileRenderer::new);
 
-            EntityRenderers.register(ModEntities.QUAD_DAMAGE_POWERUP.get(), QuaddamagePowerupRenderer::new);
-            EntityRenderers.register(ModEntities.PENTAGRAM_POWERUP.get(), PentagramPowerupRenderer::new);
-            EntityRenderers.register(ModEntities.RING_POWERUP.get(), RingPowerupRenderer::new);
-            EntityRenderers.register(ModEntities.BIOSUIT_POWERUP.get(), BiosuitPowerupRenderer::new);
+            event.registerEntityRenderer(ModEntities.QUAD_DAMAGE_POWERUP.get(), QuaddamagePowerupRenderer::new);
+            event.registerEntityRenderer(ModEntities.PENTAGRAM_POWERUP.get(), PentagramPowerupRenderer::new);
+            event.registerEntityRenderer(ModEntities.RING_POWERUP.get(), RingPowerupRenderer::new);
+            event.registerEntityRenderer(ModEntities.BIOSUIT_POWERUP.get(), BiosuitPowerupRenderer::new);
 
-            EntityRenderers.register(ModEntities.SHELLS_AMMOPICKUP.get(), ShellsAmmopickupRenderer::new);
-            EntityRenderers.register(ModEntities.NAILS_AMMOPICKUP.get(), NailsAmmopickupRenderer::new);
-            EntityRenderers.register(ModEntities.CELLS_AMMOPICKUP.get(), CellsAmmopickupRenderer::new);
-            EntityRenderers.register(ModEntities.GRENADES_AMMOPICKUP.get(), GrenadesAmmopickupRenderer::new);
-            EntityRenderers.register(ModEntities.ROCKETS_AMMOPICKUP.get(), RocketsAmmopickupRenderer::new);
+            event.registerEntityRenderer(ModEntities.SHELLS_AMMOPICKUP.get(), ShellsAmmopickupRenderer::new);
+            event.registerEntityRenderer(ModEntities.NAILS_AMMOPICKUP.get(), NailsAmmopickupRenderer::new);
+            event.registerEntityRenderer(ModEntities.CELLS_AMMOPICKUP.get(), CellsAmmopickupRenderer::new);
+            event.registerEntityRenderer(ModEntities.GRENADES_AMMOPICKUP.get(), GrenadesAmmopickupRenderer::new);
+            event.registerEntityRenderer(ModEntities.ROCKETS_AMMOPICKUP.get(), RocketsAmmopickupRenderer::new);
 
-            EntityRenderers.register(ModEntities.MEGAHEALTH_PICKUP.get(), MegahealthPickupRenderer::new);
+            event.registerEntityRenderer(ModEntities.MEGAHEALTH_PICKUP.get(), MegahealthPickupRenderer::new);
         }
     }
 
-    private static void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(ModMessages::register);
-    }
 }

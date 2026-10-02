@@ -13,7 +13,7 @@ public abstract class LivingEntityInvisibilityMixin {
     @Inject(method = "updateInvisibilityStatus", at = @At("TAIL"))
     private void includeQWInvisibility(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
-        if (entity.hasEffect(ModEffects.QW_INVIS.getHolder().orElseThrow())) {
+        if (entity.hasEffect(ModEffects.QW_INVIS)) {
             entity.setInvisible(true);
         }
     }

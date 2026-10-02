@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -34,18 +34,18 @@ public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEnt
         poseStack.translate(0.0F, 0.0f, 0.0F);
         poseStack.scale(0.75f, 0.75f, 0.75f);
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot + 180f));
-        poseStack.mulPose(Axis.XP.rotationDegrees(state.xRot ));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.yRot + 180f));
+        poseStack.rotate(Axis.XP.rotationDegrees(state.xRot ));
 
-        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(ROCKET_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
-        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(ROCKET_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(ROCKET_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(ROCKET_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
 
         super.submit(state, poseStack, nodeCollector, cameraState);
     }
 
     @Override
-    public boolean shouldRender(RocketProjectileEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ) {
+    public boolean shouldRender(RocketProjectileEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ, float partialTick) {
         return true;
     }
 

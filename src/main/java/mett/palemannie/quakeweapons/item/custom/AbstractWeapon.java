@@ -22,15 +22,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animation.object.LoopType;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.object.PlayState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoItem;
+import com.geckolib.animatable.SingletonGeoAnimatable;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.object.LoopType;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.util.GeckoLibUtil;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -91,14 +91,14 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     @Override
     public boolean canDestroyBlock(ItemStack pStack, BlockState pState, Level pLevel, BlockPos pPos, LivingEntity pEntity) { return false; }
 
-    @Override public boolean onEntitySwing(ItemStack stack, LivingEntity entity) { return true; }
+    @Override public boolean onEntitySwing(ItemStack stack, LivingEntity entity, InteractionHand hand) { return true; }
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND || player.getCooldowns().isOnCooldown(player.getUseItem())) {
             return InteractionResult.FAIL;
         }
-        player.removeEffect(ModEffects.QW_INVIS.getHolder().get());
+        player.removeEffect(ModEffects.QW_INVIS);
         player.setInvisible(false);
         setCurrentHand(hand, player);
         return InteractionResult.CONSUME;

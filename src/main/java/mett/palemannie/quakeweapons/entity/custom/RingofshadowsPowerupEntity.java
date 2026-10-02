@@ -24,7 +24,7 @@ public class RingofshadowsPowerupEntity extends AbstractPowerupEntity{
 
     @Override
     protected void onPickup(Player player) {
-        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS.getHolder().get(), getPowerupDuration(), 0, false, false, false));
+        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS, getPowerupDuration(), 0, false, false, false));
         FollowingSoundHelper.playForTrackingPlayers(player, ModSounds.RING_PICKUP.get());
     }
 

@@ -1,7 +1,7 @@
 package mett.palemannie.quakeweapons.item.client;
 
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
-import software.bernie.geckolib.renderer.GeoItemRenderer;
+import com.geckolib.renderer.GeoItemRenderer;
 
 public class NailGunRenderer extends GeoItemRenderer<NailgunItem> {
     public NailGunRenderer() {

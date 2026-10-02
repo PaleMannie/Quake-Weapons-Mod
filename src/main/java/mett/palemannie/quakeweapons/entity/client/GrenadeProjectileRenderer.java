@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -34,19 +34,19 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
         poseStack.scale(0.2f, 0.2f, 0.2f);
         poseStack.translate(0f, 0.1f, 0f);
 
-        poseStack.mulPose(Axis.XP.rotationDegrees(state.xRot));
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(state.zRot));
+        poseStack.rotate(Axis.XP.rotationDegrees(state.xRot));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.yRot));
+        poseStack.rotate(Axis.ZP.rotationDegrees(state.zRot));
 
-        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.entityCutoutNoCull(GRENADE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
-        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(GRENADE_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.entityCutout(GRENADE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(GRENADE_EMISSIVE_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
 
         super.submit(state, poseStack, nodeCollector, cameraState);
     }
 
     @Override
-    public boolean shouldRender(GrenadeProjectileEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ) {
+    public boolean shouldRender(GrenadeProjectileEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ, float partialTick) {
         return true;
     }
 

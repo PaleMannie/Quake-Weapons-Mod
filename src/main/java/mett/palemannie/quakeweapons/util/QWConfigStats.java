@@ -5,9 +5,9 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class QWConfigStats {
 
@@ -28,8 +28,8 @@ public class QWConfigStats {
     public static boolean hasQuadDamage(@Nullable Entity attacker) {
         if (!(attacker instanceof LivingEntity livingEntity)) return false;
 
-        return livingEntity.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().orElseThrow())
-                || ForgeRegistries.MOB_EFFECTS.getHolder(Q2W_QUAD_DAMAGE)
+        return livingEntity.hasEffect(ModEffects.QUAD_DAMAGE)
+                || BuiltInRegistries.MOB_EFFECT.get(Q2W_QUAD_DAMAGE)
                         .map(livingEntity::hasEffect)
                         .orElse(false);
     }

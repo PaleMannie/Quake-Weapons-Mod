@@ -84,5 +84,7 @@
 
   "command.quakeweapons.testkit.success": "Test kit ready: All weapons present and ammunition replenished.",
   "command.quakeweapons.refill.success": "Ammo replenished: 256 nails, 256 cells, 128 shells, and 64 each of grenades and rockets.",
-  "command.quakeweapons.supply.full": "Inventory full: %s items could not be added."
+  "command.quakeweapons.supply.full": "Inventory full: %s items could not be added.",
+  "sounds.quakeweapons.ammo_pickup_sound": "Ammunition picked up",
+  "sounds.quakeweapons.megahealth_sound": "Megahealth picked up"
 }

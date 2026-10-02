@@ -12,10 +12,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.animatable.client.GeoRenderProvider;
-import software.bernie.geckolib.renderer.GeoItemRenderer;
+import com.geckolib.animatable.client.GeoRenderProvider;
+import com.geckolib.renderer.GeoItemRenderer;
 
 import java.util.function.Consumer;
 
@@ -41,7 +41,6 @@ public class GrenadelauncherItem extends AbstractWeapon {
         });
     }
 
-    @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
 
@@ -57,7 +56,7 @@ public class GrenadelauncherItem extends AbstractWeapon {
             }
 
             @Override
-            public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
+            public boolean applyForgeHandTransform(PoseStack poseStack, net.minecraft.client.renderer.state.level.PlayerRenderState player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
 
                 if (itemInHand.getItem() instanceof AbstractWeapon) {
 

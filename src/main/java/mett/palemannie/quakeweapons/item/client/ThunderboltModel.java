@@ -4,8 +4,8 @@ import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.item.custom.ThunderboltItem;
 import net.minecraft.resources.Identifier;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.renderer.base.GeoRenderState;
+import com.geckolib.model.GeoModel;
+import com.geckolib.renderer.base.GeoRenderState;
 
 public class ThunderboltModel extends GeoModel<ThunderboltItem> {
 

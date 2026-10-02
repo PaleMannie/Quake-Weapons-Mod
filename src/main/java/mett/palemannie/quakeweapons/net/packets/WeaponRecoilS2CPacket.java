@@ -1,44 +1,25 @@
 package mett.palemannie.quakeweapons.net.packets;
 
-import mett.palemannie.quakeweapons.client.ClientWeaponRecoil;
+import mett.palemannie.quakeweapons.QuakeWeapons;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public class WeaponRecoilS2CPacket {
+public record WeaponRecoilS2CPacket(float pitchKick, float rollKick, float yawKick) implements CustomPacketPayload {
+    public static final Type<WeaponRecoilS2CPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "weapon_recoil"));
+    public static final StreamCodec<FriendlyByteBuf, WeaponRecoilS2CPacket> STREAM_CODEC = StreamCodec.ofMember(WeaponRecoilS2CPacket::encode, WeaponRecoilS2CPacket::decode);
 
-    private static float pitchKick = 0;
-    private static float rollKick = 0;
-    private static float yawKick = 0;
+    @Override
+    public Type<WeaponRecoilS2CPacket> type() { return TYPE; }
 
-    public WeaponRecoilS2CPacket(float pitchKick, float rollKick, float yawKick) {
-        WeaponRecoilS2CPacket.pitchKick = pitchKick;
-        WeaponRecoilS2CPacket.rollKick = rollKick;
-        WeaponRecoilS2CPacket.yawKick = yawKick;
+    public static void encode(WeaponRecoilS2CPacket packet, FriendlyByteBuf buffer) {
+        buffer.writeFloat(packet.pitchKick);
+        buffer.writeFloat(packet.rollKick);
+        buffer.writeFloat(packet.yawKick);
     }
 
-    public WeaponRecoilS2CPacket(FriendlyByteBuf buf) {
-        pitchKick = buf.readFloat();
-        rollKick = buf.readFloat();
-        yawKick = buf.readFloat();
-    }
-
-    public void encode(FriendlyByteBuf buf) {
-        buf.writeFloat(pitchKick);
-        buf.writeFloat(rollKick);
-        buf.writeFloat(yawKick);
-    }
-
-    public static WeaponRecoilS2CPacket decode(FriendlyByteBuf buf) {
-        return new WeaponRecoilS2CPacket(buf.readFloat(), buf.readFloat(), buf.readFloat());
-    }
-
-    public static void handle(WeaponRecoilS2CPacket packet, CustomPayloadEvent.Context ctx) {
-
-        ctx.enqueueWork(() -> handleClient(packet));
-        ctx.setPacketHandled(true);
-    }
-
-    public static void handleClient(WeaponRecoilS2CPacket packet) {
-        ClientWeaponRecoil.kick(pitchKick, rollKick, yawKick);
+    public static WeaponRecoilS2CPacket decode(FriendlyByteBuf buffer) {
+        return new WeaponRecoilS2CPacket(buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
     }
 }

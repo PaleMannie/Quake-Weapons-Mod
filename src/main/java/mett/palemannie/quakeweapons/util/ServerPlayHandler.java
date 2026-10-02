@@ -280,7 +280,7 @@ public class ServerPlayHandler {
         final float DAMAGE_PER_PELLET = QWConfigStats.SuperShotgunDamage;
 
         for (int i = 0; i < PELLETS; i++) {
-            Vec3 pelletDir = getSuperShotgunNormalizedSpreadDirection(look, SPREAD_H, SPREAD_V, sevel.random);
+            Vec3 pelletDir = getSuperShotgunNormalizedSpreadDirection(look, SPREAD_H, SPREAD_V, sevel.getRandom());
             Vec3 endPos = eyePos.add(pelletDir.scale(RANGE));
 
             BlockHitResult blockHit = sevel.clip(new ClipContext(
@@ -356,7 +356,7 @@ public class ServerPlayHandler {
 
         for (int i = 0; i < PELLETS; i++) {
 
-            Vec3 pelletDir = getShotgunNormalizedSpreadDirection(look, SPREAD_DEGREES, level.random);
+            Vec3 pelletDir = getShotgunNormalizedSpreadDirection(look, SPREAD_DEGREES, level.getRandom());
             Vec3 endPos = eyePos.add(pelletDir.scale(RANGE));
 
             BlockHitResult blockHit = level.clip(new ClipContext(

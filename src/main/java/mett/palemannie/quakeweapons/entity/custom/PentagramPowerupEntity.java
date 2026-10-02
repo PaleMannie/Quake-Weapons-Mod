@@ -24,7 +24,7 @@ public class PentagramPowerupEntity extends AbstractPowerupEntity{
 
     @Override
     protected void onPickup(Player player) {
-        player.addEffect(new MobEffectInstance(ModEffects.INVULNERABILITY.getHolder().get(), getPowerupDuration()));
+        player.addEffect(new MobEffectInstance(ModEffects.INVULNERABILITY, getPowerupDuration()));
         FollowingSoundHelper.playForTrackingPlayers(player, ModSounds.PENTAGRAM_PICKUP.get());
     }
 

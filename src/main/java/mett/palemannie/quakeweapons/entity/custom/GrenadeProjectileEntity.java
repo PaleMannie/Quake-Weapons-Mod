@@ -40,7 +40,7 @@ public class GrenadeProjectileEntity extends Projectile {
         }
 
         Vec3 center = this.position();
-        QWExplosionHelper.grenadeExplosion(serverLevel, null, null, center, this.getOwner());
+        QWExplosionHelper.grenadeExplosion(serverLevel, this, this.getOwner(), center, this.getOwner());
 
         serverLevel.sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,

@@ -5,14 +5,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.entity.custom.MegahealthPickupEntity;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
@@ -39,7 +38,7 @@ public class MegahealthPickupRenderer extends EntityRenderer<MegahealthPickupEnt
 
         poseStack.translate(0f, 1.75f, 0f);
         poseStack.scale(1.0f, 1.0f, 1.0f);
-        poseStack.mulPose(Axis.XP.rotationDegrees(180f));
+        poseStack.rotate(Axis.XP.rotationDegrees(180f));
 
 
         float ageInTicks = state.ageInTicks;
@@ -48,10 +47,10 @@ public class MegahealthPickupRenderer extends EntityRenderer<MegahealthPickupEnt
         poseStack.translate(0d, 0.25d + bob, 0d);
 
         float rotation = (ageInTicks * rotationSpeed) % 360;
-        poseStack.mulPose(Axis.YP.rotationDegrees(-rotation));
+        poseStack.rotate(Axis.YP.rotationDegrees(-rotation));
 
-        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(MEGAHEALTH_PICKUP_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
-        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(MEGAHEALTH_PICKUP_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
+        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(MEGAHEALTH_PICKUP_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
+        nodeCollector.submitModel(this.model, state, poseStack, RenderTypes.eyes(MEGAHEALTH_PICKUP_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
 
         poseStack.popPose();
 
@@ -59,7 +58,7 @@ public class MegahealthPickupRenderer extends EntityRenderer<MegahealthPickupEnt
     }
 
     @Override
-    public boolean shouldRender(MegahealthPickupEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ) {
+    public boolean shouldRender(MegahealthPickupEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ, float partialTick) {
         return true;
     }
 

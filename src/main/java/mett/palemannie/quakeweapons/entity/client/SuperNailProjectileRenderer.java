@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.feature.ModelFeatureRenderer;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 
@@ -30,13 +30,13 @@ public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProject
 
         poseStack.translate(0f, 0.1f, 0f);
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(-state.xRot + 180f));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(180f));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.yRot));
+        poseStack.rotate(Axis.XP.rotationDegrees(-state.xRot + 180f));
+        poseStack.rotate(Axis.ZP.rotationDegrees(180f));
 
         this.model.setupAnim(state);
 
-        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(SUPER_NAIL_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, (ModelFeatureRenderer.CrumblingOverlay) null);
+        nodeCollector.submitModel(this.model, state, poseStack, this.model.renderType(SUPER_NAIL_LOCATION), state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
 
 
         poseStack.popPose();
@@ -44,7 +44,7 @@ public class SuperNailProjectileRenderer extends EntityRenderer<SuperNailProject
     }
 
     @Override
-    public boolean shouldRender(SuperNailProjectileEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ) {
+    public boolean shouldRender(SuperNailProjectileEntity pLivingEntity, Frustum pCamera, double pCamX, double pCamY, double pCamZ, float partialTick) {
         return true;
     }
 

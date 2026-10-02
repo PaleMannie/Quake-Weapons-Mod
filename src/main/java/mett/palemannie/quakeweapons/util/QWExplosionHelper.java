@@ -34,13 +34,15 @@ public final class QWExplosionHelper {
     private QWExplosionHelper() {}
 
     public static void grenadeExplosion(ServerLevel level, Entity projectile, @Nullable Entity owner, Vec3 center, Entity quadapplier) {
-        DamageSource source = level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, projectile, owner);
+        DamageSource source = new QuakeExplosionDamageSource(
+                level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, projectile, owner));
         radiusDamage(level, projectile, owner, center, QWConfigStats.GrenadelauncherDamage,
                 QWConfigStats.GrenadelauncherRadius, source, quadapplier);
     }
 
     public static void rocketExplosion(ServerLevel level, @Nullable Entity projectile, @Nullable Entity owner, Vec3 center, Entity quadapplier) {
-        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, projectile, owner);
+        DamageSource source = new QuakeExplosionDamageSource(
+                level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, projectile, owner));
         radiusDamage(level, projectile, owner, center, QWConfigStats.RocketlauncherDamage,
                 QWConfigStats.RocketlauncherRadius, source, quadapplier);
     }
@@ -57,7 +59,7 @@ public final class QWExplosionHelper {
 
         // ModEvents already applies this mod's Quad to health damage from the source owner.
         boolean quadHandledByEvent = source.getEntity() instanceof LivingEntity attacker
-                && attacker.hasEffect(ModEffects.QUAD_DAMAGE.getHolder().get());
+                && attacker.hasEffect(ModEffects.QUAD_DAMAGE);
 
         float damageScale = Math.max(0.0F, maxDamage) * (quadHandledByEvent ? 1.0F : quad);
         double selfDamageMultiplier = QuakeWeaponsConfig.COMMON.explosionSelfDamageMultiplier.get();
@@ -93,7 +95,7 @@ public final class QWExplosionHelper {
                 // Send only the impulse; hurtMarked would send an absolute velocity afterward.
                 ModMessages.sendToPlayer(new ExplosionImpulseS2CPacket(impulse), player);
             } else {
-                target.hurtMarked = true;
+                target.syncVelocity = true;
             }
         }
     }

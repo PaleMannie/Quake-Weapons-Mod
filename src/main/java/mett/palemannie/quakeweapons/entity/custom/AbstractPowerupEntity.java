@@ -55,7 +55,7 @@ public abstract class AbstractPowerupEntity extends Entity {
     protected abstract Item getPowerupItem();
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, net.minecraft.world.phys.Vec3 location) {
 
         ItemStack stack = player.getItemInHand(hand);
 

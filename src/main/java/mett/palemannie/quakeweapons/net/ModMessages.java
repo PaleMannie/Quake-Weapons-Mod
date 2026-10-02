@@ -1,61 +1,24 @@
 package mett.palemannie.quakeweapons.net;
 
-import mett.palemannie.quakeweapons.QuakeWeapons;
-import mett.palemannie.quakeweapons.net.packets.S2CInvisPacket;
-import mett.palemannie.quakeweapons.net.packets.ExplosionImpulseS2CPacket;
-import mett.palemannie.quakeweapons.net.packets.WeaponRecoilS2CPacket;
-import net.minecraft.resources.Identifier;
+import mett.palemannie.quakeweapons.net.packets.*;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.network.ChannelBuilder;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.SimpleChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
-public class ModMessages {
+public final class ModMessages {
 
-    private static int PacketID = 0;
-    private static int id(){
-        return PacketID++;
+    public static void register(RegisterPayloadHandlersEvent event) {
+        var registrar = event.registrar("1");
+        registrar.playToClient(S2CInvisPacket.TYPE, S2CInvisPacket.STREAM_CODEC);
+        registrar.playToClient(WeaponRecoilS2CPacket.TYPE, WeaponRecoilS2CPacket.STREAM_CODEC);
+        registrar.playToClient(ExplosionImpulseS2CPacket.TYPE, ExplosionImpulseS2CPacket.STREAM_CODEC);
     }
-    final static int version = 1;
-
-    public static final SimpleChannel INSTANCE = ChannelBuilder.named(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "messages"))
-            .networkProtocolVersion(version)
-            .clientAcceptedVersions(((status, version1) -> true))
-            .serverAcceptedVersions(((status, version1) -> true))
-            .simpleChannel();
-
-    public static void register(){
-
-        INSTANCE.messageBuilder(S2CInvisPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(S2CInvisPacket::decode)
-                .encoder(S2CInvisPacket::encode)
-                .consumerMainThread(S2CInvisPacket::handle)
-                .add();
-
-        INSTANCE.messageBuilder(WeaponRecoilS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(WeaponRecoilS2CPacket::decode)
-                .encoder(WeaponRecoilS2CPacket::encode)
-                .consumerMainThread(WeaponRecoilS2CPacket::handle)
-                .add();
-
-        INSTANCE.messageBuilder(ExplosionImpulseS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(ExplosionImpulseS2CPacket::decode)
-                .encoder(ExplosionImpulseS2CPacket::encode)
-                .consumerMainThread(ExplosionImpulseS2CPacket::handle)
-                .add();
+    public static void sendToTrackingEntityAndSelf(CustomPacketPayload message, LivingEntity entity) {
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, message);
     }
-
-    public static void sendToServer(Object message){
-        INSTANCE.send(message, PacketDistributor.SERVER.noArg());
-    }
-
-    public static <MSG> void sendToTrackingEntityAndSelf(MSG message, LivingEntity entity) {
-        INSTANCE.send(message, PacketDistributor.TRACKING_ENTITY_AND_SELF.with(entity));
-    }
-
-    public static <MSG> void sendToPlayer(MSG message, ServerPlayer entity) {
-        INSTANCE.send(message, PacketDistributor.PLAYER.with(entity));
+    public static void sendToPlayer(CustomPacketPayload message, ServerPlayer player) {
+        PacketDistributor.sendToPlayer(player, message);
     }
 }

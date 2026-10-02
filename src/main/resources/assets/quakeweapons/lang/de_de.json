@@ -84,5 +84,7 @@
 
   "command.quakeweapons.testkit.success": "Testkit bereit: Alle Waffen vorhanden und Munition aufgefüllt.",
   "command.quakeweapons.refill.success": "Munition aufgefüllt: 256 Nägel, 256 Zellen, 128 Schrotpatronen und je 64 Granaten und Raketen.",
-  "command.quakeweapons.supply.full": "Inventar voll: %s Gegenstände konnten nicht hinzugefügt werden."
+  "command.quakeweapons.supply.full": "Inventar voll: %s Gegenstände konnten nicht hinzugefügt werden.",
+  "sounds.quakeweapons.ammo_pickup_sound": "Munition aufgenommen",
+  "sounds.quakeweapons.megahealth_sound": "Megahealth aufgenommen"
 }

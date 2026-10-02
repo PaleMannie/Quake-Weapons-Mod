@@ -24,7 +24,7 @@ public class QuadDamagePowerupEntity extends AbstractPowerupEntity{
 
     @Override
     protected void onPickup(Player player) {
-        player.addEffect(new MobEffectInstance(ModEffects.QUAD_DAMAGE.getHolder().get(), getPowerupDuration()));
+        player.addEffect(new MobEffectInstance(ModEffects.QUAD_DAMAGE, getPowerupDuration()));
         FollowingSoundHelper.playForTrackingPlayers(player, ModSounds.QUAD_DAMAGE_PICKUP.get());
     }
 

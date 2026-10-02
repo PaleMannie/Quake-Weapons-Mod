@@ -29,15 +29,15 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.animatable.client.GeoRenderProvider;
-import software.bernie.geckolib.animatable.manager.AnimatableManager;
-import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.RawAnimation;
-import software.bernie.geckolib.animation.object.LoopType;
-import software.bernie.geckolib.animation.object.PlayState;
-import software.bernie.geckolib.renderer.GeoItemRenderer;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import com.geckolib.animatable.GeoItem;
+import com.geckolib.animatable.client.GeoRenderProvider;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.LoopType;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.renderer.GeoItemRenderer;
 
 import java.util.List;
 import java.util.Map;
@@ -80,7 +80,6 @@ public class ThunderboltItem extends AbstractWeapon {
         });
     }
 
-    @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
 
@@ -96,7 +95,7 @@ public class ThunderboltItem extends AbstractWeapon {
             }
 
             @Override
-            public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
+            public boolean applyForgeHandTransform(PoseStack poseStack, net.minecraft.client.renderer.state.level.PlayerRenderState player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
 
                 if (itemInHand.getItem() instanceof AbstractWeapon) {
 

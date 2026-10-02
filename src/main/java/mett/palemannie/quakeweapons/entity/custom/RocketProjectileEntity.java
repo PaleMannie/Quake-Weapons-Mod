@@ -5,6 +5,7 @@ import mett.palemannie.quakeweapons.block.ModBlocks;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.QWExplosionHelper;
+import mett.palemannie.quakeweapons.util.QuakeExplosionDamageSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -20,7 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
 public class RocketProjectileEntity extends Projectile {
 
@@ -47,7 +48,7 @@ public class RocketProjectileEntity extends Projectile {
         }
 
         Vec3 center = this.position();
-        QWExplosionHelper.rocketExplosion(serverLevel, null, null, center, this.getOwner());
+        QWExplosionHelper.rocketExplosion(serverLevel, this, this.getOwner(), center, this.getOwner());
 
         serverLevel.sendParticles(ParticleTypes.FLAME,
                 center.x, center.y, center.z,
@@ -108,7 +109,7 @@ public class RocketProjectileEntity extends Projectile {
     void hitResultHandler(){
 
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-        if (hitresult.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, hitresult)) {
+        if (hitresult.getType() != HitResult.Type.MISS && !EventHooks.onProjectileImpact(this, hitresult)) {
             this.onHit(hitresult);
         }
     }
@@ -187,7 +188,8 @@ public class RocketProjectileEntity extends Projectile {
         super.onHitEntity(pResult);
         if (this.level() instanceof ServerLevel) {
             Entity owner = this.getOwner();
-            pResult.getEntity().hurt(level().damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, this, owner),
+            pResult.getEntity().hurt(new QuakeExplosionDamageSource(
+                            level().damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, this, owner)),
                     QWConfigStats.RocketlauncherDamage * RandomSource.create().nextFloat() / 4);
         }
 

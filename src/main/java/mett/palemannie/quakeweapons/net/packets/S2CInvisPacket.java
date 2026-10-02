@@ -1,47 +1,24 @@
 package mett.palemannie.quakeweapons.net.packets;
 
-import net.minecraft.client.Minecraft;
+import mett.palemannie.quakeweapons.QuakeWeapons;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.network.CustomPayloadEvent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.Identifier;
 
-public class S2CInvisPacket {
-    private final int entityId;
-    private final boolean invisible;
+public record S2CInvisPacket(int entityId, boolean invisible) implements CustomPacketPayload {
+    public static final Type<S2CInvisPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "invisibility"));
+    public static final StreamCodec<FriendlyByteBuf, S2CInvisPacket> STREAM_CODEC = StreamCodec.ofMember(S2CInvisPacket::encode, S2CInvisPacket::decode);
 
-    public S2CInvisPacket(int entityId, boolean invisible) {
-        this.entityId = entityId;
-        this.invisible = invisible;
+    @Override
+    public Type<S2CInvisPacket> type() { return TYPE; }
+
+    public static void encode(S2CInvisPacket packet, FriendlyByteBuf buffer) {
+        buffer.writeInt(packet.entityId);
+        buffer.writeBoolean(packet.invisible);
     }
 
-    public static void encode(S2CInvisPacket msg, FriendlyByteBuf buf) {
-        buf.writeInt(msg.entityId);
-        buf.writeBoolean(msg.invisible);
-    }
-
-    public static S2CInvisPacket decode(FriendlyByteBuf buf) {
-        return new S2CInvisPacket(buf.readInt(), buf.readBoolean());
-    }
-
-    public static void handle(S2CInvisPacket msg, CustomPayloadEvent.Context ctx) {
-        ctx.enqueueWork(() -> handleClient(msg));
-        ctx.setPacketHandled(true);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    private static void handleClient(S2CInvisPacket msg) {
-
-        Level level = Minecraft.getInstance().level;
-        if (level == null) return;
-
-        Entity e = level.getEntity(msg.entityId);
-
-        if (e instanceof LivingEntity living) {
-            living.getPersistentData().putBoolean("QWInvis", msg.invisible);
-        }
+    public static S2CInvisPacket decode(FriendlyByteBuf buffer) {
+        return new S2CInvisPacket(buffer.readInt(), buffer.readBoolean());
     }
 }

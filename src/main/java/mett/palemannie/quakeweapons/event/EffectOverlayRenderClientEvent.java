@@ -3,7 +3,7 @@ package mett.palemannie.quakeweapons.event;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 
@@ -16,7 +16,7 @@ public final class EffectOverlayRenderClientEvent {
     private EffectOverlayRenderClientEvent() {
     }
 
-    public static void onRenderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
+    public static void onRenderOverlay(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer player = minecraft.player;
         if (player == null) return;
@@ -24,10 +24,10 @@ public final class EffectOverlayRenderClientEvent {
         float partialTick = deltaTracker.getGameTimeDeltaPartialTick(false);
         int[] mixedColor = new int[4];
 
-        mixEffect(mixedColor, player.getEffect(ModEffects.QUAD_DAMAGE.getHolder().orElseThrow()), QUAD, partialTick);
-        mixEffect(mixedColor, player.getEffect(ModEffects.INVULNERABILITY.getHolder().orElseThrow()), PENTAGRAM, partialTick);
-        mixEffect(mixedColor, player.getEffect(ModEffects.QW_INVIS.getHolder().orElseThrow()), RING, partialTick);
-        mixEffect(mixedColor, player.getEffect(ModEffects.BIOSUIT.getHolder().orElseThrow()), BIOSUIT, partialTick);
+        mixEffect(mixedColor, player.getEffect(ModEffects.QUAD_DAMAGE), QUAD, partialTick);
+        mixEffect(mixedColor, player.getEffect(ModEffects.INVULNERABILITY), PENTAGRAM, partialTick);
+        mixEffect(mixedColor, player.getEffect(ModEffects.QW_INVIS), RING, partialTick);
+        mixEffect(mixedColor, player.getEffect(ModEffects.BIOSUIT), BIOSUIT, partialTick);
 
         int alpha = mixedColor[3];
         if (alpha == 0) return;

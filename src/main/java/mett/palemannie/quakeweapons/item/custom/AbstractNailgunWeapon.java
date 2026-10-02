@@ -5,13 +5,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib.animation.object.LoopType;
+import com.geckolib.animation.object.LoopType;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
 /** Keeps the firing loop running while held and stops it as soon as firing ends. */
 public abstract class AbstractNailgunWeapon extends AbstractWeapon {
+
     private final Map<ServerPlayer, ItemStack> activeAnimations = new WeakHashMap<>();
 
     protected AbstractNailgunWeapon(Properties properties, int ammoCost, String animationBase) {

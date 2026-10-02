@@ -14,9 +14,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +24,9 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.function.Consumer;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(modid = QuakeWeapons.MODID)
 public final class PowerupSpawner {
+
     private PowerupSpawner() {}
 
     private static final int TYPE_COUNT = 9;
@@ -62,8 +63,8 @@ public final class PowerupSpawner {
     }
 
     @SubscribeEvent
-    public static void onWorldTick(TickEvent.LevelTickEvent.Post event) {
-        if (/*event.phase != TickEvent.Phase.END ||*/ !(event.level() instanceof ServerLevel level)) return;
+    public static void onWorldTick(LevelTickEvent.Post event) {
+        if (!(event.getLevel() instanceof ServerLevel level)) return;
         if (!powerupSpawningEnabled || level.getGameTime() % spawnInterval != 0L) return;
 
         for (ServerPlayer player : level.players()) {
@@ -79,7 +80,7 @@ public final class PowerupSpawner {
             return;
         }
 
-        RandomSource random = level.random;
+        RandomSource random = level.getRandom();
         int x = player.blockPosition().getX() + Mth.nextInt(random, -128, 128);
         int z = player.blockPosition().getZ() + Mth.nextInt(random, -128, 128);
         int minY = player.blockPosition().getY() - 64;
@@ -141,7 +142,7 @@ public final class PowerupSpawner {
         if (bag.isEmpty()) {
             for (int i = 0; i < TYPE_COUNT; i++) bag.add(i);
             for (int i = bag.size() - 1; i > 0; i--) {
-                int j = level.random.nextInt(i + 1);
+                int j = level.getRandom().nextInt(i + 1);
                 int value = bag.get(i);
                 bag.set(i, bag.get(j));
                 bag.set(j, value);

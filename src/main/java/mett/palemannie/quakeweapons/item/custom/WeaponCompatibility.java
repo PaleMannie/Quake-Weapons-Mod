@@ -4,7 +4,7 @@ import mett.palemannie.quakeweapons.item.ModItems;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 public final class WeaponCompatibility {
     private WeaponCompatibility() {}
@@ -14,7 +14,7 @@ public final class WeaponCompatibility {
         String q2wName = localAmmo == ModItems.SHELL.get() ? "shell"
                 : localAmmo == ModItems.GRENADE.get() ? "grenade"
                 : localAmmo == ModItems.ROCKET.get() ? "rocket" : null;
-        return q2wName != null && ForgeRegistries.ITEMS.getKey(stack.getItem())
+        return q2wName != null && BuiltInRegistries.ITEM.getKey(stack.getItem())
                 .equals(Identifier.fromNamespaceAndPath("q2w", q2wName));
     }
 }
