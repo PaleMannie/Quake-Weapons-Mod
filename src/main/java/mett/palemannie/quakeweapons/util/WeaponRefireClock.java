@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class WeaponRefireClock<K> {
+
     private final Map<K, Long> lastAttempts = new HashMap<>();
 
     public boolean tryFire(K weapon, long currentTick, int intervalTicks) {
