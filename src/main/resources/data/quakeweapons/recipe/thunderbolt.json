@@ -24,7 +24,7 @@
     }
   },
   "result": {
-    "item": "quakeweapons:thunderbolt",
+    "id": "quakeweapons:thunderbolt",
     "count": 1
   }
 }

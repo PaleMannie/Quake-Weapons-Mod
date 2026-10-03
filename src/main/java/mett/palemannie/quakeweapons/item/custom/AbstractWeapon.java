@@ -24,12 +24,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Map;
@@ -74,7 +74,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         ItemStack stack = entity.getItemInHand(hand);
         if (stack.isEmpty() || entity.isUsingItem()) return;
         entity.useItem = stack;
-        entity.useItemRemaining = stack.getUseDuration();
+        entity.useItemRemaining = stack.getUseDuration(entity);
         if (!entity.level().isClientSide) {
             entity.setLivingEntityFlag(1, true);
             entity.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
@@ -84,7 +84,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
 
     @Override public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) { return slotChanged; }
     @Override public @NotNull UseAnim getUseAnimation(ItemStack stack) { return UseAnim.NONE; }
-    @Override public int getUseDuration(ItemStack stack) { return 2_000_000_000; }
+    @Override public int getUseDuration(ItemStack stack, LivingEntity entity) { return 2_000_000_000; }
     @Override public boolean canAttackBlock(BlockState state, Level level, BlockPos pos, Player player) { return false; }
     @Override public boolean onEntitySwing(ItemStack stack, LivingEntity entity) { return true; }
 
@@ -93,7 +93,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         if (hand != InteractionHand.MAIN_HAND || player.getCooldowns().isOnCooldown(this)) {
             return InteractionResultHolder.fail(player.getItemInHand(hand));
         }
-        player.removeEffect(ModEffects.QW_INVIS.get());
+        player.removeEffect(ModEffects.QW_INVIS);
         player.setInvisible(false);
         setCurrentHand(hand, player);
         return InteractionResultHolder.consume(player.getItemInHand(hand));
@@ -107,7 +107,7 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
         if (!REFIRE_CLOCKS.computeIfAbsent(player, ignored -> new WeaponRefireClock<>())
                 .tryFire(this, player.getServer().getTickCount(), fireIntervalTicks)) return;
 
-        int useTicks = getUseDuration(stack) - remainingUseDuration;
+        int useTicks = getUseDuration(stack, user) - remainingUseDuration;
         if (!consumeAmmo(player, ammoCostPerShot)) {
             onAmmoEmpty(serverLevel, player, stack);
             return;
@@ -167,9 +167,9 @@ public abstract class AbstractWeapon extends Item implements GeoItem {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         super.inventoryTick(stack, level, entity, slot, selected);
         if (!(level instanceof ServerLevel serverLevel) || !(entity instanceof LivingEntity living)) return;
-        if (stack.hasTag() && stack.getTag().getBoolean("WasDropped")) {
+        if (stack.getOrDefault(net.minecraft.core.component.DataComponents.CUSTOM_DATA, net.minecraft.world.item.component.CustomData.EMPTY).copyTag().getBoolean("WasDropped")) {
             hardStopTriggeredAnimations(living, serverLevel, stack);
-            stack.getTag().remove("WasDropped");
+            net.minecraft.world.item.component.CustomData.update(net.minecraft.core.component.DataComponents.CUSTOM_DATA, stack, tag -> tag.remove("WasDropped"));
         }
         if (entity instanceof Player player && !selected && !(player.isUsingItem() && player.getUseItem() == stack)) {
             hardStopTriggeredAnimations(living, serverLevel, stack);

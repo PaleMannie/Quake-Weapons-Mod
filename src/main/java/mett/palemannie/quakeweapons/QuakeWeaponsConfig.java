@@ -1,40 +1,39 @@
 package mett.palemannie.quakeweapons;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.config.ModConfig;
 
 public class QuakeWeaponsConfig
 {
-    public static final ForgeConfigSpec COMMON_SPEC;
+    public static final ModConfigSpec COMMON_SPEC;
     public static final Common COMMON;
 
     static {
-        final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        final ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         COMMON = new Common(builder);
         COMMON_SPEC = builder.build();
     }
 
     public static class Common {
-        public final ForgeConfigSpec.BooleanValue enableMuzzleFlash;
-        public final ForgeConfigSpec.BooleanValue enableRocketTrailLight;
-        public final ForgeConfigSpec.BooleanValue enableThunderboltTracer;
-        public final ForgeConfigSpec.BooleanValue enableGore;
-        public final ForgeConfigSpec.BooleanValue enableEnhancedModels;
-        public final ForgeConfigSpec.DoubleValue axeDamage;
-        public final ForgeConfigSpec.DoubleValue shotgunDamage;
-        public final ForgeConfigSpec.DoubleValue superShotgunDamage;
-        public final ForgeConfigSpec.DoubleValue nailgunDamage;
-        public final ForgeConfigSpec.DoubleValue superNailgunDamage;
-        public final ForgeConfigSpec.DoubleValue thunderboltDamage;
-        public final ForgeConfigSpec.DoubleValue rocketlauncherDamage;
-        public final ForgeConfigSpec.DoubleValue rocketlauncherRadius;
-        public final ForgeConfigSpec.DoubleValue grenadelauncherDamage;
-        public final ForgeConfigSpec.DoubleValue grenadelauncherRadius;
-        public final ForgeConfigSpec.DoubleValue explosionSelfDamageMultiplier;
+        public final ModConfigSpec.BooleanValue enableMuzzleFlash;
+        public final ModConfigSpec.BooleanValue enableRocketTrailLight;
+        public final ModConfigSpec.BooleanValue enableThunderboltTracer;
+        public final ModConfigSpec.BooleanValue enableGore;
+        public final ModConfigSpec.BooleanValue enableEnhancedModels;
+        public final ModConfigSpec.DoubleValue axeDamage;
+        public final ModConfigSpec.DoubleValue shotgunDamage;
+        public final ModConfigSpec.DoubleValue superShotgunDamage;
+        public final ModConfigSpec.DoubleValue nailgunDamage;
+        public final ModConfigSpec.DoubleValue superNailgunDamage;
+        public final ModConfigSpec.DoubleValue thunderboltDamage;
+        public final ModConfigSpec.DoubleValue rocketlauncherDamage;
+        public final ModConfigSpec.DoubleValue rocketlauncherRadius;
+        public final ModConfigSpec.DoubleValue grenadelauncherDamage;
+        public final ModConfigSpec.DoubleValue grenadelauncherRadius;
+        public final ModConfigSpec.DoubleValue explosionSelfDamageMultiplier;
 
-
-        public Common(ForgeConfigSpec.Builder builder) {
+        public Common(ModConfigSpec.Builder builder) {
             builder.push("Effects");
 
             enableEnhancedModels = builder
@@ -104,28 +103,28 @@ public class QuakeWeaponsConfig
         }
     }
 
-    public static final ForgeConfigSpec SERVER_SPEC;
+    public static final ModConfigSpec SERVER_SPEC;
     public static final Server SERVER;
 
     static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
         SERVER = new Server(builder);
         SERVER_SPEC = builder.build();
     }
 
     public static class Server {
 
-        public final ForgeConfigSpec.IntValue weaponAggroRange;
-        public final ForgeConfigSpec.IntValue powerupSpawnInterval;
-        public final ForgeConfigSpec.IntValue powerupSpawnAttempts;
-        public final ForgeConfigSpec.IntValue maxNearbyPowerups;
-        public final ForgeConfigSpec.IntValue powerupSpawnSearchRadius;
-        public final ForgeConfigSpec.IntValue powerupEffectDuration;
-        public final ForgeConfigSpec.IntValue powerupLifetime;
-        public final ForgeConfigSpec.BooleanValue powerupDebug;
-        public final ForgeConfigSpec.BooleanValue enablePowerups;
+        public final ModConfigSpec.IntValue weaponAggroRange;
+        public final ModConfigSpec.IntValue powerupSpawnInterval;
+        public final ModConfigSpec.IntValue powerupSpawnAttempts;
+        public final ModConfigSpec.IntValue maxNearbyPowerups;
+        public final ModConfigSpec.IntValue powerupSpawnSearchRadius;
+        public final ModConfigSpec.IntValue powerupEffectDuration;
+        public final ModConfigSpec.IntValue powerupLifetime;
+        public final ModConfigSpec.BooleanValue powerupDebug;
+        public final ModConfigSpec.BooleanValue enablePowerups;
 
-        public Server(ForgeConfigSpec.Builder builder) {
+        public Server(ModConfigSpec.Builder builder) {
 
             builder.push("Weapon aggro values");
             weaponAggroRange = builder
@@ -171,8 +170,8 @@ public class QuakeWeaponsConfig
         }
     }
 
-    public static void registerConfigs() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_SPEC);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_SPEC);
+    public static void registerConfigs(ModContainer container) {
+        container.registerConfig(ModConfig.Type.COMMON, COMMON_SPEC);
+        container.registerConfig(ModConfig.Type.SERVER, SERVER_SPEC);
     }
 }

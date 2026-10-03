@@ -14,12 +14,12 @@ public class BiosuitItem extends AbstractPowerupItem{
     }
 
     @Override
-    public MobEffect getPowerupEffect() {
-        return ModEffects.BIOSUIT.get();
+    public net.minecraft.core.Holder<MobEffect> getPowerupEffect() {
+        return ModEffects.BIOSUIT;
     }
 
     @Override
     protected void onPowerupUse(Level level, Player player, ItemStack stack, int duration) {
-        player.addEffect(new MobEffectInstance(ModEffects.BIOSUIT.get(), getPowerupDuration()));
+        player.addEffect(new MobEffectInstance(ModEffects.BIOSUIT, getPowerupDuration()));
     }
 }

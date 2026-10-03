@@ -2,32 +2,32 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "GIR",
-    "INW",
-    "RWS"
+    "IIG",
+    "DBR",
+    "IIS"
   ],
   "key": {
-    "N": {
-      "item": "quakeweapons:nailgun"
-    },
     "I": {
       "item": "minecraft:iron_block"
-    },
-    "W": {
-      "tag": "minecraft:planks"
     },
     "S": {
       "item": "minecraft:stick"
     },
     "R": {
-      "item": "minecraft:redstone"
+      "item": "minecraft:repeater"
+    },
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "B": {
+      "item": "minecraft:blaze_rod"
     },
     "G": {
       "item": "minecraft:gold_ingot"
     }
   },
   "result": {
-    "item": "quakeweapons:super_nailgun",
+    "id": "quakeweapons:rocketlauncher",
     "count": 1
   }
 }

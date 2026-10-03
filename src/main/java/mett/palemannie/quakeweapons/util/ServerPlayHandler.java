@@ -5,7 +5,6 @@ import mett.palemannie.quakeweapons.entity.ModEntities;
 import mett.palemannie.quakeweapons.entity.custom.*;
 import mett.palemannie.quakeweapons.item.custom.NailgunItem;
 import mett.palemannie.quakeweapons.sound.ModSounds;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 
 import java.util.HashSet;
@@ -92,8 +90,8 @@ public class ServerPlayHandler {
         ServerLevel sLevel = (ServerLevel) level;
 
         double reach = 3.0D;
-        if (player.getAttributes().hasAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get())) {
-            reach = player.getAttribute(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get()).getValue();
+        if (player.getAttributes().hasAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ENTITY_INTERACTION_RANGE)) {
+            reach = player.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ENTITY_INTERACTION_RANGE).getValue();
         }
 
         // Ray setup
@@ -347,7 +345,6 @@ public class ServerPlayHandler {
 
         ServerLevel sevel = player.serverLevel();
         Level level = player.level();
-
 
         ///Hitscan
         final int PELLETS = 6;

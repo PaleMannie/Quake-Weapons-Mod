@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    " II",
-    "ITG",
-    " II"
+    " I ",
+    "RTG",
+    " I "
   ],
   "key": {
     "I": {
@@ -15,10 +15,13 @@
     },
     "T": {
       "item": "minecraft:tnt"
+    },
+    "R": {
+      "item": "minecraft:redstone"
     }
   },
   "result": {
-    "item": "quakeweapons:rocket",
+    "id": "quakeweapons:grenade",
     "count": 8
   }
 }

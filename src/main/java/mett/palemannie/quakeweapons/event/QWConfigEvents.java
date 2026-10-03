@@ -2,11 +2,11 @@ package mett.palemannie.quakeweapons.event;
 
 import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = QuakeWeapons.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class QWConfigEvents {
 
     /// A way to set config values after they've been (re)loaded upon game start

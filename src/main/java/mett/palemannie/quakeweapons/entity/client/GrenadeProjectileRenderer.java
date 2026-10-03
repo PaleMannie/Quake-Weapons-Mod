@@ -59,10 +59,10 @@ public class GrenadeProjectileRenderer extends EntityRenderer<GrenadeProjectileE
         }
 
         VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(GRENADE_LOCATION));
-        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
         VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(GRENADE_EMISSIVE_LOCATION));
-        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, -1);
         poseStack.popPose();
 
         super.render(grenadeEntity, v1, partialTicks, poseStack, bufferSource, packedLight);

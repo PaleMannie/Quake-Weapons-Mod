@@ -5,19 +5,19 @@ import mett.palemannie.quakeweapons.effect.ModEffects;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RenderLivingEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = QuakeWeapons.MODID, value = Dist.CLIENT)
 public class RingOfShadowsRenderClientEvent {
 
     @SubscribeEvent
     public static void onRenderPlayer(RenderLivingEvent.Pre<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> event) {
 
         LivingEntity entity = event.getEntity();
-        if (entity.hasEffect(ModEffects.QW_INVIS.get())) {
+        if (entity.hasEffect(ModEffects.QW_INVIS)) {
 
             event.setCanceled(true);
         }

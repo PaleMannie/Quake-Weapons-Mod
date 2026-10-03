@@ -2,32 +2,29 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "WII",
-    "DBR",
-    "IIS"
+    " Di",
+    "DCI",
+    "iIS"
   ],
   "key": {
     "I": {
-    "item": "minecraft:iron_block"
-    },
-    "B": {
-      "item": "minecraft:blaze_rod"
+      "item": "minecraft:iron_block"
     },
     "S": {
       "item": "minecraft:stick"
     },
-    "R": {
-      "item": "minecraft:repeater"
+    "C": {
+      "item": "minecraft:comparator"
     },
-    "W": {
-      "tag": "minecraft:planks"
+    "i": {
+      "item": "minecraft:iron_ingot"
     },
     "D": {
       "item": "minecraft:dispenser"
     }
   },
   "result": {
-    "item": "quakeweapons:grenadelauncher",
+    "id": "quakeweapons:nailgun",
     "count": 1
   }
 }

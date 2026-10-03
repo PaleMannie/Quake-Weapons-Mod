@@ -27,7 +27,7 @@
     }
   },
   "result": {
-    "item": "quakeweapons:super_shotgun",
+    "id": "quakeweapons:super_shotgun",
     "count": 1
   }
 }

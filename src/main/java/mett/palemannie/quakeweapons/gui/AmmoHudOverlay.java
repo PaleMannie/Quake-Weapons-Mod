@@ -7,14 +7,17 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import net.minecraft.client.gui.LayeredDraw;
 
 public final class AmmoHudOverlay {
 
     private AmmoHudOverlay() {}
 
-    public static final IGuiOverlay HUD = (gui, graphics, partialTick, width, height) -> {
+    public static final LayeredDraw.Layer HUD = (graphics, partialTick) -> {
         Minecraft minecraft = Minecraft.getInstance();
+        int width = graphics.guiWidth();
+        int height = graphics.guiHeight();
+        var gui = minecraft.gui;
         if (minecraft.options.hideGui || minecraft.player == null || minecraft.player.isSpectator()) return;
         if (!(minecraft.player.getMainHandItem().getItem() instanceof AbstractWeapon weapon)) return;
         Item ammo = weapon.getAmmoItem();

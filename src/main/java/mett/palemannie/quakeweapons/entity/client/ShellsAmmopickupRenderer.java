@@ -47,11 +47,11 @@ public class ShellsAmmopickupRenderer extends EntityRenderer<ShellsAmmopickupEnt
         float rotation = (ageInTicks * rotationSpeed) % 360;
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
 
-        VertexConsumer $$6 = bufferSource.getBuffer(this.model.renderType(SHELLS_AMMOPICKUP_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        VertexConsumer normal = bufferSource.getBuffer(this.model.renderType(SHELLS_AMMOPICKUP_LOCATION));
+        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
-        VertexConsumer $$5 = bufferSource.getBuffer(RenderType.eyes(SHELLS_AMMOPICKUP_LOCATION));
-        this.model.renderToBuffer(poseStack, $$6, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(SHELLS_AMMOPICKUP_LOCATION));
+        this.model.renderToBuffer(poseStack, emissive, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
         poseStack.popPose();
 

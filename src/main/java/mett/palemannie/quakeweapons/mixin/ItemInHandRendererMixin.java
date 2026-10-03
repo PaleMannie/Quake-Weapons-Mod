@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
  *   https://github.com/bytemaniak/mcquake3
  */
 
-
 @Mixin(ItemInHandRenderer.class)
 public class ItemInHandRendererMixin {
 

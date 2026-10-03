@@ -5,7 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.animation.Animation;
 
 import java.util.Map;
 import java.util.WeakHashMap;

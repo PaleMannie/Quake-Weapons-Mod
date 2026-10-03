@@ -1,23 +1,16 @@
 package mett.palemannie.quakeweapons.item.custom;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.item.ModItems;
-import mett.palemannie.quakeweapons.item.client.ThunderboltRenderer;
 import mett.palemannie.quakeweapons.sound.ModSounds;
 import mett.palemannie.quakeweapons.util.WeaponKnockback;
 import mett.palemannie.quakeweapons.util.ModDamageTypes;
 import mett.palemannie.quakeweapons.util.QWConfigStats;
 import mett.palemannie.quakeweapons.util.ServerPlayHandler;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -28,16 +21,15 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.Animation;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.Animation;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.PlayState;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ThunderboltItem extends AbstractWeapon {
     private static final RawAnimation SHOOT_ANIM = RawAnimation.begin().then("thunderbolt.animations.shooting", Animation.LoopType.LOOP);
@@ -58,47 +50,6 @@ public class ThunderboltItem extends AbstractWeapon {
                 .triggerableAnim("ammoempty", AMMOEMPTY_ANIM));
         controllers.add(new AnimationController<>(this, "controller3", 0, state -> PlayState.CONTINUE)
                 .triggerableAnim("idle", IDLE_ANIM));
-    }
-
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            private ThunderboltRenderer renderer;
-
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                if(this.renderer == null) {
-                    this.renderer = new ThunderboltRenderer();
-                }
-
-                return this.renderer;
-            }
-
-            //Keeps the item in the bow holding position when it's not used
-            @Override
-            public HumanoidModel.ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
-                if (!itemStack.isEmpty()) {
-                    if (entityLiving.getItemInHand(hand) == itemStack) {
-                        return HumanoidModel.ArmPose.BOW_AND_ARROW;
-                    }
-                }
-                return HumanoidModel.ArmPose.EMPTY;
-            }
-
-            @Override
-            public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
-
-                if (itemInHand.getItem() instanceof AbstractWeapon) {
-
-                    int side = arm == HumanoidArm.RIGHT ? 1 : -1;
-                    poseStack.translate(side * 0.56f, -0.52f, -0.72f);
-
-                    return true;
-                }
-
-                return false;
-            }
-        });
     }
 
     private void triggerWaterDischarge(ServerLevel level, Player player) {
@@ -128,7 +79,7 @@ public class ThunderboltItem extends AbstractWeapon {
                 WeaponKnockback.hurt(target, level.damageSources().playerAttack(player), Float.MIN_VALUE);
                 //the real damage
                 WeaponKnockback.hurt(target, level.damageSources().source(ModDamageTypes.THUNDERBOLT_DISCHARGE, null, null),
-                        player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
+                        player.hasEffect(ModEffects.QUAD_DAMAGE) ? ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage * 4)
                                 : ((cellCount * 0.66f) * QWConfigStats.ThunderboltDamage));
 
                 //particles and sound
@@ -149,7 +100,7 @@ public class ThunderboltItem extends AbstractWeapon {
 
     private boolean hasLineOfSight(Level level, Vec3 from, LivingEntity target) {
         Vec3 to = target.position().add(0, target.getBbHeight() / 2, 0);
-        BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null));
+        BlockHitResult hit = level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, CollisionContext.empty()));
         return hit.getType() == HitResult.Type.MISS;
     }
 

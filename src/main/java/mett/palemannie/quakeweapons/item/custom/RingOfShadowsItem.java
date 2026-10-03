@@ -14,12 +14,12 @@ public class RingOfShadowsItem extends AbstractPowerupItem{
     }
 
     @Override
-    public MobEffect getPowerupEffect() {
-        return ModEffects.QW_INVIS.get();
+    public net.minecraft.core.Holder<MobEffect> getPowerupEffect() {
+        return ModEffects.QW_INVIS;
     }
 
     @Override
     protected void onPowerupUse(Level level, Player player, ItemStack stack, int duration) {
-        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS.get(), duration, 0, false, false, false));
+        player.addEffect(new MobEffectInstance(ModEffects.QW_INVIS, duration, 0, false, false, false));
     }
 }

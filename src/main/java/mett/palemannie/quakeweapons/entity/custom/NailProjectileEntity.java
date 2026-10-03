@@ -25,7 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.event.EventHooks;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +36,7 @@ public class NailProjectileEntity extends Projectile {
     }
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {}
 
     @Override
     public boolean isNoGravity() {
@@ -46,7 +46,7 @@ public class NailProjectileEntity extends Projectile {
     void hitResultHandler(){
 
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-        if (hitresult.getType() != HitResult.Type.MISS && !ForgeEventFactory.onProjectileImpact(this, hitresult)) {
+        if (hitresult.getType() != HitResult.Type.MISS && !EventHooks.onProjectileImpact(this, hitresult)) {
             this.onHit(hitresult);
         }
     }
@@ -74,7 +74,7 @@ public class NailProjectileEntity extends Projectile {
         if(pResult.getEntity() instanceof LivingEntity entity){
 
             WeaponKnockback.hurt(entity, source2, Float.MIN_VALUE);
-            WeaponKnockback.hurt(entity, source, player.hasEffect(ModEffects.QUAD_DAMAGE.get()) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
+            WeaponKnockback.hurt(entity, source, player.hasEffect(ModEffects.QUAD_DAMAGE) ? QWConfigStats.NailgunDamage * 4 : QWConfigStats.NailgunDamage);
         }
     }
 

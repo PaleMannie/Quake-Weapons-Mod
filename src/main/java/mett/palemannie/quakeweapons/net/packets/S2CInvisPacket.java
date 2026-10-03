@@ -5,13 +5,18 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.function.Supplier;
+public class S2CInvisPacket implements CustomPacketPayload {
+    public static final Type<S2CInvisPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("quakeweapons", "s2cinvispacket"));
+    public static final StreamCodec<FriendlyByteBuf, S2CInvisPacket> STREAM_CODEC = StreamCodec.of(S2CInvisPacket::encode, S2CInvisPacket::decode);
+    @Override public Type<S2CInvisPacket> type() { return TYPE; }
 
-public class S2CInvisPacket {
     private final int entityId;
     private final boolean invisible;
 
@@ -20,7 +25,7 @@ public class S2CInvisPacket {
         this.invisible = invisible;
     }
 
-    public static void encode(S2CInvisPacket msg, FriendlyByteBuf buf) {
+    public static void encode(FriendlyByteBuf buf, S2CInvisPacket msg) {
         buf.writeInt(msg.entityId);
         buf.writeBoolean(msg.invisible);
     }
@@ -29,9 +34,8 @@ public class S2CInvisPacket {
         return new S2CInvisPacket(buf.readInt(), buf.readBoolean());
     }
 
-    public static void handle(S2CInvisPacket msg, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> handleClient(msg));
-        ctx.get().setPacketHandled(true);
+    public static void handle(S2CInvisPacket msg, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> handleClient(msg));
     }
 
     @OnlyIn(Dist.CLIENT)

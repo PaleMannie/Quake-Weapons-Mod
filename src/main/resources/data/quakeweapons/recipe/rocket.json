@@ -2,26 +2,23 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "III",
-    "III",
-    "PGB"
+    " II",
+    "ITG",
+    " II"
   ],
   "key": {
     "I": {
-      "item": "minecraft:iron_nugget"
+      "item": "minecraft:iron_ingot"
     },
     "G": {
       "item": "minecraft:gunpowder"
     },
-    "P": {
-      "item": "minecraft:paper"
-    },
-    "B": {
-      "item": "minecraft:gold_ingot"
+    "T": {
+      "item": "minecraft:tnt"
     }
   },
   "result": {
-    "item": "quakeweapons:shell",
+    "id": "quakeweapons:rocket",
     "count": 8
   }
 }

@@ -61,10 +61,10 @@ public class BiosuitPowerupModel<T extends Entity> extends EntityModel<T> {
 	}
 
 	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		shoes.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		arms.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-		backpack.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);	}
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
+		shoes.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		arms.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		head.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
+		backpack.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);	}
 }

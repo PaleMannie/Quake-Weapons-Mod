@@ -4,17 +4,17 @@ import mett.palemannie.quakeweapons.QuakeWeapons;
 import mett.palemannie.quakeweapons.client.ClientWeaponRecoil;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
-@Mod.EventBusSubscriber(modid = QuakeWeapons.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+@EventBusSubscriber(modid = QuakeWeapons.MODID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
 public class WeaponRecoilClientEvents {
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) ClientWeaponRecoil.clientTick();
+    public static void onClientTick(ClientTickEvent.Post event) {
+        ClientWeaponRecoil.clientTick();
     }
 
     @SubscribeEvent

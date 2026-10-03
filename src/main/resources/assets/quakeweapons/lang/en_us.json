@@ -1,4 +1,6 @@
 {
+  "sounds.quakeweapons.ammo_pickup_sound": "Ammunition picked up",
+  "sounds.quakeweapons.megahealth_sound": "Megahealth picked up",
   "quakeweapons.creativetab.quakeweapons_tab": "Quake Weapons Mod",
 
   "quakeweapons.key.category.title": "Quake Weapons Mod",

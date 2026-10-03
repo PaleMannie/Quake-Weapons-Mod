@@ -39,10 +39,10 @@ public class RocketProjectileRenderer extends EntityRenderer<RocketProjectileEnt
         poseStack.scale(0.25F, 0.25F, 0.25F);
 
         VertexConsumer normal = bufferSource.getBuffer(RenderType.entityCutoutNoCull(ROCKET_LOCATION));
-        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(poseStack, normal, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
         VertexConsumer emissive = bufferSource.getBuffer(RenderType.eyes(ROCKET_EMISSIVE_LOCATION));
-        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        this.model.renderToBuffer(poseStack, emissive, 0xF000F0, OverlayTexture.NO_OVERLAY, -1);
         poseStack.popPose();
 
         super.render(rocketEntity, v1, v2, poseStack, bufferSource, packedLight);

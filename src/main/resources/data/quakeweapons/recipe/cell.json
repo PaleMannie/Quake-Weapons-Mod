@@ -24,7 +24,7 @@
     }
   },
   "result": {
-    "item": "quakeweapons:cell",
+    "id": "quakeweapons:cell",
     "count": 16
   }
 }

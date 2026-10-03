@@ -17,7 +17,6 @@ public class QWAxeModel extends GeoModel<QWAxeItem> {
     private static final ResourceLocation DEFAULT_ANIM = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/qwaxe.animations.json");
     private static final ResourceLocation ALT_ANIM = ResourceLocation.fromNamespaceAndPath(QuakeWeapons.MODID, "animations/qwaxe_alt.animations.json");
 
-
     @Override
     public ResourceLocation getModelResource(QWAxeItem animatable) {
 

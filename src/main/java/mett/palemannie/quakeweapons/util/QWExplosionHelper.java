@@ -52,7 +52,7 @@ public final class QWExplosionHelper {
 
         // ModEvents already applies this mod's Quad to health damage from the source owner.
         boolean quadHandledByEvent = source.getEntity() instanceof LivingEntity attacker
-                && attacker.hasEffect(ModEffects.QUAD_DAMAGE.get());
+                && attacker.hasEffect(ModEffects.QUAD_DAMAGE);
 
         float damageScale = Math.max(0.0F, maxDamage) * (quadHandledByEvent ? 1.0F : quad);
         double selfDamageMultiplier = QuakeWeaponsConfig.COMMON.explosionSelfDamageMultiplier.get();

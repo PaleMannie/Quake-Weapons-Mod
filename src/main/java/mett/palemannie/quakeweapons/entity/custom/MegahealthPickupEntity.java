@@ -43,7 +43,7 @@ public class MegahealthPickupEntity extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {}
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder builder) {}
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compoundTag) {}
