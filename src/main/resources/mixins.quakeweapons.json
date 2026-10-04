@@ -8,13 +8,14 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
-    "ItemInHandRendererMixin",
-    "LocalPlayerMixin",
-    "MinecraftMixin",
+    "HorseArmorLayerMixin",
     "HumanoidArmorLayerMixin",
     "ItemInHandLayerMixin",
-    "HorseArmorLayerMixin",
-    "LlamaDecorLayerMixin"
+    "ItemInHandRendererMixin",
+    "LlamaDecorLayerMixin",
+    "LocalPlayerMixin",
+    "MinecraftMixin",
+    "WolfArmorLayerMixin"
   ],
   "server": []
 }

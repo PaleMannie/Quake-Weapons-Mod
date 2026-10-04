@@ -4,6 +4,7 @@ import mett.palemannie.quakeweapons.QuakeWeaponsConfig;
 import mett.palemannie.quakeweapons.effect.ModEffects;
 import mett.palemannie.quakeweapons.net.ModMessages;
 import mett.palemannie.quakeweapons.net.packets.ExplosionImpulseS2CPacket;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * Quake 1 splash and impulse adapted to Minecraft, with independent damage/radius settings.
  * Reference: https://github.com/id-Software/quake-rerelease-qc/blob/main/quakec/combat.qc
  */
+
 public final class QWExplosionHelper {
 
     private static final double QUAKE_SPLASH_DAMAGE = 120.0D;
@@ -32,15 +34,30 @@ public final class QWExplosionHelper {
     private QWExplosionHelper() {}
 
     public static void grenadeExplosion(ServerLevel level, Entity projectile, @Nullable Entity owner, Vec3 center) {
-        DamageSource source = level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, projectile, owner);
+        DamageSource source = withExplosionDeathMessage(level.damageSources().source(ModDamageTypes.GRENADELAUNCHER_DAMAGE, projectile, owner));
         radiusDamage(level, projectile, owner, center, QWConfigStats.GrenadelauncherDamage,
                 QWConfigStats.GrenadelauncherRadius, source);
     }
 
     public static void rocketExplosion(ServerLevel level, @Nullable Entity projectile, @Nullable Entity owner, Vec3 center) {
-        DamageSource source = level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, projectile, owner);
+        DamageSource source = withExplosionDeathMessage(level.damageSources().source(ModDamageTypes.ROCKETLAUNCHER_DAMAGE, projectile, owner));
         radiusDamage(level, projectile, owner, center, QWConfigStats.RocketlauncherDamage,
                 QWConfigStats.RocketlauncherRadius, source);
+    }
+
+    private static DamageSource withExplosionDeathMessage(DamageSource source) {
+        return new DamageSource(source.typeHolder(), source.getDirectEntity(), source.getEntity()) {
+            @Override
+            public Component getLocalizedDeathMessage(LivingEntity victim) {
+                String key = "death.attack." + getMsgId();
+                Entity attacker = getEntity();
+                // The base key describes self-kills; attributed kills use the attacker variant.
+                if (attacker != null && attacker != victim) {
+                    return Component.translatable(key + ".player", victim.getDisplayName(), attacker.getDisplayName());
+                }
+                return Component.translatable(key, victim.getDisplayName());
+            }
+        };
     }
 
     public static void radiusDamage(ServerLevel level, @Nullable Entity inflictor, @Nullable Entity owner,
