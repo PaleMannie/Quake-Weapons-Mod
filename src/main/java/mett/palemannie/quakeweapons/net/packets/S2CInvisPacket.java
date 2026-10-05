@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 public record S2CInvisPacket(int entityId, boolean invisible) implements CustomPacketPayload {
+
     public static final Type<S2CInvisPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "invisibility"));
     public static final StreamCodec<FriendlyByteBuf, S2CInvisPacket> STREAM_CODEC = StreamCodec.ofMember(S2CInvisPacket::encode, S2CInvisPacket::decode);
 

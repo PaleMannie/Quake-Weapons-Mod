@@ -8,6 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
 public record ExplosionImpulseS2CPacket(Vec3 impulse) implements CustomPacketPayload {
+
     public static final Type<ExplosionImpulseS2CPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "explosion_impulse"));
     public static final StreamCodec<FriendlyByteBuf, ExplosionImpulseS2CPacket> STREAM_CODEC = StreamCodec.ofMember(ExplosionImpulseS2CPacket::encode, ExplosionImpulseS2CPacket::decode);
 

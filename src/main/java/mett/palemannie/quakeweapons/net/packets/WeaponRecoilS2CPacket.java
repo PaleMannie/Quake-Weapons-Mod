@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
 
 public record WeaponRecoilS2CPacket(float pitchKick, float rollKick, float yawKick) implements CustomPacketPayload {
+
     public static final Type<WeaponRecoilS2CPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(QuakeWeapons.MODID, "weapon_recoil"));
     public static final StreamCodec<FriendlyByteBuf, WeaponRecoilS2CPacket> STREAM_CODEC = StreamCodec.ofMember(WeaponRecoilS2CPacket::encode, WeaponRecoilS2CPacket::decode);
 

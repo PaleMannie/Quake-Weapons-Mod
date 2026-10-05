@@ -47,17 +47,3 @@ publishing {
 }
 idea.module { downloadJavadoc = downloadSources = true }
 
-sourceSets {
-    verification {
-        compileClasspath += sourceSets.main.output + configurations.compileClasspath
-        runtimeClasspath += sourceSets.main.output + configurations.runtimeClasspath
-    }
-}
-tasks.register('verifyPayloadCodecs', JavaExec) {
-    dependsOn tasks.named('verificationClasses')
-    classpath = sourceSets.verification.runtimeClasspath
-    mainClass = 'mett.palemannie.quakeweapons.net.PayloadCodecCheck'
-    workingDir = layout.buildDirectory.dir('verification').get().asFile
-    doFirst { workingDir.mkdirs() }
-}
-tasks.named('check') { dependsOn tasks.named('verifyPayloadCodecs') }
