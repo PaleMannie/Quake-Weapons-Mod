@@ -161,7 +161,7 @@ public final class PowerupSpawner {
             case 5 -> new NailsAmmopickupEntity(ModEntities.NAILS_AMMOPICKUP.get(), level);
             case 6 -> new CellsAmmopickupEntity(ModEntities.CELLS_AMMOPICKUP.get(), level);
             case 7 -> new GrenadesAmmopickupEntity(ModEntities.GRENADES_AMMOPICKUP.get(), level);
-            case 8 -> new GrenadesAmmopickupEntity(ModEntities.MEGAHEALTH_PICKUP.get(), level);
+            case 8 -> new MegahealthPickupEntity(ModEntities.MEGAHEALTH_PICKUP.get(), level);
             default -> new RocketsAmmopickupEntity(ModEntities.ROCKETS_AMMOPICKUP.get(), level);
         };
     }
